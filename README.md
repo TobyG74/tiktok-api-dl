@@ -5,24 +5,24 @@
 
 ## Installation
 
--   tiktok-down requires Node.js v10+ to run.
+-   @tobyg74/tiktok-api-dl requires Node.js v10+ to run.
 
 ### Install from NPM
 
 ```
-npm install tiktok-down
+npm install @tobyg74/tiktok-api-dl
 ```
 
 ### Install from YARN
 
 ```
-yarn add tiktok-down
+yarn add @tobyg74/tiktok-api-dl
 ```
 
 ## Usage
 
 ```
-const { TiktokDL } =  require("tiktok-down");
+const { TiktokDL } =  require("@tobyg74/tiktok-api-dl");
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
@@ -48,7 +48,7 @@ TiktokDL(tiktok_url)
     statistics: {
         ...
     },
-    video: [
+    video // images: [
         ...
     ],
     music: [
