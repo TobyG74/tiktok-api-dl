@@ -11,17 +11,21 @@ const TiktokDL = (url) => {
         })
             .then(({ request }) => {
                 const { responseUrl } = request.res;
-                const ID = responseUrl.match(/\d{17,21}/g)[0];
+                let ID = responseUrl.match(/\d{17,21}/g)
+                if (ID === null) return reject({
+                    status: "error",
+                    message: "Failed to fetch tiktok url. Make sure your tiktok url is correct!",
+                });
+                ID = ID[0]
                 Axios(_tiktokapi(ID), {
                     method: "GET",
                 })
                     .then(({ data }) => {
                         const content = data.aweme_list.filter((v) => v.aweme_id === ID)[0];
-                        if (content.aweme_id !== ID)
-                            return resolve({
-                                status: "error",
-                                message: "Failed to find tiktok data. Make sure your tiktok url is correct!",
-                            });
+                        if (!content) return resolve({
+                            status: "error",
+                            message: "Failed to find tiktok data. Make sure your tiktok url is correct!",
+                        });
                         const statistics = {
                             play_count: content.statistics.play_count,
                             download_count: content.statistics.download_count,
