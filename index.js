@@ -1,3 +1,3 @@
-const { TiktokDL } = require("./utils");
+const { TiktokDL, TiktokStalk } = require("./utils");
 
-module.exports = { TiktokDL }
+module.exports = { TiktokDL, TiktokStalk };

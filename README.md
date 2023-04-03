@@ -21,6 +21,8 @@ yarn add @tobyg74/tiktok-api-dl
 
 ## Usage
 
+### Tiktok Downloader
+
 ```
 const { TiktokDL } =  require("@tobyg74/tiktok-api-dl");
 
@@ -32,7 +34,20 @@ TiktokDL(tiktok_url)
     })
 ```
 
-## Response
+### Tiktok Profile
+
+const { TiktokStalk } = require("@tobyg74/tiktok-api-dl");
+
+const username = "tobz2k19"
+
+```
+TiktokStalk(username)
+    .then((result) => {
+        console.log(result);
+    })
+```
+
+## Tiktok Downloader Response
 
 ```
 {
@@ -54,6 +69,31 @@ TiktokDL(tiktok_url)
     music: [
         ...
     ]
+  }
+}
+```
+
+## Tiktok Profile Response
+
+```
+{
+  status: "success",
+  result: {
+    users: {
+      username: ...,
+      nickname: ...,
+      avatar: ...,
+      signature: ...,
+      verified: ...,
+      region: ...
+    },
+    stats: {
+      followerCount: ...,
+      followingCount: ...,
+      heartCount: ...,
+      videoCount: ...,
+      likeCount: ...
+    }
   }
 }
 ```
