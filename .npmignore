@@ -5,3 +5,4 @@ package-lock.json
 tsconfig.json
 .eslintrc
 .prettierrc
+src
