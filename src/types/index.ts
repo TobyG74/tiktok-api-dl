@@ -1,58 +1,4 @@
-# Tiktok Downloader
-
--   Used to download videos, images, music from TikTok
--   No login or password are required
-
-## Installation
-
--   @tobyg74/tiktok-api-dl requires Node.js v10+ to run.
-
-### Install from NPM
-
-```
-npm install @tobyg74/tiktok-api-dl
-```
-
-### Install from YARN
-
-```
-yarn add @tobyg74/tiktok-api-dl
-```
-
-## Usage
-
-### Tiktok Downloader
-
-```js
-const { TiktokDL } =  require("@tobyg74/tiktok-api-dl");
-
-const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
-
-TiktokDL(tiktok_url)
-    .then((result) => {
-        console.log(result);
-    })
-```
-
-### Tiktok Profile
-
-```js
-const { TiktokStalk } = require("@tobyg74/tiktok-api-dl");
-
-const username = "tobz2k19"
-
-TiktokStalk(username)
-    .then((result) => {
-        console.log(result);
-    })
-```
-
-## Response
-
-### Tiktok Downloader
-
-```ts
-{
+export type DLResult = {
   status: "success" | "error"
   message?: string
   result?: {
@@ -80,12 +26,8 @@ TiktokStalk(username)
     music: string[]
   }
 }
-```
 
-### Tiktok Profile
-
-```ts
-{
+export type StalkResult = {
   status: "success" | "error"
   message?: string
   result?: {
@@ -106,4 +48,3 @@ TiktokStalk(username)
     }
   }
 }
-```
