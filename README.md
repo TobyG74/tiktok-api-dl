@@ -36,18 +36,20 @@ TiktokDL(tiktok_url)
 
 ### Tiktok Profile
 
+```
 const { TiktokStalk } = require("@tobyg74/tiktok-api-dl");
 
 const username = "tobz2k19"
 
-```
 TiktokStalk(username)
     .then((result) => {
         console.log(result);
     })
 ```
 
-## Tiktok Downloader Response
+## Response
+
+### Tiktok Downloader
 
 ```
 {
@@ -73,7 +75,7 @@ TiktokStalk(username)
 }
 ```
 
-## Tiktok Profile Response
+### Tiktok Profile
 
 ```
 {
