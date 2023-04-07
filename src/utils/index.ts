@@ -74,9 +74,9 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
               })
             }
           })
-          .catch(reject)
+          .catch((e) => resolve({ status: "error", message: e.message }))
       })
-      .catch(reject)
+      .catch((e) => resolve({ status: "error", message: e.message }))
   })
 
 export const TiktokStalk = (username: string): Promise<StalkResult> =>
@@ -125,6 +125,7 @@ export const TiktokStalk = (username: string): Promise<StalkResult> =>
               }
             })
           })
+          .catch((e) => resolve({ status: "error", message: e.message }))
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
