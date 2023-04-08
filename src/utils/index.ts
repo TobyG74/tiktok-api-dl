@@ -15,7 +15,7 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
         const { responseUrl } = request.res
         let ID = responseUrl.match(/\d{17,21}/g)
         if (ID === null)
-          return reject({
+          return resolve({
             status: "error",
             message: "Failed to fetch tiktok url. Make sure your tiktok url is correct!"
           })
@@ -30,12 +30,12 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
                 message: "Failed to find tiktok data. Make sure your tiktok url is correct!"
               })
             const statistics = {
-              play_count: content.statistics.play_count,
-              download_count: content.statistics.download_count,
-              share_count: content.statistics.share_count,
-              comment_count: content.statistics.comment_count,
-              like_count: content.statistics.digg_count,
-              favourite_count: content.statistics.collect_count
+              playCount: content.statistics.play_count,
+              downloadCount: content.statistics.download_count,
+              shareCount: content.statistics.share_count,
+              commentCount: content.statistics.comment_count,
+              likeCount: content.statistics.digg_count,
+              favoriteCount: content.statistics.collect_count
             }
             const author = {
               username: content.author.unique_id,
@@ -50,7 +50,7 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
                 result: {
                   type: "image",
                   id: content.aweme_id,
-                  create_time: content.create_time,
+                  createTime: content.create_time,
                   description: content.desc,
                   author,
                   statistics,
@@ -64,7 +64,7 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
                 result: {
                   type: "video",
                   id: content.aweme_id,
-                  create_time: content.create_time,
+                  createTime: content.create_time,
                   description: content.desc,
                   author,
                   statistics,

@@ -1,6 +1,6 @@
 {
   "name": "@tobyg74/tiktok-api-dl",
-  "version": "1.0.4",
+  "version": "1.0.2-new",
   "description": "Scrapper for download Video, Image, Music from Tiktok",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -21,7 +21,8 @@
   ],
   "author": "Tobz",
   "contributors": [
-    "aqulzz"
+    "aqulzz",
+    "nugraizy"
   ],
   "license": "ISC",
   "bugs": {

@@ -1,11 +1,11 @@
 # Tiktok Downloader
 
--   Used to download videos, images, music from TikTok
--   No login or password are required
+- Used to download videos, images, music from TikTok
+- No login or password are required
 
 ## Installation
 
--   @tobyg74/tiktok-api-dl requires Node.js v10+ to run.
+- @tobyg74/tiktok-api-dl requires Node.js v10+ to run.
 
 ### Install from NPM
 
@@ -24,27 +24,25 @@ yarn add @tobyg74/tiktok-api-dl
 ### Tiktok Downloader
 
 ```js
-const { TiktokDL } =  require("@tobyg74/tiktok-api-dl");
+const { TiktokDL } = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
-TiktokDL(tiktok_url)
-    .then((result) => {
-        console.log(result);
-    })
+TiktokDL(tiktok_url).then((result) => {
+  console.log(result)
+})
 ```
 
 ### Tiktok Profile
 
 ```js
-const { TiktokStalk } = require("@tobyg74/tiktok-api-dl");
+const { TiktokStalk } = require("@tobyg74/tiktok-api-dl")
 
 const username = "tobz2k19"
 
-TiktokStalk(username)
-    .then((result) => {
-        console.log(result);
-    })
+TiktokStalk(username).then((result) => {
+  console.log(result)
+})
 ```
 
 ## Response
@@ -68,12 +66,12 @@ TiktokStalk(username)
       region: string
     }
     statistics: {
-      play_count: number
-      download_count: number
-      share_count: number
-      comment_count: number
-      like_count: number
-      favourite_count: number
+      playCount: number
+      downloadCount: number
+      shareCount: number
+      commentCount: number
+      likeCount: number
+      favoriteCount: number
     }
     video?: string[]
     images?: string[]
@@ -107,3 +105,8 @@ TiktokStalk(username)
   }
 }
 ```
+
+### Collaborators
+
+- [Nugraizy](https://github.com/nugraizy)
+- [Aqul](https://github.om/zennn08)

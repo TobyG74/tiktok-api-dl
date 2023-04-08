@@ -4,7 +4,7 @@ export type DLResult = {
   result?: {
     type: "video" | "image"
     id: string
-    create_time: number
+    createTime: number
     description: string
     author: {
       username: string
@@ -14,12 +14,12 @@ export type DLResult = {
       region: string
     }
     statistics: {
-      play_count: number
-      download_count: number
-      share_count: number
-      comment_count: number
-      like_count: number
-      favourite_count: number
+      playCount: number
+      downloadCount: number
+      shareCount: number
+      commentCount: number
+      likeCount: number
+      favoriteCount: number
     }
     video?: string[]
     images?: string[]
