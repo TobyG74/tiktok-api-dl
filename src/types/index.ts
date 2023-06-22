@@ -22,6 +22,8 @@ export type DLResult = {
       favoriteCount: number
     }
     video?: string[]
+    cover?: string[]
+    dynamic_cover?: string[]
     images?: string[]
     music: string[]
   }
