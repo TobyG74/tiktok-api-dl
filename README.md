@@ -74,6 +74,8 @@ TiktokStalk(username).then((result) => {
       favoriteCount: number
     }
     video?: string[]
+    cover?: string[]
+    dynamic_cover?: string[]
     images?: string[]
     music: string[]
   }

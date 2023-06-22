@@ -69,6 +69,8 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
                   author,
                   statistics,
                   video: content.video.play_addr.url_list,
+                  cover: content.video.cover.url_list,
+                  dynamic_cover:content.video.dynamic_cover.url_list,
                   music: content.music.play_url.url_list
                 }
               })
