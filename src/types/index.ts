@@ -1,4 +1,4 @@
-export type DLResult = {
+export interface DLResult {
   status: "success" | "error"
   message?: string
   result?: {
@@ -6,21 +6,8 @@ export type DLResult = {
     id: string
     createTime: number
     description: string
-    author: {
-      username: string
-      nickname: string
-      signature: string
-      birthday: string
-      region: string
-    }
-    statistics: {
-      playCount: number
-      downloadCount: number
-      shareCount: number
-      commentCount: number
-      likeCount: number
-      favoriteCount: number
-    }
+    author: Author
+    statistics: Statistics
     video?: string[]
     cover?: string[]
     dynamic_cover?: string[]
@@ -29,24 +16,46 @@ export type DLResult = {
   }
 }
 
-export type StalkResult = {
+export interface Author {
+  uid: number
+  username: string
+  nickname: string
+  signature: string
+  birthday: string
+  region: string
+}
+
+export interface Statistics {
+  playCount: number
+  downloadCount: number
+  shareCount: number
+  commentCount: number
+  likeCount: number
+  favoriteCount: number
+}
+
+export interface StalkResult {
   status: "success" | "error"
   message?: string
   result?: {
-    users: {
-      username: string
-      nickname: string
-      avatar: string
-      signature: string
-      verified: boolean
-      region: string
-    }
-    stats: {
-      followerCount: number
-      followingCount: number
-      heartCount: number
-      videoCount: number
-      likeCount: number
-    }
+    users: Users
+    stats: Stats
   }
+}
+
+export interface Users {
+  username: string
+  nickname: string
+  avatar: string
+  signature: string
+  verified: boolean
+  region: string
+}
+
+export interface Stats {
+  followerCount: number
+  followingCount: number
+  heartCount: number
+  videoCount: number
+  likeCount: number
 }
