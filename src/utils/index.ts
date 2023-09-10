@@ -1,10 +1,9 @@
 import axios from "axios"
 import { load } from "cheerio"
-import { DLResult, StalkResult } from "../types"
+import { Author, DLResult, StalkResult, Statistics, Stats, Users } from "../types"
 
 const _tiktokurl: string = "https://www.tiktok.com"
-const _tiktokapi = (id: string): string =>
-  `https://api16-va.tiktokv.com/aweme/v1/feed/?aweme_id=${id}&version_name=1.1.9&version_code=119&build_number=1.1.9&manifest_version_code=119&update_version_code=119&openudid=dlcrw3zg28ajm4ml&uuid=3703699664470627&_rticket=1677813932976&ts=1677813932&device_brand=Realme&device_type=RMX1821&device_platform=android&resolution=720*1370&dpi=320&os_version=11&os_api=30&carrier_region=US&sys_region=US%C2%AEion=US&app_name=TK%20Downloader&app_language=en&language=en&timezone_name=Western%20Indonesia%20Time&timezone_offset=25200&channel=googleplay&ac=wifi&mcc_mnc=&is_my_cn=0&aid=1180&ssmix=a&as=a1qwert123`
+const _tiktokapi = (id: string): string => `https://api16-core.tiktokv.com/aweme/v1/feed/?aweme_id=${id}&openudid=vi8vz5c5aec5wllw&uuid=7661132520610792&_rticket=1694319262046&ts=1694319262&device_platform=android&channel=googleplay&ac=wifi`
 
 export const TiktokDL = (url: string): Promise<DLResult> =>
   new Promise((resolve, reject) => {
@@ -29,7 +28,7 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
                 status: "error",
                 message: "Failed to find tiktok data. Make sure your tiktok url is correct!"
               })
-            const statistics = {
+            const statistics: Statistics = {
               playCount: content.statistics.play_count,
               downloadCount: content.statistics.download_count,
               shareCount: content.statistics.share_count,
@@ -37,7 +36,8 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
               likeCount: content.statistics.digg_count,
               favoriteCount: content.statistics.collect_count
             }
-            const author = {
+            const author: Author = {
+              uid: content.author.uid,
               username: content.author.unique_id,
               nickname: content.author.nickname,
               signature: content.author.signature,
@@ -70,7 +70,7 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
                   statistics,
                   video: content.video.play_addr.url_list,
                   cover: content.video.cover.url_list,
-                  dynamic_cover:content.video.dynamic_cover.url_list,
+                  dynamic_cover: content.video.dynamic_cover.url_list,
                   music: content.music.play_url.url_list
                 }
               })
@@ -78,7 +78,7 @@ export const TiktokDL = (url: string): Promise<DLResult> =>
           })
           .catch((e) => resolve({ status: "error", message: e.message }))
       })
-      .catch((e) => resolve({ status: "error", message: e.message }))
+      .catch((e) => reject(e))
   })
 
 export const TiktokStalk = (username: string): Promise<StalkResult> =>
@@ -104,7 +104,7 @@ export const TiktokStalk = (username: string): Promise<StalkResult> =>
               })
             }
             const user = result.UserModule
-            const users = {
+            const users: Users = {
               username: user.users[username].uniqueId,
               nickname: user.users[username].nickname,
               avatar: user.users[username].avatarLarger,
@@ -112,7 +112,7 @@ export const TiktokStalk = (username: string): Promise<StalkResult> =>
               verified: user.users[username].verified,
               region: user.users[username].region
             }
-            const stats = {
+            const stats: Stats = {
               followerCount: user.stats[username].followerCount,
               followingCount: user.stats[username].followingCount,
               heartCount: user.stats[username].heartCount,
@@ -129,5 +129,5 @@ export const TiktokStalk = (username: string): Promise<StalkResult> =>
           })
           .catch((e) => resolve({ status: "error", message: e.message }))
       })
-      .catch((e) => resolve({ status: "error", message: e.message }))
+      .catch((e) => reject(e))
   })
