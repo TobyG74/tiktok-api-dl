@@ -56,7 +56,7 @@ TiktokStalk(username).then((result) => {
   result?: {
     type: "video" | "image"
     id: string
-    create_time: number
+    createTime: number
     description: string
     author: {
       username: string
