@@ -4,3 +4,4 @@ package-lock.json
 yarn.lock
 lib
 test.js
+bun.lockb

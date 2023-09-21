@@ -7,3 +7,4 @@ tsconfig.json
 .prettierrc
 src
 test.js
+bun.lockb
