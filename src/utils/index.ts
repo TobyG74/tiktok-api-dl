@@ -1,6 +1,6 @@
 import axios from "axios"
 import { load } from "cheerio"
-import { Author, DLResult, StalkResult, Statistics, Stats, Users } from "../types"
+import { Author, DLResult, Post, StalkResult, Statistics, Stats, Users } from "../types"
 
 const _tiktokurl: string = "https://www.tiktok.com"
 const _tiktokapi = (id: string): string => `https://api16-core.tiktokv.com/aweme/v1/feed/?aweme_id=${id}&openudid=vi8vz5c5aec5wllw&uuid=7661132520610792&_rticket=1694319262046&ts=1694319262&device_platform=android&channel=googleplay&ac=wifi`
@@ -119,11 +119,16 @@ export const TiktokStalk = (username: string): Promise<StalkResult> =>
               videoCount: user.stats[username].videoCount,
               likeCount: user.stats[username].diggCount
             }
+
+            const items = result.ItemModule
+            const posts = Object.values(items) as Post[]
+
             resolve({
               status: "success",
               result: {
                 users,
-                stats
+                stats,
+                posts
               }
             })
           })
