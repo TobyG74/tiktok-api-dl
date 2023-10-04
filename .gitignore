@@ -1,6 +1,7 @@
 node_modules
 yarn-lock.json
 package-lock.json
+pnpm-lock.yaml
 yarn.lock
 lib
 test.js
