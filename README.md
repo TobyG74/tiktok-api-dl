@@ -1,27 +1,49 @@
-# Tiktok Downloader
+# Tiktok Downloader & Stalk User
 
-- Used to download videos, images, music from TikTok
+- Can be used to download videos, images / slides and music from Tiktok
+- Can be used to view someone's profile from Tiktok
 - No login or password are required
+- It is recommended to use your own cookies on Tiktok Stalker
 
-## Installation
+# Table of Contents
+
+- [Install](#install)
+  - [From NPM](#from-npm)
+  - [From Yarn](#from-yarn)
+  - [From Github](#from-github)
+- [Examples](#examples)
+  - [Tiktok Downloader](#tiktok-downloader)
+  - [Tiktok Stalker](#tiktok-stalker)
+- [Response](#response)
+  - [Tiktok Downloader](#tiktok-downloader-1)
+  - [Tiktok Stalker](#tiktok-stalker-1)
+- [Contributors](#contributors)
+
+# Install
 
 - @tobyg74/tiktok-api-dl requires Node.js v10+ to run.
 
-### Install from NPM
+## From NPM
 
 ```
 npm install @tobyg74/tiktok-api-dl
 ```
 
-### Install from YARN
+## From YARN
 
 ```
 yarn add @tobyg74/tiktok-api-dl
 ```
 
-## Usage
+## From Github
 
-### Tiktok Downloader
+```
+npm install github:TobyG74/tiktok-api-dl
+```
+
+# Examples
+
+## Tiktok Downloader
 
 ```js
 const { TiktokDL } = require("@tobyg74/tiktok-api-dl")
@@ -33,7 +55,9 @@ TiktokDL(tiktok_url).then((result) => {
 })
 ```
 
-### Tiktok Profile
+## Tiktok Stalker
+
+- Using Default Cookies
 
 ```js
 const { TiktokStalk } = require("@tobyg74/tiktok-api-dl")
@@ -45,9 +69,23 @@ TiktokStalk(username).then((result) => {
 })
 ```
 
-## Response
+- Using Your Cookies
 
-### Tiktok Downloader
+```js
+const { TiktokStalk } = require("@tobyg74/tiktok-api-dl")
+
+const username = "tobz2k19"
+
+TiktokStalk(username, {
+  cookie: "YourCookie"
+}).then((result) => {
+  console.log(result)
+})
+```
+
+# Response
+
+## Tiktok Downloader
 
 ```ts
 {
@@ -58,12 +96,18 @@ TiktokStalk(username).then((result) => {
     id: string
     createTime: number
     description: string
+    duration?: string
+    hashtag: string[]
     author: {
+      uid: string
       username: string
       nickname: string
       signature: string
-      birthday: string
       region: string
+      avatarLarger: string
+      avatarThumb: string
+      avatarMedium: string
+      url: string
     }
     statistics: {
       playCount: number
@@ -72,17 +116,32 @@ TiktokStalk(username).then((result) => {
       commentCount: number
       likeCount: number
       favoriteCount: number
+      forwardCount: number
+      whatsappShareCount: number
+      loseCount: number
+      loseCommentCount: number
     }
     video?: string[]
     cover?: string[]
-    dynamic_cover?: string[]
+    dynamicCover?: string[]
+    originCover: string[]
     images?: string[]
-    music: string[]
+    music: {
+      id: number
+      title: string
+      author: string
+      album: string
+      playUrl: string[]
+      coverLarge: string[]
+      coverMedium: string[]
+      coverThumb: string[]
+      duration: number
+    }
   }
 }
 ```
 
-### Tiktok Profile
+## Tiktok Stalker
 
 ```ts
 {
@@ -108,7 +167,7 @@ TiktokStalk(username).then((result) => {
 }
 ```
 
-### Collaborators
+# Contributors
 
 - [Nugraizy](https://github.com/nugraizy)
 - [Aqul](https://github.om/zennn08)
