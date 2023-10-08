@@ -12,7 +12,8 @@
   - [From Yarn](#from-yarn)
   - [From Github](#from-github)
 - [Examples](#examples)
-  - [Tiktok Downloader](#tiktok-downloader)
+  - [Tiktok Downloader V1](#tiktok-downloader-v1)
+  - [Tiktok Downloader V2](#tiktok-downloader-v2)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
   - [Tiktok Downloader](#tiktok-downloader-1)
@@ -50,7 +51,9 @@ const { TiktokDL } = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
-TiktokDL(tiktok_url).then((result) => {
+TiktokDL(tiktok_url, {
+  version: "v1" //  version: "v1" | "v2"
+}).then((result) => {
   console.log(result)
 })
 ```
@@ -85,7 +88,7 @@ TiktokStalk(username, {
 
 # Response
 
-## Tiktok Downloader
+## Tiktok Downloader V1
 
 ```ts
 {
@@ -141,6 +144,31 @@ TiktokStalk(username, {
 }
 ```
 
+## Tiktok Downloader V2
+
+```ts
+{
+  status: "success" | "error"
+  message?: string
+  result?: {
+    type: "video" | "image"
+    description: string
+    author: {
+      nickname: string
+      avatr: string
+    }
+    statistics: {
+      likeCount: string
+      commentCount: string
+      shareCount: string
+    }
+    video?: string
+    images?: string[]
+    music: string
+  }
+}
+```
+
 ## Tiktok Stalker
 
 ```ts
@@ -170,4 +198,4 @@ TiktokStalk(username, {
 # Contributors
 
 - [Nugraizy](https://github.com/nugraizy)
-- [Aqul](https://github.om/zennn08)
+- [Aqul](https://github.com/zennn08)
