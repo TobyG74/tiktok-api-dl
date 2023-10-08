@@ -1,6 +1,6 @@
 import axios from "axios"
 import { _tiktokapi, _tiktokurl } from "../api"
-import { Author, DLResult, Statistics, Music } from "../types"
+import { Author, DLResult, Statistics, Music } from "../types/tiktokapi"
 
 const toMinute = (duration) => {
   const mins = ~~((duration % 3600) / 60)
@@ -14,7 +14,7 @@ const toMinute = (duration) => {
   return ret
 }
 
-export const TiktokDL = (url: string): Promise<DLResult> =>
+export const TiktokAPI = (url: string): Promise<DLResult> =>
   new Promise((resolve, reject) => {
     url = url.replace("https://vm", "https://vt")
     axios

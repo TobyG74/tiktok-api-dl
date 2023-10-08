@@ -1,2 +1,2 @@
-export * from "./downloader"
+export * from "./switch"
 export * from "./stalker"

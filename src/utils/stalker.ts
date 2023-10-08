@@ -1,7 +1,7 @@
 import axios from "axios"
 import { load } from "cheerio"
 import { _tiktokurl } from "../api"
-import { StalkResult, Stats, Users } from "../types"
+import { Music, Posts, StalkResult, Statistics, Stats, Users, Video } from "../types/stalker"
 
 const getCookie = () =>
   new Promise((resolve, reject) => {
@@ -33,6 +33,9 @@ export const TiktokStalk = (username: string, options: { cookie: string }): Prom
           })
         }
         const user = result.UserModule
+        const itemKeys = Object.keys(result.ItemModule)
+
+        // User Info Result
         const users: Users = {
           username: user.users[username].uniqueId,
           nickname: user.users[username].nickname,
@@ -41,24 +44,92 @@ export const TiktokStalk = (username: string, options: { cookie: string }): Prom
           avatarMedium: user.users[username].avatarMedium,
           signature: user.users[username].signature,
           verified: user.users[username].verified,
+          privateAccount: user.users[username].privateAccount,
           region: user.users[username].region,
           commerceUser: user.users[username].commerceUserInfo.commerceUser,
           usernameModifyTime: user.users[username].uniqueIdModifyTime,
           nicknameModifyTime: user.users[username].nickNameModifyTime
         }
+
+        // Statistics Result
         const stats: Stats = {
           followerCount: user.stats[username].followerCount,
           followingCount: user.stats[username].followingCount,
           heartCount: user.stats[username].heartCount,
           videoCount: user.stats[username].videoCount,
           likeCount: user.stats[username].diggCount,
-          friendCount: user.stats[username].friendCount
+          friendCount: user.stats[username].friendCount,
+          postCount: itemKeys.length
         }
+
+        // Posts Result
+        const posts: Posts[] = []
+        itemKeys.forEach((key) => {
+          const post = result.ItemModule[key]
+          let media
+          if (post.imagePost) {
+            // Images or Slide Posts Result
+            media = {
+              images: post.imagePost.images.map((v: any) => v.imageURL.urlList[0])
+            }
+          } else {
+            // Video Posts Result
+            media = {
+              video: {
+                id: post.video.id,
+                duration: post.video.duration,
+                ratio: post.video.ratio,
+                cover: post.video.cover,
+                originCover: post.video.originCover,
+                dynamicCover: post.video.dynamicCover,
+                playAddr: post.video.playAddr,
+                downloadAddr: post.video.downloadAddr,
+                format: post.video.format,
+                bitrate: post.video.bitrate
+              } as Video
+            }
+          }
+
+          // Music Posts Result
+          const music: Music = {
+            id: post.music.id,
+            title: post.music.title,
+            authorName: post.music.authorName,
+            album: post.music.album,
+            coverLarge: post.music.coverLarge,
+            coverMedium: post.music.coverMedium,
+            coverThumb: post.music.coverThumb,
+            playUrl: post.music.playUrl,
+            duration: post.music.duration
+          }
+
+          // Statistics Posts Result
+          const statistics: Statistics = {
+            likeCount: post.stats.diggCount,
+            shareCount: post.stats.shareCount,
+            commentCount: post.stats.commentCount,
+            playCount: post.stats.playCount,
+            favoriteCount: post.stats.collectCount
+          }
+
+          posts.push({
+            id: post.id,
+            desc: post.desc,
+            createTime: post.createTime,
+            author: post.author,
+            locationCreated: post.locationCreated,
+            hashtags: post.challenges.map((v: any) => v.title),
+            statistics,
+            music,
+            ...media
+          })
+        })
         resolve({
           status: "success",
           result: {
             users,
-            stats
+            stats,
+            posts
           }
         })
       })
