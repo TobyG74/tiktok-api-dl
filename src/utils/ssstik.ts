@@ -1,12 +1,12 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { Author, Statistics, TiktokFetchTT } from "../types/tiktokdownload"
+import { Author, Statistics, SSSTikFetchTT, SSSTikResult } from "../types/ssstik"
 
-const fetchTT = (): Promise<TiktokFetchTT> =>
-  new Promise(async (resolve, reject) => {
-    Axios.get("https://tiktokdownload.online/", {
+const fetchTT = () =>
+  new Promise<SSSTikFetchTT>(async (resolve, reject) => {
+    Axios.get("https://ssstik.io", {
       headers: {
-        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
       }
     })
       .then(({ data }) => {
@@ -22,12 +22,18 @@ const fetchTT = (): Promise<TiktokFetchTT> =>
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
 
-export const TiktokDownload = (url: string) =>
-  new Promise(async (resolve, reject) => {
-    const tt: TiktokFetchTT = await fetchTT()
-    if (tt.status !== "success") return resolve(tt)
-    Axios("https://tiktokdownload.online/abc?url=dl", {
+export const SSSTik = (url: string) =>
+  new Promise<SSSTikResult>(async (resolve, reject) => {
+    const tt: SSSTikFetchTT = await fetchTT()
+    if (tt.status !== "success") return resolve({ status: "error", message: tt.message })
+    Axios("https://ssstik.io/abc?url=dl", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        Origin: "https://ssstik.io",
+        Referer: "https://ssstik.io/en",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+      },
       data: new URLSearchParams(
         Object.entries({
           id: url,
@@ -87,5 +93,5 @@ export const TiktokDownload = (url: string) =>
           })
         }
       })
-      .catch(console.log)
+      .catch((e) => resolve({ status: "error", message: e.message }))
   })

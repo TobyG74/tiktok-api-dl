@@ -1,10 +1,10 @@
-export interface TiktokFetchTT {
+export interface SSSTikFetchTT {
   status: "success" | "error"
   message?: string
   result?: string
 }
 
-export interface TiktokDownload {
+export interface SSSTikResult {
   status: "success" | "error"
   message?: string
   result?: {
