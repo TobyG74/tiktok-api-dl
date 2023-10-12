@@ -12,11 +12,11 @@
   - [From Yarn](#from-yarn)
   - [From Github](#from-github)
 - [Examples](#examples)
-  - [Tiktok Downloader V1](#tiktok-downloader-v1)
-  - [Tiktok Downloader V2](#tiktok-downloader-v2)
+  - [Tiktok Downloader](#tiktok-downloader)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
-  - [Tiktok Downloader](#tiktok-downloader-1)
+  - [Tiktok Downloader V1](#tiktok-downloader-v1)
+  - [Tiktok Downloader V2](#tiktok-downloader-v2)
   - [Tiktok Stalker](#tiktok-stalker-1)
 - [Contributors](#contributors)
 
@@ -80,7 +80,7 @@ const { TiktokStalk } = require("@tobyg74/tiktok-api-dl")
 const username = "tobz2k19"
 
 TiktokStalk(username, {
-  cookie: "YourCookie"
+  cookie: process.env.COOKIE || "Your Cookie"
 }).then((result) => {
   console.log(result)
 })
@@ -191,6 +191,7 @@ TiktokStalk(username, {
       videoCount: number
       likeCount: number
     }
+    posts: Posts[]
   }
 }
 ```
