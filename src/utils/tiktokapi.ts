@@ -2,18 +2,6 @@ import axios from "axios"
 import { _tiktokapi, _tiktokurl } from "../api"
 import { Author, DLResult, Statistics, Music } from "../types/tiktokapi"
 
-const toMinute = (duration) => {
-  const mins = ~~((duration % 3600) / 60)
-  const secs = ~~duration % 60
-
-  let ret = ""
-
-  ret += "" + mins + ":" + (secs < 10 ? "0" : "")
-  ret += "" + secs
-
-  return ret
-}
-
 export const TiktokAPI = (url: string): Promise<DLResult> =>
   new Promise((resolve, reject) => {
     url = url.replace("https://vm", "https://vt")
@@ -29,7 +17,15 @@ export const TiktokAPI = (url: string): Promise<DLResult> =>
           })
         ID = ID[0]
         axios
-          .get(_tiktokapi(ID))
+          .get(
+            _tiktokapi(
+              new URLSearchParams(
+                withParams({
+                  aweme_id: ID
+                })
+              ).toString()
+            )
+          )
           .then(({ data }) => {
             const content = data.aweme_list.filter((v) => v.aweme_id === ID)[0]
             if (!content)
@@ -59,7 +55,6 @@ export const TiktokAPI = (url: string): Promise<DLResult> =>
               nickname: content.author.nickname,
               signature: content.author.signature,
               region: content.author.region,
-              avatarLarger: content.author.avatar_larger.url_list,
               avatarThumb: content.author.avatar_thumb.url_list,
               avatarMedium: content.author.avatar_medium.url_list,
               url: `${_tiktokurl}/@${content.username}`
@@ -121,3 +116,63 @@ export const TiktokAPI = (url: string): Promise<DLResult> =>
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
+
+const withParams = (args) => {
+  return {
+    ...args,
+    version_name: "1.1.9",
+    version_code: "2018111632",
+    build_number: "1.1.9",
+    manifest_version_code: "2018111632",
+    update_version_code: "2018111632",
+    openudid: randomChar("0123456789abcdef", 16),
+    uuid: randomChar("1234567890", 16),
+    _rticket: Date.now() * 1000,
+    ts: Date.now(),
+    device_brand: "Google",
+    device_type: "Pixel 4",
+    device_platform: "android",
+    resolution: "1080*1920",
+    dpi: 420,
+    os_version: "10",
+    os_api: "29",
+    carrier_region: "US",
+    sys_region: "US",
+    region: "US",
+    app_name: "trill",
+    app_language: "en",
+    language: "en",
+    timezone_name: "America/New_York",
+    timezone_offset: "-14400",
+    channel: "googleplay",
+    ac: "wifi",
+    mcc_mnc: "310260",
+    is_my_cn: 0,
+    aid: 1180,
+    ssmix: "a",
+    as: "a1qwert123",
+    cp: "cbfhckdckkde1"
+  }
+}
+
+const toMinute = (duration) => {
+  const mins = ~~((duration % 3600) / 60)
+  const secs = ~~duration % 60
+
+  let ret = ""
+
+  ret += "" + mins + ":" + (secs < 10 ? "0" : "")
+  ret += "" + secs
+
+  return ret
+}
+
+const randomChar = (char: string, range: number) => {
+  let chars = ""
+
+  for (let i = 0; i < range; i++) {
+    chars += char[Math.floor(Math.random() * char.length)]
+  }
+
+  return chars
+}
