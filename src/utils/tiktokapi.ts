@@ -57,7 +57,7 @@ export const TiktokAPI = (url: string): Promise<DLResult> =>
               region: content.author.region,
               avatarThumb: content.author.avatar_thumb.url_list,
               avatarMedium: content.author.avatar_medium.url_list,
-              url: `${_tiktokurl}/@${content.username}`
+              url: `${_tiktokurl}/@${content.author.unqiue_id}`
             }
 
             // Music Result
