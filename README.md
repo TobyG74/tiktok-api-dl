@@ -5,7 +5,8 @@
 <div align="center">
   <a href="https://github.com/TobyG74/tiktok-api-dl/graphs/contributors" title="contributors"><img src="https://img.shields.io/github/contributors/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
   <a href="https://github.com/TobyG74/tiktok-api-dl/network/members" title="forks"><img src="https://img.shields.io/github/forks/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
-  <a href="https://github.com/TobyG74/tiktok-api-dl/stargazers" title="stargazers"><img src="https://img.shields.io/github/issues/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/issues" title="issues"><img src="https://img.shields.io/github/issues/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/stargazers" title="stargazer"><img src="https://img.shields.io/github/stars/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
 </div>
 <br>
 <div align="center">
