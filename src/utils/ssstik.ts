@@ -3,6 +3,11 @@ import { load } from "cheerio"
 import { Author, Statistics, SSSTikFetchTT, SSSTikResult } from "../types/ssstik"
 import { _ssstikapi, _ssstikurl } from "../api"
 
+/**
+ * Using API from Website:
+ * BASE URL : https://ssstik.io
+ */
+
 const fetchTT = () =>
   new Promise<SSSTikFetchTT>(async (resolve, reject) => {
     Axios.get(_ssstikurl, {
@@ -14,10 +19,10 @@ const fetchTT = () =>
         const regex = /form\.setAttribute\("include-vals",\s*"([^"]+)"\)/
         const match = data.match(regex)
         if (match) {
-          const includeValsValue = match[1]
-          resolve({ status: "success", result: includeValsValue })
+          const value = match[1]
+          resolve({ status: "success", result: value })
         } else {
-          resolve({ status: "error", message: "Not found" })
+          resolve({ status: "error", message: "Failed to get the request form!" })
         }
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
@@ -39,7 +44,7 @@ export const SSSTik = (url: string) =>
         Object.entries({
           id: url,
           locale: "en",
-          tt: tt.result as string
+          tt: tt.result
         })
       )
     })
@@ -49,7 +54,7 @@ export const SSSTik = (url: string) =>
         // Result
         const desc = $("p.maintext").text().trim()
         const author: Author = {
-          avatar: $("img.result_author").attr("src") as string,
+          avatar: $("img.result_author").attr("src"),
           nickname: $("h2").text().trim()
         }
         const statistics: Statistics = {
@@ -63,7 +68,7 @@ export const SSSTik = (url: string) =>
         $("ul.splide__list > li")
           .get()
           .map((img) => {
-            images.push($(img).find("img").attr("src") as string)
+            images.push($(img).find("img").attr("src"))
           })
 
         if (images.length !== 0) {
@@ -76,7 +81,7 @@ export const SSSTik = (url: string) =>
               author,
               statistics,
               images,
-              music: $("a.music").attr("href") as string
+              music: $("a.music").attr("href")
             }
           })
         } else {
@@ -89,7 +94,7 @@ export const SSSTik = (url: string) =>
               author,
               statistics,
               video: $("a.without_watermark").attr("href"),
-              music: $("a.music").attr("href") as string
+              music: $("a.music").attr("href")
             }
           })
         }
