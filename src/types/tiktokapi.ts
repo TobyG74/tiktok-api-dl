@@ -25,7 +25,6 @@ export interface Author {
   nickname: string
   signature: string
   region: string
-  avatarLarger: string[]
   avatarThumb: string[]
   avatarMedium: string[]
   url: string
