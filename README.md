@@ -222,7 +222,36 @@ TiktokStalk(username, {
 ```
 
 </details>
+<details>
+  <summary><b>Tiktok Stalker</b></summary>
+  <br>
 
+```ts
+{
+  status: "success" | "error"
+  message?: string
+  result?: {
+    users: {
+      username: string
+      nickname: string
+      avatar: string
+      signature: string
+      verified: boolean
+      region: string
+    }
+    stats: {
+      followerCount: number
+      followingCount: number
+      heartCount: number
+      videoCount: number
+      likeCount: number
+    }
+    posts: Posts[]
+  }
+}
+```
+
+</details>
 <br>
 
 # Contributors
