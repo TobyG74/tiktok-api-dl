@@ -1,12 +1,22 @@
-# Tiktok Downloader & Stalk User
+<h1 align="center">
+ Tiktok Downloader & Stalk User
+</h1>
 
-- Can be used to download videos, images / slides and music from Tiktok
-- Can be used to view someone's profile from Tiktok
-- No login or password are required
-- It is recommended to use your own cookies on Tiktok Stalker
+<div align="center">
+  <a href="https://github.com/TobyG74/tiktok-api-dl/graphs/contributors" title="contributors"><img src="https://img.shields.io/github/contributors/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/network/members" title="forks"><img src="https://img.shields.io/github/forks/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/stargazers" title="stargazers"><img src="https://img.shields.io/github/issues/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
+</div>
+<br>
+<div align="center">
+  <a href="https://nodei.co/npm/@tobyg74/tiktok-api-dl" title="npm"><img src="https://nodei.co/npm/@tobyg74/tiktok-api-dl.png?downloads=true&downloadRank=true&stars=true"></img></a>
+</div>
+
+<br>
 
 # Table of Contents
 
+- [Description](#description)
 - [Install](#install)
   - [From NPM](#from-npm)
   - [From Yarn](#from-yarn)
@@ -15,14 +25,20 @@
   - [Tiktok Downloader](#tiktok-downloader)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
-  - [Tiktok Downloader V1](#tiktok-downloader-v1)
-  - [Tiktok Downloader V2](#tiktok-downloader-v2)
-  - [Tiktok Stalker](#tiktok-stalker-1)
 - [Contributors](#contributors)
+
+# Description
+
+This project uses the Unofficial API from Tiktok.
+
+- Can be used to download videos, images / slides and music from Tiktok
+- Can be used to view someone's profile from Tiktok
+- No login or password are required
+- It is recommended to use your own cookies on Tiktok Stalker
 
 # Install
 
-- @tobyg74/tiktok-api-dl requires Node.js v10+ to run.
+- This module requires Node.js v10+ to run.
 
 ## From NPM
 
@@ -46,13 +62,17 @@ npm install github:TobyG74/tiktok-api-dl
 
 ## Tiktok Downloader
 
+- V1 uses the API from TiktokAPI
+- V2 uses the API from [SSSTik](https://ssstik.io/)
+- V3 uses the API from [MusicalDown](https://musicaldown.com/)
+
 ```js
 const { TiktokDL } = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
 TiktokDL(tiktok_url, {
-  version: "v1" //  version: "v1" | "v2"
+  version: "v1" //  version: "v1" | "v2" | "v3"
 }).then((result) => {
   console.log(result)
 })
@@ -88,7 +108,10 @@ TiktokStalk(username, {
 
 # Response
 
-## Tiktok Downloader V1
+<br>
+<details>
+  <summary><b>Tiktok Downloader V1</b></summary>
+  <br>
 
 ```ts
 {
@@ -144,7 +167,10 @@ TiktokStalk(username, {
 }
 ```
 
-## Tiktok Downloader V2
+</details>
+<details>
+  <summary><b>Tiktok Downloader V2</b></summary>
+  <br>
 
 ```ts
 {
@@ -169,32 +195,35 @@ TiktokStalk(username, {
 }
 ```
 
-## Tiktok Stalker
+</details>
+<details>
+  <summary><b>Tiktok Downloader V3</b></summary>
+  <br>
 
 ```ts
 {
   status: "success" | "error"
   message?: string
   result?: {
-    users: {
-      username: string
+    type: "video" | "image"
+    desc?: string
+    author: {
+      avatar?: string
       nickname: string
-      avatar: string
-      signature: string
-      verified: boolean
-      region: string
     }
-    stats: {
-      followerCount: number
-      followingCount: number
-      heartCount: number
-      videoCount: number
-      likeCount: number
-    }
-    posts: Posts[]
+    music?: string
+    images?: string[]
+    video1?: string
+    video2?: string
+    video_hd?: string
+    video_watermark?: string
   }
 }
 ```
+
+</details>
+
+<br>
 
 # Contributors
 
