@@ -4,7 +4,7 @@ export interface SSSTikFetchTT {
   result?: string
 }
 
-export interface SSSTikResult {
+export interface SSSTikResponse {
   status: "success" | "error"
   message?: string
   result?: {

@@ -1,9 +1,9 @@
 import axios from "axios"
 import { _tiktokapi, _tiktokurl } from "../api"
-import { Author, DLResult, Statistics, Music } from "../types/tiktokapi"
+import { Author, TiktokAPIResponse, Statistics, Music } from "../types/tiktokApi"
 
-export const TiktokAPI = (url: string): Promise<DLResult> =>
-  new Promise((resolve, reject) => {
+export const TiktokAPI = (url: string) =>
+  new Promise<TiktokAPIResponse>((resolve, reject) => {
     url = url.replace("https://vm", "https://vt")
     axios
       .head(url)

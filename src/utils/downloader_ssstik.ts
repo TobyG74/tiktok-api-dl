@@ -1,6 +1,6 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { Author, Statistics, SSSTikFetchTT, SSSTikResult } from "../types/ssstik"
+import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../types/ssstik"
 import { _ssstikapi, _ssstikurl } from "../api"
 
 /**
@@ -29,7 +29,7 @@ const fetchTT = () =>
   })
 
 export const SSSTik = (url: string) =>
-  new Promise<SSSTikResult>(async (resolve, reject) => {
+  new Promise<SSSTikResponse>(async (resolve, reject) => {
     const tt: SSSTikFetchTT = await fetchTT()
     if (tt.status !== "success") return resolve({ status: "error", message: tt.message })
     Axios(_ssstikapi, {

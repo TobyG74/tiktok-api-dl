@@ -19,7 +19,7 @@ export const TiktokStalk = (username: string, options: { cookie: string }): Prom
     axios
       .get(`${_tiktokurl}/@${username}`, {
         headers: {
-          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
           cookie: (options?.cookie ? options.cookie : await getCookie()) as string
         }
       })

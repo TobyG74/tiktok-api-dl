@@ -1,4 +1,4 @@
-export interface DLResult {
+export interface TiktokAPIResponse {
   status: "success" | "error"
   message?: string
   result?: {
