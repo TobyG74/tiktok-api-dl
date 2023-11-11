@@ -1,7 +1,7 @@
 import axios from "axios"
 import { load } from "cheerio"
 import { _tiktokurl } from "../api"
-import { Music, Posts, StalkResult, Statistics, Stats, Users, Video } from "../types/stalker"
+import { StalkResult, Stats, Users } from "../types/stalker"
 
 const getCookie = () =>
   new Promise((resolve, reject) => {
@@ -25,44 +25,44 @@ export const TiktokStalk = (username: string, options: { cookie: string }): Prom
       })
       .then(({ data }) => {
         const $ = load(data)
-        const result = JSON.parse($("script#SIGI_STATE").text())
-        if (!result.UserModule) {
+        const result = JSON.parse($("script#__UNIVERSAL_DATA_FOR_REHYDRATION__").text())
+        if (!result?.__DEFAULT_SCOPE__?.["webapp.user-detail"]) {
           return resolve({
             status: "error",
             message: "User not found!"
           })
         }
-        const user = result.UserModule
-        const itemKeys = Object.keys(result.ItemModule)
+        const dataUser = result.__DEFAULT_SCOPE__["webapp.user-detail"].userInfo
 
         // User Info Result
         const users: Users = {
-          username: user.users[username].uniqueId,
-          nickname: user.users[username].nickname,
-          avatarLarger: user.users[username].avatarLarger,
-          avatarThumb: user.users[username].avatarThumb,
-          avatarMedium: user.users[username].avatarMedium,
-          signature: user.users[username].signature,
-          verified: user.users[username].verified,
-          privateAccount: user.users[username].privateAccount,
-          region: user.users[username].region,
-          commerceUser: user.users[username].commerceUserInfo.commerceUser,
-          usernameModifyTime: user.users[username].uniqueIdModifyTime,
-          nicknameModifyTime: user.users[username].nickNameModifyTime
+          username: dataUser.user.uniqueId,
+          nickname: dataUser.user.nickname,
+          avatarLarger: dataUser.user.avatarLarger,
+          avatarThumb: dataUser.user.avatarThumb,
+          avatarMedium: dataUser.user.avatarMedium,
+          signature: dataUser.user.signature,
+          verified: dataUser.user.verified,
+          privateAccount: dataUser.user.privateAccount,
+          region: dataUser.user.region,
+          commerceUser: dataUser.user.commerceUserInfo.commerceUser,
+          usernameModifyTime: dataUser.user.uniqueIdModifyTime,
+          nicknameModifyTime: dataUser.user.nickNameModifyTime
         }
 
         // Statistics Result
         const stats: Stats = {
-          followerCount: user.stats[username].followerCount,
-          followingCount: user.stats[username].followingCount,
-          heartCount: user.stats[username].heartCount,
-          videoCount: user.stats[username].videoCount,
-          likeCount: user.stats[username].diggCount,
-          friendCount: user.stats[username].friendCount,
-          postCount: itemKeys.length
+          followerCount: dataUser.stats.followerCount,
+          followingCount: dataUser.stats.followingCount,
+          heartCount: dataUser.stats.heartCount,
+          videoCount: dataUser.stats.videoCount,
+          likeCount: dataUser.stats.diggCount,
+          friendCount: dataUser.stats.friendCount
+          // postCount: itemKeys.length
         }
 
         // Posts Result
+        /** 
         const posts: Posts[] = []
         itemKeys.forEach((key) => {
           const post = result.ItemModule[key]
@@ -124,12 +124,13 @@ export const TiktokStalk = (username: string, options: { cookie: string }): Prom
             ...media
           })
         })
+        */
         resolve({
           status: "success",
           result: {
             users,
-            stats,
-            posts
+            stats
+            // posts
           }
         })
       })
