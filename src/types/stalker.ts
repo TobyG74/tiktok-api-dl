@@ -4,7 +4,7 @@ export interface StalkResult {
   result?: {
     users: Users
     stats: Stats
-    posts: Posts[]
+    // posts: Posts[]
   }
 }
 
@@ -30,20 +30,20 @@ export interface Stats {
   videoCount: number
   likeCount: number
   friendCount: number
-  postCount: number
+  // postCount: number
 }
 
-export interface Posts {
-  id: string
-  desc: string
-  createTime: number
-  author: string
-  locationCreated: string
-  hashtags: string[]
-  statistics: Statistics
-  video: Video
-  music: Music
-}
+// export interface Posts {
+//   id: string
+//   desc: string
+//   createTime: number
+//   author: string
+//   locationCreated: string
+//   hashtags: string[]
+//   statistics: Statistics
+//   video: Video
+//   music: Music
+// }
 
 export interface Statistics {
   likeCount: number
