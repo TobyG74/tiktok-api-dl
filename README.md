@@ -264,7 +264,6 @@ TiktokStalk(username, {
       likeCount: number
       friendCount: number
     }
-    // posts: Posts[]
   }
 }
 ```
