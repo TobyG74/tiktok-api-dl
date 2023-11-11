@@ -245,16 +245,10 @@ TiktokStalk(username, {
     users: {
       username: string
       nickname: string
-      avatarLarger: string
-      avatarThumb: string
-      avatarMedium: string
+      avatar: string
       signature: string
       verified: boolean
-      privateAccount: boolean
       region: string
-      commerceUser: boolean
-      usernameModifyTime: number
-      nicknameModifyTime: number
     }
     stats: {
       followerCount: number
@@ -262,7 +256,6 @@ TiktokStalk(username, {
       heartCount: number
       videoCount: number
       likeCount: number
-      friendCount: number
     }
   }
 }
