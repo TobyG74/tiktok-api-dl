@@ -18,6 +18,7 @@
 # Table of Contents
 
 - [Description](#description)
+- [How to get Tiktok Cookie](#how-to-get-tiktok-cookie)
 - [Install](#install)
   - [From NPM](#from-npm)
   - [From Yarn](#from-yarn)
@@ -36,6 +37,15 @@ This project uses the Unofficial API from Tiktok.
 - Can be used to view someone's profile from Tiktok
 - No login or password are required
 - It is recommended to use your own cookies on Tiktok Stalker
+
+# How to get Tiktok Cookie
+
+(If the Default Cookie Has Expired)
+
+- Login at [Tiktok](https://www.tiktok.com/)
+- When you have finished logging in, you can press CTRL + SHIFT + I or Right Click and select Inspect
+- Go to the Console section then type <b>document.cookie<b>
+- Then Copy Paste your Cookie and Use it for TiktokStalk
 
 # Install
 
