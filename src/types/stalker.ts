@@ -1,4 +1,4 @@
-export interface StalkResult {
+export type StalkResult = {
   status: "success" | "error"
   message?: string
   result?: {
@@ -8,7 +8,7 @@ export interface StalkResult {
   }
 }
 
-export interface Users {
+export type Users = {
   username: string
   nickname: string
   avatarLarger: string
@@ -23,29 +23,16 @@ export interface Users {
   nicknameModifyTime: number
 }
 
-export interface Stats {
+export type Stats = {
   followerCount: number
   followingCount: number
   heartCount: number
   videoCount: number
   likeCount: number
   friendCount: number
-  // postCount: number
 }
 
-// export interface Posts {
-//   id: string
-//   desc: string
-//   createTime: number
-//   author: string
-//   locationCreated: string
-//   hashtags: string[]
-//   statistics: Statistics
-//   video: Video
-//   music: Music
-// }
-
-export interface Statistics {
+export type Statistics = {
   likeCount: number
   shareCount: number
   commentCount: number
@@ -53,7 +40,7 @@ export interface Statistics {
   favoriteCount: number
 }
 
-export interface Video {
+export type Video = {
   id: string
   duration: string
   ratio: string
@@ -66,7 +53,7 @@ export interface Video {
   bitrate: number
 }
 
-export interface Music {
+export type Music = {
   id: string
   title: string
   album: string

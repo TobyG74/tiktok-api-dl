@@ -1,4 +1,4 @@
-export interface TiktokAPIResponse {
+export type TiktokAPIResponse = {
   status: "success" | "error"
   message?: string
   result?: {
@@ -19,7 +19,7 @@ export interface TiktokAPIResponse {
   }
 }
 
-export interface Author {
+export type Author = {
   uid: number
   username: string
   nickname: string
@@ -30,7 +30,7 @@ export interface Author {
   url: string
 }
 
-export interface Statistics {
+export type Statistics = {
   playCount: number
   downloadCount: number
   shareCount: number
@@ -43,7 +43,7 @@ export interface Statistics {
   loseCommentCount: number
 }
 
-export interface Music {
+export type Music = {
   id: number
   title: string
   author: string

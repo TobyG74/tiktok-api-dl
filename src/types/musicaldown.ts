@@ -1,4 +1,4 @@
-export interface getRequest {
+export type getRequest = {
   status: "success" | "error"
   request?: {
     [key: string]: string
@@ -7,7 +7,7 @@ export interface getRequest {
   cookie?: string
 }
 
-export interface MusicalDownResponse {
+export type MusicalDownResponse = {
   status: "success" | "error"
   message?: string
   result?: {
@@ -26,7 +26,7 @@ export interface MusicalDownResponse {
   }
 }
 
-export interface getMusic {
+export type getMusic = {
   status: "success" | "error"
   result?: string
 }

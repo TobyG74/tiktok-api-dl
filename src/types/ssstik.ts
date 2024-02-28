@@ -1,10 +1,10 @@
-export interface SSSTikFetchTT {
+export type SSSTikFetchTT = {
   status: "success" | "error"
   message?: string
   result?: string
 }
 
-export interface SSSTikResponse {
+export type SSSTikResponse = {
   status: "success" | "error"
   message?: string
   result?: {
@@ -18,12 +18,12 @@ export interface SSSTikResponse {
   }
 }
 
-export interface Author {
+export type Author = {
   avatar: string
   nickname: string
 }
 
-export interface Statistics {
+export type Statistics = {
   likeCount: string
   commentCount: string
   shareCount: string
