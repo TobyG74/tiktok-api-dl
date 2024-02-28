@@ -1,7 +1,7 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { MusicalDownResponse, getMusic, getRequest } from "../types/musicaldown"
-import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../api"
+import { MusicalDownResponse, getMusic, getRequest } from "../../types/musicaldown"
+import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../api"
 
 /**
  * Using API from Website:

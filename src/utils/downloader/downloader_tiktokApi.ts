@@ -1,6 +1,6 @@
 import axios from "axios"
-import { _tiktokapi, _tiktokurl } from "../api"
-import { Author, TiktokAPIResponse, Statistics, Music } from "../types/tiktokApi"
+import { _tiktokapi, _tiktokurl } from "../../api"
+import { Author, TiktokAPIResponse, Statistics, Music } from "../../types/tiktokApi"
 
 export const TiktokAPI = (url: string) =>
   new Promise<TiktokAPIResponse>((resolve, reject) => {

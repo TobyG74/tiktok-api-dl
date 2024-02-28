@@ -1,7 +1,7 @@
 import axios from "axios"
 import { load } from "cheerio"
-import { _tiktokurl } from "../api"
-import { StalkResult, Stats, Users } from "../types/stalker"
+import { _tiktokurl } from "../../api"
+import { StalkResult, Stats, Users } from "../../types/stalker"
 
 const getCookie = () =>
   new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ const getCookie = () =>
       .catch((e) => resolve({ status: "error", message: "Failed to fetch cookie." }))
   })
 
-export const TiktokStalk = (username: string, options: { cookie: string }): Promise<StalkResult> =>
+export const TiktokStalk = (username: string, options?: { cookie: string }): Promise<StalkResult> =>
   new Promise(async (resolve, reject) => {
     username = username.replace("@", "")
     axios

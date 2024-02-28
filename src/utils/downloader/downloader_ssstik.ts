@@ -1,7 +1,7 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../types/ssstik"
-import { _ssstikapi, _ssstikurl } from "../api"
+import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../../types/ssstik"
+import { _ssstikapi, _ssstikurl } from "../../api"
 
 /**
  * Using API from Website:
@@ -16,7 +16,7 @@ const fetchTT = () =>
       }
     })
       .then(({ data }) => {
-        const regex = /form\.setAttribute\("include-vals",\s*"([^"]+)"\)/
+        const regex = /s_tt\s*=\s*["']([^"']+)["']/
         const match = data.match(regex)
         if (match) {
           const value = match[1]
