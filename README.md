@@ -78,11 +78,11 @@ npm install github:TobyG74/tiktok-api-dl
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
 ```js
-const { TiktokDL } = require("@tobyg74/tiktok-api-dl")
+const { TiktokDownloader } = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
-TiktokDL(tiktok_url, {
+TiktokDownloader(tiktok_url, {
   version: "v1" //  version: "v1" | "v2" | "v3"
 }).then((result) => {
   console.log(result)
