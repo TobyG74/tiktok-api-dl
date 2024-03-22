@@ -68,7 +68,7 @@ export const SSSTik = (url: string) =>
         $("ul.splide__list > li")
           .get()
           .map((img) => {
-            images.push($(img).find("img").attr("src"))
+            images.push($(img).find("a").attr("href"))
           })
 
         if (images.length !== 0) {
