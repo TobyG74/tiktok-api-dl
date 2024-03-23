@@ -1,13 +1,14 @@
 import axios from "axios"
+import asyncRetry from "async-retry"
 import { _tiktokapi, _tiktokurl } from "../../api"
-import { Author, TiktokAPIResponse, Statistics, Music } from "../../types/tiktokApi"
+import { Author, TiktokAPIResponse, Statistics, Music, responseParser } from "../../types/tiktokApi"
 
 export const TiktokAPI = (url: string) =>
   new Promise<TiktokAPIResponse>((resolve, reject) => {
     url = url.replace("https://vm", "https://vt")
     axios
       .head(url)
-      .then(({ request }) => {
+      .then(async ({ request }) => {
         const { responseUrl } = request.res
         let ID = responseUrl.match(/\d{17,21}/g)
         if (ID === null)
@@ -16,106 +17,145 @@ export const TiktokAPI = (url: string) =>
             message: "Failed to fetch tiktok url. Make sure your tiktok url is correct!"
           })
         ID = ID[0]
-        axios
-          .get(
-            _tiktokapi(
-              new URLSearchParams(
-                withParams({
-                  aweme_id: ID
-                })
-              ).toString()
-            )
-          )
-          .then(({ data }) => {
-            const content = data.aweme_list.filter((v) => v.aweme_id === ID)[0]
-            if (!content)
-              return resolve({
-                status: "error",
-                message: "Failed to find tiktok data. Make sure your tiktok url is correct!"
-              })
 
-            // Statictics Result
-            const statistics: Statistics = {
-              playCount: content.statistics.play_count,
-              downloadCount: content.statistics.download_count,
-              shareCount: content.statistics.share_count,
-              commentCount: content.statistics.comment_count,
-              likeCount: content.statistics.digg_count,
-              favoriteCount: content.statistics.collect_count,
-              forwardCount: content.statistics.forward_count,
-              whatsappShareCount: content.statistics.whatsapp_share_count,
-              loseCount: content.statistics.lose_count,
-              loseCommentCount: content.statistics.lose_comment_count
-            }
+        let data2 = await fetchTiktokData(ID)
 
-            // Author Result
-            const author: Author = {
-              uid: content.author.uid,
-              username: content.author.unique_id,
-              nickname: content.author.nickname,
-              signature: content.author.signature,
-              region: content.author.region,
-              avatarThumb: content.author.avatar_thumb.url_list,
-              avatarMedium: content.author.avatar_medium.url_list,
-              url: `${_tiktokurl}/@${content.author.unique_id}`
-            }
+        if (!data2.content) {
+          return resolve({
+            status: "error",
+            message: "Failed to fetch tiktok data. Make sure your tiktok url is correct!"
+          })
+        }
 
-            // Music Result
-            const music: Music = {
-              id: content.music.id,
-              title: content.music.title,
-              author: content.music.author,
-              album: content.music.album,
-              playUrl: content.music.play_url.url_list,
-              coverLarge: content.music.cover_large.url_list,
-              coverMedium: content.music.cover_medium.url_list,
-              coverThumb: content.music.cover_thumb.url_list,
-              duration: content.music.duration
-            }
+        const { content, author, statistics, music } = data2
 
-            // Download Result
-            if (content.image_post_info) {
-              // Images or Slide Result
-              resolve({
-                status: "success",
-                result: {
-                  type: "image",
-                  id: content.aweme_id,
-                  createTime: content.create_time,
-                  description: content.desc,
-                  hashtag: content.text_extra.filter((x) => x.hashtag_name !== undefined).map((v) => v.hashtag_name),
-                  author,
-                  statistics,
-                  images: content.image_post_info.images.map((v) => v.display_image.url_list[0]),
-                  music
-                }
-              })
-            } else {
-              // Video Result
-              resolve({
-                status: "success",
-                result: {
-                  type: "video",
-                  id: content.aweme_id,
-                  createTime: content.create_time,
-                  description: content.desc,
-                  hashtag: content.text_extra.filter((x) => x.hashtag_name !== undefined).map((v) => v.hashtag_name),
-                  duration: toMinute(content.duration),
-                  author,
-                  statistics,
-                  video: content.video.play_addr.url_list,
-                  cover: content.video.cover.url_list,
-                  dynamicCover: content.video.dynamic_cover.url_list,
-                  originCover: content.video.origin_cover.url_list,
-                  music
-                }
-              })
+        // Download Result
+        if (content.image_post_info) {
+          // Images or Slide Result
+          resolve({
+            status: "success",
+            result: {
+              type: "image",
+              id: content.aweme_id,
+              createTime: content.create_time,
+              description: content.desc,
+              hashtag: content.text_extra.filter((x) => x.hashtag_name !== undefined).map((v) => v.hashtag_name),
+              author,
+              statistics,
+              images: content.image_post_info.images.map((v) => v.display_image.url_list[0]),
+              music
             }
           })
-          .catch((e) => resolve({ status: "error", message: e.message }))
+        } else {
+          // Video Result
+          resolve({
+            status: "success",
+            result: {
+              type: "video",
+              id: content.aweme_id,
+              createTime: content.create_time,
+              description: content.desc,
+              hashtag: content.text_extra.filter((x) => x.hashtag_name !== undefined).map((v) => v.hashtag_name),
+              duration: toMinute(content.duration),
+              author,
+              statistics,
+              video: content.video.play_addr.url_list,
+              cover: content.video.cover.url_list,
+              dynamicCover: content.video.dynamic_cover.url_list,
+              originCover: content.video.origin_cover.url_list,
+              music
+            }
+          })
+        }
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
+
+const fetchTiktokData = async (ID: string) => {
+  let data2: responseParser
+  await asyncRetry(
+    async () => {
+      const res = await fetch(
+        _tiktokapi(
+          new URLSearchParams(
+            withParams({
+              aweme_id: ID
+            })
+          ).toString()
+        ),
+        {
+          method: "GET",
+          headers: {
+            "User-Agent": "com.ss.android.ugc.trill/494+Mozilla/5.0+(Linux;+Android+12;+2112123G+Build/SKQ1.211006.001;+wv)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Version/4.0+Chrome/107.0.5304.105+Mobile+Safari/537.36"
+          }
+        }
+      )
+
+      if (res.headers.get("content-length") !== "0") {
+        const data = await res.json()
+
+        if (data) {
+          data2 = parseTiktokData(data)
+          return
+        }
+      }
+
+      throw new Error("Data is empty!")
+    },
+    { forever: true, minTimeout: 0, maxTimeout: 0 }
+  )
+
+  return data2
+}
+
+const parseTiktokData = (data: any): responseParser => {
+  let content = data?.aweme_list
+
+  if (!content) return { content: null }
+
+  content = content[0]
+
+  // Statistics Result
+  const statistics: Statistics = {
+    playCount: content.statistics.play_count,
+    downloadCount: content.statistics.download_count,
+    shareCount: content.statistics.share_count,
+    commentCount: content.statistics.comment_count,
+    likeCount: content.statistics.digg_count,
+    favoriteCount: content.statistics.collect_count,
+    forwardCount: content.statistics.forward_count,
+    whatsappShareCount: content.statistics.whatsapp_share_count,
+    loseCount: content.statistics.lose_count,
+    loseCommentCount: content.statistics.lose_comment_count
+  }
+
+  // Author Result
+  const author: Author = {
+    uid: content.author.uid,
+    username: content.author.unique_id,
+    nickname: content.author.nickname,
+    signature: content.author.signature,
+    region: content.author.region,
+    avatarThumb: content.author.avatar_thumb.url_list,
+    avatarMedium: content.author.avatar_medium.url_list,
+    url: `${_tiktokurl}/@${content.author.unique_id}`
+  }
+
+  // Music Result
+  const music: Music = {
+    id: content.music.id,
+    title: content.music.title,
+    author: content.music.author,
+    album: content.music.album,
+    playUrl: content.music.play_url.url_list,
+    coverLarge: content.music.cover_large.url_list,
+    coverMedium: content.music.cover_medium.url_list,
+    coverThumb: content.music.cover_thumb.url_list,
+    duration: content.music.duration
+  }
+
+  return { content, statistics, author, music }
+}
 
 const withParams = (args) => {
   return {
@@ -155,7 +195,7 @@ const withParams = (args) => {
   }
 }
 
-const toMinute = (duration) => {
+const toMinute = (duration: number) => {
   const mins = ~~((duration % 3600) / 60)
   const secs = ~~duration % 60
 
