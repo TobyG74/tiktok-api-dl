@@ -54,3 +54,10 @@ export type Music = {
   coverThumb: string[]
   duration: number
 }
+
+export type responseParser = {
+  content?: any
+  statistics?: Statistics
+  author?: Author
+  music?: Music
+}
