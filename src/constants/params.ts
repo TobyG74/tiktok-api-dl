@@ -35,6 +35,46 @@ export const _userPostsParams = () => {
   )
 }
 
+export const _userSearchParams = (keyword: any, page: number = 1) => {
+  let cursor = 0
+  for (let i = 1; i < page; i++) {
+    cursor += 10
+  }
+
+  return qs.stringify({
+    WebIdLastTime: Date.now(),
+    aid: "1988",
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Win32",
+    browser_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
+    channel: "tiktok_web",
+    cookie_enabled: true,
+    cursor: cursor,
+    device_id: "7340508178566366722",
+    device_platform: "web_pc",
+    focus_state: false,
+    from_page: "search",
+    history_len: 5,
+    is_fullscreen: false,
+    is_page_visible: true,
+    keyword: keyword,
+    os: "windows",
+    priority_region: "ID",
+    referer: "",
+    region: "ID",
+    screen_height: 768,
+    screen_width: 1366,
+    search_id: "20240329123238075BE0FECBA0FE11C76B",
+    tz_name: "Asia/Jakarta",
+    web_search_code: { tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } },
+    webcast_language: "en"
+  })
+}
+
 export const _tiktokApiParams = (args: any) => {
   return {
     ...args,

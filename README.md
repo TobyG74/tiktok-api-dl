@@ -103,6 +103,7 @@ const username = "tobz2k19"
 
 Tiktok.Search(username, {
   type: "user",
+  page: 1,
   cookie: process.env.COOKIE || "Your Cookie"
 }).then((result) => {
   console.log(result)

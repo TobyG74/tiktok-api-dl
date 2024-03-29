@@ -38,10 +38,10 @@ export const Tiktok = {
       }
     }
   },
-  Search: async <T extends "user" | "video">(query: string, options: { type: T; cookie: string }): Promise<TiktokSearchResponse<T>> => {
+  Search: async <T extends "user" | "video">(query: string, options: { type: T; cookie?: string; page?: number }): Promise<TiktokSearchResponse<T>> => {
     switch (options?.type) {
       case "user": {
-        const response = await SearchUser(query, options.cookie)
+        const response = await SearchUser(query, options?.cookie, options?.page)
         return response as TiktokSearchResponse<T>
       }
       // case "video": {
@@ -49,13 +49,13 @@ export const Tiktok = {
       //   return response as TiktokSearchResponse<T>
       // }
       default: {
-        const response = await SearchUser(query, options?.cookie)
+        const response = await SearchUser(query, options?.cookie, options?.page)
         return response as TiktokSearchResponse<T>
       }
     }
   },
-  StalkUser: async (username: string, options: { cookie: string }): Promise<StalkResult> => {
-    const response = await StalkUser(username, options.cookie)
+  StalkUser: async (username: string, options?: { cookie?: string }): Promise<StalkResult> => {
+    const response = await StalkUser(username, options?.cookie)
     return response
   }
 }
