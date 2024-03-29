@@ -6,14 +6,14 @@ export type TiktokAPIResponse = {
     id: string
     createTime: number
     description: string
-    duration?: string
     author: Author
     statistics: Statistics
     hashtag: string[]
+    isADS: boolean
     cover?: string[]
     dynamicCover?: string[]
     originCover?: string[]
-    video?: string[]
+    video?: Video
     images?: string[]
     music: Music
   }
@@ -35,12 +35,23 @@ export type Statistics = {
   downloadCount: number
   shareCount: number
   commentCount: number
-  likeCount: number
-  favoriteCount: number
+  diggCount: number
+  collectCount: number
   forwardCount: number
   whatsappShareCount: number
   loseCount: number
   loseCommentCount: number
+  repostCount: number
+}
+
+export type Video = {
+  ratio: string
+  duration: number
+  playAddr: string[]
+  downloadAddr: string[]
+  cover: string[]
+  dynamicCover: string[]
+  originCover: string[]
 }
 
 export type Music = {
@@ -53,6 +64,9 @@ export type Music = {
   coverMedium: string[]
   coverThumb: string[]
   duration: number
+  isCommerceMusic: boolean
+  isOriginalSound: boolean
+  isAuthorArtist: boolean
 }
 
 export type responseParser = {
