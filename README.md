@@ -25,6 +25,7 @@
   - [From Github](#from-github)
 - [Examples](#examples)
   - [Tiktok Downloader](#tiktok-downloader)
+  - [Tiktok Search](#tiktok-search)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
 - [Contributors](#contributors)
@@ -78,12 +79,31 @@ npm install github:TobyG74/tiktok-api-dl
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
 ```js
-const { TiktokDownloader } = require("@tobyg74/tiktok-api-dl")
+const { default: Tiktok } = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
-TiktokDownloader(tiktok_url, {
+Tiktok.Downloader(tiktok_url, {
   version: "v1" //  version: "v1" | "v2" | "v3"
+}).then((result) => {
+  console.log(result)
+})
+```
+
+## Tiktok Search
+
+### Search User
+
+- Using Your Cookie
+
+```js
+const { default: Tiktok } = require("@tobyg74/tiktok-api-dl")
+
+const username = "tobz2k19"
+
+Tiktok.Search(username, {
+  type: "user",
+  cookie: process.env.COOKIE || "Your Cookie"
 }).then((result) => {
   console.log(result)
 })
@@ -91,26 +111,14 @@ TiktokDownloader(tiktok_url, {
 
 ## Tiktok Stalker
 
-- Using Default Cookies
+- Using Your Cookie
 
 ```js
-const { TiktokStalk } = require("@tobyg74/tiktok-api-dl")
+const { default: Tiktok } = require("@tobyg74/tiktok-api-dl")
 
 const username = "tobz2k19"
 
-TiktokStalk(username).then((result) => {
-  console.log(result)
-})
-```
-
-- Using Your Cookies
-
-```js
-const { TiktokStalk } = require("@tobyg74/tiktok-api-dl")
-
-const username = "tobz2k19"
-
-TiktokStalk(username, {
+Tiktok.StalkUser(username, {
   cookie: process.env.COOKIE || "Your Cookie"
 }).then((result) => {
   console.log(result)
@@ -133,7 +141,7 @@ TiktokStalk(username, {
     id: string
     createTime: number
     description: string
-    duration?: string
+    isADS: boolean
     hashtag: string[]
     author: {
       uid: string
@@ -151,17 +159,24 @@ TiktokStalk(username, {
       downloadCount: number
       shareCount: number
       commentCount: number
-      likeCount: number
+      diggCount: number
       favoriteCount: number
       forwardCount: number
       whatsappShareCount: number
       loseCount: number
       loseCommentCount: number
+      whatsappShareCount: number
+      repostCount: number
     }
-    video?: string[]
-    cover?: string[]
-    dynamicCover?: string[]
-    originCover: string[]
+    video?: {
+      ratio: string
+      duration: number
+      playAddr: string
+      downloadAddr: string
+      cover: string
+      originCover: string
+      dynamicCover: string
+    }
     images?: string[]
     music: {
       id: number
@@ -173,6 +188,9 @@ TiktokStalk(username, {
       coverMedium: string[]
       coverThumb: string[]
       duration: number
+      isCommerceMusic: boolean
+      isOriginalSound: boolean
+      isAuthorArtist: boolean
     }
   }
 }
@@ -232,6 +250,28 @@ TiktokStalk(username, {
 }
 ```
 
+<details>
+  <summary><b>Tiktok Search "User"</b></summary>
+  <br>
+
+```ts
+{
+  status: "success" | "error"
+  message?: string
+  result?: {
+    uid: string
+    username: string
+    nickname: string
+    signature: string
+    followerCount: number
+    avatarThumb: string[]
+    isVerified: boolean
+    secUid: string
+    url: string
+  }
+}
+```
+
 </details>
 <details>
   <summary><b>Tiktok Stalker</b></summary>
@@ -257,6 +297,7 @@ TiktokStalk(username, {
       videoCount: number
       likeCount: number
     }
+    posts: Posts[]
   }
 }
 ```
