@@ -250,12 +250,13 @@ Tiktok.StalkUser(username, {
 }
 ```
 
+</details>
 <details>
   <summary><b>Tiktok Search "User"</b></summary>
   <br>
 
 ```ts
-{
+[{
   status: "success" | "error"
   message?: string
   result?: {
@@ -269,7 +270,7 @@ Tiktok.StalkUser(username, {
     secUid: string
     url: string
   }
-}
+}]
 ```
 
 </details>
