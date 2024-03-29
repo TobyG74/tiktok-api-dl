@@ -250,6 +250,7 @@ Tiktok.StalkUser(username, {
 }
 ```
 
+</details>
 <details>
   <summary><b>Tiktok Search "User"</b></summary>
   <br>
