@@ -1,15 +1,23 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { MusicalDownResponse, getMusic, getRequest } from "../../types/musicaldown"
-import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../api"
+import { MusicalDownResponse, getMusic, getRequest } from "../../types/downloader/musicaldown"
+import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../constants/api"
 
 /**
  * Using API from Website:
  * BASE URL : https://ssstik.io
  */
 
+const TiktokURLregex = /(?:http[s]?:\/\/)?(?:www\.|m\.)?(?:tiktok\.com\/(?:@[\w.-]+\/video\/|@[\w.-]+\/video\/))?(\d+)/
+
 const getRequest = (url: string) =>
   new Promise<getRequest>((resolve, reject) => {
+    if (!TiktokURLregex.test(url)) {
+      return resolve({
+        status: "error",
+        message: "Invalid Tiktok URL. Make sure your url is correct!"
+      })
+    }
     Axios.get(_musicaldownurl, {
       headers: {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
@@ -45,6 +53,12 @@ const getMusic = (cookie: string) =>
       })
       .catch((e) => resolve({ status: "error" }))
   })
+
+/**
+ * Tiktok MusicalDown Downloader
+ * @param {string} url - Tiktok URL
+ * @returns {Promise<MusicalDownResponse>}
+ */
 
 export const MusicalDown = (url: string) =>
   new Promise<MusicalDownResponse>(async (resolve, reject) => {

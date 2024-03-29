@@ -1,12 +1,14 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../../types/ssstik"
-import { _ssstikapi, _ssstikurl } from "../../api"
+import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../../types/downloader/ssstik"
+import { _ssstikapi, _ssstikurl } from "../../constants/api"
 
 /**
  * Using API from Website:
  * BASE URL : https://ssstik.io
  */
+
+const TiktokURLregex = /(?:http[s]?:\/\/)?(?:www\.|m\.)?(?:tiktok\.com\/(?:@[\w.-]+\/video\/|@[\w.-]+\/video\/))?(\d+)/
 
 const fetchTT = () =>
   new Promise<SSSTikFetchTT>(async (resolve, reject) => {
@@ -28,8 +30,20 @@ const fetchTT = () =>
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
 
+/**
+ * Tiktok SSSTik Downloader
+ * @param {string} url - Tiktok URL
+ * @returns {Promise<SSSTikResponse>}
+ */
+
 export const SSSTik = (url: string) =>
   new Promise<SSSTikResponse>(async (resolve, reject) => {
+    if (!TiktokURLregex.test(url)) {
+      return resolve({
+        status: "error",
+        message: "Invalid Tiktok URL. Make sure your url is correct!"
+      })
+    }
     const tt: SSSTikFetchTT = await fetchTT()
     if (tt.status !== "success") return resolve({ status: "error", message: tt.message })
     Axios(_ssstikapi, {
