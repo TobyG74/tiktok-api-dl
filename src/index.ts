@@ -17,7 +17,7 @@ import { StalkResult } from "./types/search/stalker"
 type TiktokDownloaderResponse<T extends "v1" | "v2" | "v3"> = T extends "v1" ? TiktokAPIResponse : T extends "v2" ? SSSTikResponse : T extends "v3" ? MusicalDownResponse : TiktokAPIResponse
 type TiktokSearchResponse<T extends "user" | "video"> = T extends "user" ? TiktokUserSearchResponse : T extends "video" ? any : TiktokUserSearchResponse
 
-export const Tiktok = {
+const Tiktok = {
   Downloader: async <T extends "v1" | "v2" | "v3">(url: string, options?: { version: T }): Promise<TiktokDownloaderResponse<T>> => {
     switch (options?.version) {
       case "v1": {
