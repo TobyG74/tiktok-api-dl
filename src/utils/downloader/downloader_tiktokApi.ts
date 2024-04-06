@@ -3,7 +3,7 @@ import { _tiktokapi, _tiktokurl } from "../../constants/api"
 import { _tiktokApiParams } from "../../constants/params"
 import { Author, TiktokAPIResponse, Statistics, Music, responseParser, Video } from "../../types/downloader/tiktokApi"
 
-const TiktokURLregex = /(?:http[s]?:\/\/)?(?:www\.|m\.)?(?:tiktok\.com\/(?:@[\w.-]+\/video\/|@[\w.-]+\/video\/))?(\d+)/
+const TiktokURLregex = /https:\/\/(?:m|www|vm|vt)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 /**
  * Tiktok API Downloader

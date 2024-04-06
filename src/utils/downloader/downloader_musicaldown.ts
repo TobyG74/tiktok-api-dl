@@ -8,7 +8,7 @@ import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../co
  * BASE URL : https://ssstik.io
  */
 
-const TiktokURLregex = /(?:http[s]?:\/\/)?(?:www\.|m\.)?(?:tiktok\.com\/(?:@[\w.-]+\/video\/|@[\w.-]+\/video\/))?(\d+)/
+const TiktokURLregex = /https:\/\/(?:m|www|vm|vt)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 const getRequest = (url: string) =>
   new Promise<getRequest>((resolve, reject) => {

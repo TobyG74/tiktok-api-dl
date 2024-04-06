@@ -19,6 +19,7 @@
 
 - [Description](#description)
 - [How to get Tiktok Cookie](#how-to-get-tiktok-cookie)
+- [Build this project](#build-this-project)
 - [Install](#install)
   - [From NPM](#from-npm)
   - [From Yarn](#from-yarn)
@@ -41,12 +42,32 @@ This project uses the Unofficial API from Tiktok.
 
 # How to get Tiktok Cookie
 
-(If the Default Cookie Has Expired)
+You can use cookies in the form of String or JSON
 
-- Login at [Tiktok](https://www.tiktok.com/)
-- When you have finished logging in, you can press CTRL + SHIFT + I or Right Click and select Inspect
-- Go to the Console section then type <b>document.cookie<b>
-- Then Copy Paste your Cookie and Use it for TiktokStalk
+- Method 1 (String) :
+
+  Login to the [Tiktok website](https://tiktok/.com) -> Open the **Inspect Element** or you can press the shortcut **CTRL + SHIFT + I** -> Go to network -> Find the request that goes to tiktok then open the request and look for **Cookie**
+
+![Capture](https://github.com/TobyG74/tiktok-api-dl/assets/32604979/c516e5e8-7b8f-43cb-aa2e-2bbe92944dac)
+
+- Method 2 (JSON) :
+
+  You can use the chrome extension [EditThisCookies](https://chromewebstore.google.com/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg) -> Login to the [Tiktok website](https://tiktok/.com) -> Then open the **EditThisCookie** extension -> Then click **Export Cookie**
+
+![Capture2](https://github.com/TobyG74/tiktok-api-dl/assets/32604979/fa0e4bc7-a646-4551-a974-160881a98198)
+
+# Build this project
+
+- Clone the repository
+- Install the dependencies
+- Run the build script
+
+```bash
+git clone https://github.com/TobyG74/tiktok-api-dl.git
+cd tiktok-api-dl
+npm install
+npm run build
+```
 
 # Install
 
@@ -79,7 +100,7 @@ npm install github:TobyG74/tiktok-api-dl
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
 ```js
-const { default: Tiktok } = require("@tobyg74/tiktok-api-dl")
+const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
@@ -97,7 +118,7 @@ Tiktok.Downloader(tiktok_url, {
 - Using Your Cookie
 
 ```js
-const { default: Tiktok } = require("@tobyg74/tiktok-api-dl")
+const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const username = "tobz2k19"
 
@@ -115,7 +136,7 @@ Tiktok.Search(username, {
 - Using Your Cookie
 
 ```js
-const { default: Tiktok } = require("@tobyg74/tiktok-api-dl")
+const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const username = "tobz2k19"
 
