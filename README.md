@@ -182,7 +182,7 @@ Tiktok.StalkUser(username, {
       shareCount: number
       commentCount: number
       diggCount: number
-      favoriteCount: number
+      collectCount: number
       forwardCount: number
       whatsappShareCount: number
       loseCount: number
