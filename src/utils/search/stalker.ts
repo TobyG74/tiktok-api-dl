@@ -103,6 +103,7 @@ const parsePosts = async (dataUser: any, postLimit?: number): Promise<Posts[]> =
   const posts: Posts[] = []
   while (hasMore) {
     let result2: any | null = null
+    let counter = 0
 
     // Prevent missing response posts
     for (let i = 0; i < 30; i++) {
@@ -183,8 +184,15 @@ const parsePosts = async (dataUser: any, postLimit?: number): Promise<Posts[]> =
       }
     })
 
+    // Restrict too many data requests
+    if (postLimit !== 0) {
+      let loopCount = Math.floor(postLimit / 30)
+      if (counter >= loopCount) break
+    }
+
     hasMore = result2.hasMore
     cursor = hasMore ? result2.cursor : null
+    counter++
   }
 
   return postLimit ? posts.slice(0, postLimit) : posts
