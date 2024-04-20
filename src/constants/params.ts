@@ -111,6 +111,25 @@ export const _tiktokApiParams = (args: any) => {
   }
 }
 
+export const _xttParams = (secUid: string, cursor: number, count: number) => {
+  return qs.stringify({
+    aid: "1988",
+    cookie_enabled: true,
+    screen_width: 0,
+    screen_height: 0,
+    browser_language: "",
+    browser_platform: "",
+    browser_name: "",
+    browser_version: "",
+    browser_online: "",
+    timezone_name: "Europe/London",
+    secUid,
+    cursor,
+    count,
+    is_encryption: 1
+  })
+}
+
 const randomChar = (char: string, range: number) => {
   let chars = ""
 
