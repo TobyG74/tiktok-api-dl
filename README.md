@@ -147,7 +147,7 @@ Tiktok.StalkUser(username, {
 })
 ```
 
-# Response
+## Response
 
 <br>
 <details>
@@ -328,7 +328,7 @@ Tiktok.StalkUser(username, {
 </details>
 <br>
 
-## Contributing
+# Contributing
 
 - This repository is open source. We really appreciate it if you want to participate in developing this repository...
 - Please read our [CONTRIBUTING.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CODE_OF_CONDUCT.md) before contributing.
