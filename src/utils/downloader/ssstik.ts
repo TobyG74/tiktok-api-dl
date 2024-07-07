@@ -9,7 +9,7 @@ import { _ssstikapi, _ssstikurl } from "../../constants/api"
  * BASE URL : https://ssstik.io
  */
 
-const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
+const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 const fetchTT = () =>
   new Promise<SSSTikFetchTT>(async (resolve, reject) => {
