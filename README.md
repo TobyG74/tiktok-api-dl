@@ -29,7 +29,7 @@
   - [Tiktok Search](#tiktok-search)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
-- [Contributors](#contributors)
+- [Contributing](#Contributing)
 
 # Description
 
