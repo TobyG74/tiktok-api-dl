@@ -1,5 +1,5 @@
 import Axios from "axios"
-import { _tiktokapi, _tiktokurl } from "../../constants/api"
+import { _tiktokvFeed, _tiktokurl } from "../../constants/api"
 import { _tiktokApiParams } from "../../constants/params"
 import { Author, TiktokAPIResponse, Statistics, Music, responseParser, Video } from "../../types/downloader/tiktokApi"
 
@@ -94,7 +94,7 @@ export const TiktokAPI = (url: string) =>
 
 const fetchTiktokData = async (ID: string): Promise<responseParser> | null => {
   const res = await fetch(
-    _tiktokapi(
+    _tiktokvFeed(
       new URLSearchParams(
         _tiktokApiParams({
           aweme_id: ID
@@ -104,6 +104,8 @@ const fetchTiktokData = async (ID: string): Promise<responseParser> | null => {
     {
       method: "GET",
       headers: {
+        Cookie:
+          "tt_csrf_token=g1GUApj0-ADAIP9COU6o1m1_NnbwhKGTbiyI; ttwid=1%7CvqigUFT-mdDjU8gnwF3hkh8sPQqokFjCRyD7R1jpM44%7C1720342326%7Cc8c89833ea6bb912642ea1340ef98691ad3382878374ec61a5de85eeb5d79e83; ak_bmsc=C3345397EF8621798FA50BACA05F1AD3~000000000000000000000000000000~YAAQhq0wFzqUPlOQAQAA+ctjjBiYLJJ3WVeqfLXcnxTCKMkcRlAYLT+GxhKgkMdR94wzPi2zqWiZfuEUdBpaJmo01qZY4M4dUO6xiYqbXZev0cFbauilIxyj1WRUHOy9+oAUCAkyWRMubLICOr1g9XUc7eadCgHCEnmwfVYe6mYbkwaqDMn/0mgxdqJCjnLFnEQTLG1FXUYkhk1sjrzg1ubRwJLuAdw4T+FZg2mYeQIdFuo/CUPf8Jw2UYfNd…XkpqwL-3Zzf_VO_mXrptr32f1D4TVmQPhR1FNen76-b7g2Tey2UlUrFD1fhpjJmOySmQtS_eW0p8BVLJthEcysTN98LLGTkAzD7M335V27Rf0zxX8ZsVWE6wa2P7x5X-HNmCwEO_WccrcClQifgb2PCKYDmhpG5BWNwoer5-8ak1SwZjybv_hdspeNhpbylwg4sNLRc_OiunUK0tYW2hiV7xrliwDKsIMVsZcQ0kwvBmp0eyUQJrEJv0fnzoS0o_jKMFtTvUChfEVz0Laj5O4MKf52isC30U3q; last_login_method=google; passport_fe_beating_status=true; msToken=ftn8ICq2_TfkkAyS3f6umBK1FafalSQ_IyzJxq1LmeBmDe2QxefwBfd_weMdvJI3TU5Z8gyFmzJdPSMESb5zUeseZysme5LBC19xouQTYAAMfVV35YliLfxMWhWZ_2ABP_uYMFNDJ5jtYE4Ap6uRyA==",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
       }
     }
