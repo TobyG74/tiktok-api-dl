@@ -35,7 +35,7 @@ export const _userPostsParams = () => {
   )
 }
 
-export const _userSearchParams = (keyword: any, page: number = 1) => {
+export const _userSearchParams = (keyword: string, page: number = 1) => {
   let cursor = 0
   for (let i = 1; i < page; i++) {
     cursor += 10
@@ -75,8 +75,51 @@ export const _userSearchParams = (keyword: any, page: number = 1) => {
   })
 }
 
+export const _liveSearchParams = (keyword: string, page: number = 1) => {
+  let cursor = 0
+  for (let i = 1; i < page; i++) {
+    cursor += 12
+  }
+
+  let offset = `${cursor}`
+
+  return new URLSearchParams({
+    WebIdLastTime: "1720342268",
+    aid: "1988",
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: "true",
+    browser_platform: "Linux x86_64",
+    browser_version: "5.0 (X11)",
+    channel: "tiktok_web",
+    cookie_enabled: "true",
+    count: "20",
+    device_id: "7388813454814086664",
+    device_platform: "web_pc",
+    device_type: "web_h264",
+    focus_state: "true",
+    from_page: "search",
+    history_len: "10",
+    is_fullscreen: "false",
+    is_page_visible: "true",
+    keyword,
+    offset,
+    os: "linux",
+    priority_region: "",
+    referer: "",
+    region: "ID",
+    screen_height: "768",
+    screen_width: "1366",
+    tz_name: "Asia/Jakarta",
+    web_search_code: "{ tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } }",
+    webcast_language: "en"
+  })
+}
+
 export const _tiktokApiParams = (args: any) => {
-  return {
+  return new URLSearchParams({
     ...args,
     version_name: "1.1.9",
     version_code: "2018111632",
@@ -108,7 +151,7 @@ export const _tiktokApiParams = (args: any) => {
     ssmix: "a",
     as: "a1qwert123",
     cp: "cbfhckdckkde1"
-  }
+  }).toString()
 }
 
 export const _xttParams = (secUid: string, cursor: number, count: number) => {

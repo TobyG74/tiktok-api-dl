@@ -13,9 +13,11 @@ import { SSSTikResponse } from "./types/downloader/ssstik"
 import { TiktokAPIResponse } from "./types/downloader/tiktokApi"
 import { TiktokUserSearchResponse } from "./types/search/userSearch"
 import { StalkResult } from "./types/search/stalker"
+import { SearchLive } from "./utils/search/liveSearch"
+import { TiktokLiveSearchResponse } from "./types/search/liveSearch"
 
 type TiktokDownloaderResponse<T extends "v1" | "v2" | "v3"> = T extends "v1" ? TiktokAPIResponse : T extends "v2" ? SSSTikResponse : T extends "v3" ? MusicalDownResponse : TiktokAPIResponse
-type TiktokSearchResponse<T extends "user" | "video"> = T extends "user" ? TiktokUserSearchResponse : T extends "video" ? any : TiktokUserSearchResponse
+type TiktokSearchResponse<T extends "user" | "live"> = T extends "user" ? TiktokUserSearchResponse : T extends "live" ? any : TiktokLiveSearchResponse
 
 export = {
   /**
@@ -55,16 +57,16 @@ export = {
    * @param {number} options.page - The page of search (optional)
    * @returns {Promise<TiktokSearchResponse>}
    */
-  Search: async <T extends "user" | "video">(query: string, options: { type: T; cookie?: string; page?: number }): Promise<TiktokSearchResponse<T>> => {
+  Search: async <T extends "user" | "live">(query: string, options: { type: T; cookie?: string; page?: number }): Promise<TiktokSearchResponse<T>> => {
     switch (options?.type) {
       case "user": {
         const response = await SearchUser(query, options?.cookie, options?.page)
         return response as TiktokSearchResponse<T>
       }
-      // case "video": {
-      //   const response = await SearchVideo(query)
-      //   return response as TiktokSearchResponse<T>
-      // }
+      case "live": {
+        const response = await SearchLive(query, options?.cookie, options?.page)
+        return response as TiktokSearchResponse<T>
+      }
       default: {
         const response = await SearchUser(query, options?.cookie, options?.page)
         return response as TiktokSearchResponse<T>

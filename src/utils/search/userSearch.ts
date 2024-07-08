@@ -12,7 +12,7 @@ import { _userSearchParams } from "../../constants/params"
  */
 
 export const SearchUser = (username: string, cookie?: any, page?: number): Promise<TiktokUserSearchResponse> =>
-  new Promise(async (resolve, reject) => {
+  new Promise(async (resolve) => {
     Axios(_tiktokSearchUserFull(_userSearchParams(username, page)), {
       method: "GET",
       headers: {
@@ -21,9 +21,13 @@ export const SearchUser = (username: string, cookie?: any, page?: number): Promi
       }
     })
       .then(({ data }) => {
-        if (data.status_code !== 0) return resolve({ status: "error", message: "Failed to find user. Make sure the keywords you are looking for are correct..." })
-        const result = []
+        // Cookie Invalid
+        if (data.status_code === 2483) return resolve({ status: "error", message: "Invalid cookie!" })
+        // Another Error
+        if (data.status_code !== 0) return resolve({ status: "error", message: data.status_msg || "An error occurred! Please report this issue to the developer." })
+        if (!data.user_list) return resolve({ status: "error", message: "User not found!" })
 
+        const result = []
         for (let i = 0; i < data.user_list.length; i++) {
           const user = data.user_list[i]
           result.push({

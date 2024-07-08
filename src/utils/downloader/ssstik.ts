@@ -12,7 +12,7 @@ import { _ssstikapi, _ssstikurl } from "../../constants/api"
 const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 const fetchTT = () =>
-  new Promise<SSSTikFetchTT>(async (resolve, reject) => {
+  new Promise<SSSTikFetchTT>(async (resolve) => {
     Axios.get(_ssstikurl, {
       headers: {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"

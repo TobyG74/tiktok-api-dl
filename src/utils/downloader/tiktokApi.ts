@@ -13,7 +13,7 @@ const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(
  */
 
 export const TiktokAPI = (url: string) =>
-  new Promise<TiktokAPIResponse>((resolve, reject) => {
+  new Promise<TiktokAPIResponse>((resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
         status: "error",
@@ -99,11 +99,9 @@ const fetchTiktokData = async (ID: string): Promise<responseParser> | null => {
       async () => {
         const res = await fetch(
           _tiktokvFeed(
-            new URLSearchParams(
-              _tiktokApiParams({
-                aweme_id: ID
-              })
-            ).toString()
+            _tiktokApiParams({
+              aweme_id: ID
+            })
           ),
           {
             method: "OPTIONS",

@@ -14,7 +14,7 @@ import { createCipheriv } from "crypto"
  */
 
 export const StalkUser = (username: string, cookie?: any, postLimit?: number): Promise<StalkResult> =>
-  new Promise(async (resolve, reject) => {
+  new Promise(async (resolve) => {
     username = username.replace("@", "")
     Axios.get(`${_tiktokurl}/@${username}`, {
       headers: {

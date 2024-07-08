@@ -11,7 +11,7 @@ import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../co
 const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 const getRequest = (url: string) =>
-  new Promise<getRequest>((resolve, reject) => {
+  new Promise<getRequest>((resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
         status: "error",
@@ -38,7 +38,7 @@ const getRequest = (url: string) =>
   })
 
 const getMusic = (cookie: string) =>
-  new Promise<getMusic>((resolve, reject) => {
+  new Promise<getMusic>((resolve) => {
     Axios.get(_musicaldownmusicapi, {
       headers: {
         cookie: cookie,
@@ -61,7 +61,7 @@ const getMusic = (cookie: string) =>
  */
 
 export const MusicalDown = (url: string) =>
-  new Promise<MusicalDownResponse>(async (resolve, reject) => {
+  new Promise<MusicalDownResponse>(async (resolve) => {
     const request: getRequest = await getRequest(url)
     if (request.status !== "success") return resolve({ status: "error", message: request.message })
     Axios(_musicaldownapi, {
