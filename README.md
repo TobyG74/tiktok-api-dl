@@ -278,10 +278,10 @@ Tiktok.StalkUser(username, {
   <br>
 
 ```ts
-[{
+{
   status: "success" | "error"
   message?: string
-  result?: {
+  result?: [{
     uid: string
     username: string
     nickname: string
@@ -291,8 +291,8 @@ Tiktok.StalkUser(username, {
     isVerified: boolean
     secUid: string
     url: string
-  }
-}]
+  }]
+}
 ```
 
 </details>
@@ -301,10 +301,10 @@ Tiktok.StalkUser(username, {
   <br>
 
 ```ts
-[{
+{
   status: "success" | "error"
   message?: string
-  result?: {
+  result?: [{
     id: string
     title: string
     cover: string
@@ -333,8 +333,8 @@ Tiktok.StalkUser(username, {
       }
       isVerified: boolean
     }
-  }
-}]
+  }]
+}
 ```
 
 </details>
