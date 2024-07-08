@@ -278,10 +278,10 @@ Tiktok.StalkUser(username, {
   <br>
 
 ```ts
-[{
+{
   status: "success" | "error"
   message?: string
-  result?: {
+  result?: [{
     uid: string
     username: string
     nickname: string
@@ -291,8 +291,8 @@ Tiktok.StalkUser(username, {
     isVerified: boolean
     secUid: string
     url: string
-  }
-}]
+  }]
+}
 ```
 
 </details>
@@ -301,15 +301,15 @@ Tiktok.StalkUser(username, {
   <br>
 
 ```ts
-[{
+{
   status: "success" | "error"
   message?: string
-  result?: {
+  result?: [{
     id: string
     title: string
-    cover: string
-    squareCover: string
-    rectangleCover: string
+    cover: string[]
+    squareCover: string[]
+    rectangleCover: string[]
     liveTypeThirdParty: boolean
     hashtag: string
     startTime: number
@@ -323,9 +323,9 @@ Tiktok.StalkUser(username, {
       nickname: string
       username: string
       signature: string
-      avatarThumb: string
-      avatarMedium: string
-      avatarLarge: string
+      avatarThumb: string[]
+      avatarMedium: string[]
+      avatarLarge: string[]
       modifyTime: number
       stats: {
         followingCount: number
@@ -333,8 +333,8 @@ Tiktok.StalkUser(username, {
       }
       isVerified: boolean
     }
-  }
-}]
+  }]
+}
 ```
 
 </details>
