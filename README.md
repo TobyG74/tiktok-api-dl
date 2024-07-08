@@ -29,7 +29,7 @@
   - [Tiktok Search](#tiktok-search)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
-- [Contributing](#Contributing)
+- [Contributing](#contributing)
 
 # Description
 
@@ -291,6 +291,48 @@ Tiktok.StalkUser(username, {
     isVerified: boolean
     secUid: string
     url: string
+  }
+}]
+```
+
+</details>
+<details>
+  <summary><b>Tiktok Search "Live"</b></summary>
+  <br>
+
+```ts
+[{
+  status: "success" | "error"
+  message?: string
+  result?: {
+    id: string
+    title: string
+    cover: string
+    squareCover: string
+    rectangleCover: string
+    liveTypeThirdParty: boolean
+    hashtag: string
+    startTime: number
+    stats: {
+      totalUser: number
+      viewerCount: number
+      likeCount: number
+    }
+    owner: {
+      id: string
+      nickname: string
+      username: string
+      signature: string
+      avatarThumb: string
+      avatarMedium: string
+      avatarLarge: string
+      modifyTime: number
+      stats: {
+        followingCount: number
+        followerCount: number
+      }
+      isVerified: boolean
+    }
   }
 }]
 ```
