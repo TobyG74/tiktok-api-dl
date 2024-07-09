@@ -30,6 +30,7 @@
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
 - [Contributing](#contributing)
+- [License](#license)
 
 # Description
 
@@ -99,13 +100,22 @@ npm install github:TobyG74/tiktok-api-dl
 - V2 uses the API from [SSSTik](https://ssstik.io/)
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
+### Options
+
+- `version` : The version of the downloader you want to use
+  - `v1` : TiktokAPI
+  - `v2` : SSSTik
+  - `v3` : MusicalDown
+- `proxy` : Proxy for request
+
 ```js
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
 
 Tiktok.Downloader(tiktok_url, {
-  version: "v1" //  version: "v1" | "v2" | "v3"
+  version: "v1", //  version: "v1" | "v2" | "v3"
+  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
 }).then((result) => {
   console.log(result)
 })
@@ -113,9 +123,18 @@ Tiktok.Downloader(tiktok_url, {
 
 ## Tiktok Search
 
-### Search User
+Note : Cookies are required for searching users or live
 
-- Using Your Cookie
+### Options
+
+- `type` : The type of search you want to use
+  - `user` : Search User
+  - `live` : Search Live
+- `page` : The page you want to search
+- `cookie` : Your Tiktok Cookie
+- `proxy` : Proxy for request
+
+### Search User | Live
 
 ```js
 const Tiktok = require("@tobyg74/tiktok-api-dl")
@@ -123,9 +142,10 @@ const Tiktok = require("@tobyg74/tiktok-api-dl")
 const username = "tobz2k19"
 
 Tiktok.Search(username, {
-  type: "user",
+  type: "user" || "live",
   page: 1,
-  cookie: process.env.COOKIE || "Your Cookie"
+  cookie: process.env.COOKIE || "Your Cookie",
+  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
 }).then((result) => {
   console.log(result)
 })
@@ -133,7 +153,11 @@ Tiktok.Search(username, {
 
 ## Tiktok Stalker
 
-- Using Your Cookie
+### Options
+
+- `cookie` : Only needed if you want to get all user posts
+- `postLimit` : Limit the number of posts to display
+- `proxy` : Proxy for request
 
 ```js
 const Tiktok = require("@tobyg74/tiktok-api-dl")
@@ -142,6 +166,8 @@ const username = "tobz2k19"
 
 Tiktok.StalkUser(username, {
   cookie: process.env.COOKIE || "Your Cookie"
+  postLimit: 10, // Limit the number of posts to display
+  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
 }).then((result) => {
   console.log(result)
 })
@@ -374,3 +400,7 @@ Tiktok.StalkUser(username, {
 
 - This repository is open source. We really appreciate it if you want to participate in developing this repository...
 - Please read our [CONTRIBUTING.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CODE_OF_CONDUCT.md) before contributing.
+
+# License
+
+- This project is licensed under the MIT License - see the [LICENSE](https://github.com/TobyG74/tiktok-api-dl/blob/master/LICENSE) file for details.
