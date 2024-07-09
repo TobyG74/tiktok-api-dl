@@ -2,6 +2,8 @@ import Axios from "axios"
 import { load } from "cheerio"
 import { MusicalDownResponse, getMusic, getRequest } from "../../types/downloader/musicaldown"
 import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../constants/api"
+import { HttpsProxyAgent } from "https-proxy-agent"
+import { SocksProxyAgent } from "socks-proxy-agent"
 
 /**
  * Using API from Website:
@@ -10,7 +12,7 @@ import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../co
 
 const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
-const getRequest = (url: string) =>
+const getRequest = (url: string, proxy?: string) =>
   new Promise<getRequest>((resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
@@ -18,10 +20,12 @@ const getRequest = (url: string) =>
         message: "Invalid Tiktok URL. Make sure your url is correct!"
       })
     }
-    Axios.get(_musicaldownurl, {
+    Axios(_musicaldownurl, {
+      method: "GET",
       headers: {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
-      }
+      },
+      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
     })
       .then((data) => {
         const cookie = data.headers["set-cookie"][0].split(";")[0] + "; " + "lang=en"
@@ -37,14 +41,16 @@ const getRequest = (url: string) =>
       .catch((e) => resolve({ status: "error", message: "Failed to get the request form!" }))
   })
 
-const getMusic = (cookie: string) =>
+const getMusic = (cookie: string, proxy?: string) =>
   new Promise<getMusic>((resolve) => {
-    Axios.get(_musicaldownmusicapi, {
+    Axios(_musicaldownmusicapi, {
+      method: "GET",
       headers: {
         cookie: cookie,
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
-      }
+      },
+      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
     })
       .then(({ data }) => {
         const $ = load(data)
@@ -57,10 +63,11 @@ const getMusic = (cookie: string) =>
 /**
  * Tiktok MusicalDown Downloader
  * @param {string} url - Tiktok URL
+ * @param {string} proxy - Proxy
  * @returns {Promise<MusicalDownResponse>}
  */
 
-export const MusicalDown = (url: string) =>
+export const MusicalDown = (url: string, proxy?: string) =>
   new Promise<MusicalDownResponse>(async (resolve) => {
     const request: getRequest = await getRequest(url)
     if (request.status !== "success") return resolve({ status: "error", message: request.message })
@@ -72,7 +79,8 @@ export const MusicalDown = (url: string) =>
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
       },
-      data: new URLSearchParams(Object.entries(request.request))
+      data: new URLSearchParams(Object.entries(request.request)),
+      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
     })
       .then(async ({ data }) => {
         const $ = load(data)

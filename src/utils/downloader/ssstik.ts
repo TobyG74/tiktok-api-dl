@@ -3,6 +3,8 @@ import asyncRetry from "async-retry"
 import { load } from "cheerio"
 import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../../types/downloader/ssstik"
 import { _ssstikapi, _ssstikurl } from "../../constants/api"
+import { HttpsProxyAgent } from "https-proxy-agent"
+import { SocksProxyAgent } from "socks-proxy-agent"
 
 /**
  * Using API from Website:
@@ -11,12 +13,14 @@ import { _ssstikapi, _ssstikurl } from "../../constants/api"
 
 const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
-const fetchTT = () =>
+const fetchTT = (proxy?: string) =>
   new Promise<SSSTikFetchTT>(async (resolve) => {
-    Axios.get(_ssstikurl, {
+    Axios(_ssstikurl, {
+      method: "GET",
       headers: {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
-      }
+      },
+      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
     })
       .then(({ data }) => {
         const regex = /s_tt\s*=\s*["']([^"']+)["']/
@@ -34,10 +38,11 @@ const fetchTT = () =>
 /**
  * Tiktok SSSTik Downloader
  * @param {string} url - Tiktok URL
+ * @param {string} proxy - Your Proxy (optional)
  * @returns {Promise<SSSTikResponse>}
  */
 
-export const SSSTik = (url: string) =>
+export const SSSTik = (url: string, proxy?: string) =>
   new Promise<SSSTikResponse>(async (resolve) => {
     try {
       if (!TiktokURLregex.test(url)) {
@@ -46,7 +51,7 @@ export const SSSTik = (url: string) =>
           message: "Invalid Tiktok URL. Make sure your url is correct!"
         })
       }
-      const tt: SSSTikFetchTT = await fetchTT()
+      const tt: SSSTikFetchTT = await fetchTT(proxy)
       if (tt.status !== "success") return resolve({ status: "error", message: tt.message })
 
       const response = asyncRetry(
@@ -65,7 +70,8 @@ export const SSSTik = (url: string) =>
                 locale: "en",
                 tt: tt.result
               })
-            )
+            ),
+            httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
           })
 
           if (res.status === 200 && res.data !== "") return res.data

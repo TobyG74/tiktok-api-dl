@@ -5,22 +5,27 @@ import { _tiktokGetPosts, _tiktokurl } from "../../constants/api"
 import { AuthorPost, Posts, StalkResult, Stats, Users } from "../../types/search/stalker"
 import { _userPostsParams, _xttParams } from "../../constants/params"
 import { createCipheriv } from "crypto"
+import { HttpsProxyAgent } from "https-proxy-agent"
+import { SocksProxyAgent } from "socks-proxy-agent"
 
 /**
  * Tiktok Stalk User
  * @param {string} username - The username you want to stalk
  * @param {object|string} cookie - Your Tiktok Cookie (optional)
+ * @param {number} postLimit - The limit of post you want to get (optional)
+ * @param {string} proxy - Your Proxy (optional)
  * @returns {Promise<StalkResult>}
  */
 
-export const StalkUser = (username: string, cookie?: any, postLimit?: number): Promise<StalkResult> =>
+export const StalkUser = (username: string, cookie?: any, postLimit?: number, proxy?: string): Promise<StalkResult> =>
   new Promise(async (resolve) => {
     username = username.replace("@", "")
     Axios.get(`${_tiktokurl}/@${username}`, {
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
         cookie: typeof cookie === "object" ? cookie.map((v) => `${v.name}=${v.value}`).join("; ") : cookie
-      }
+      },
+      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
     })
       .then(async ({ data }) => {
         const $ = load(data)
@@ -33,7 +38,7 @@ export const StalkUser = (username: string, cookie?: any, postLimit?: number): P
         }
         const dataUser = result["__DEFAULT_SCOPE__"]["webapp.user-detail"]["userInfo"]
 
-        const posts: Posts[] = await parsePosts(dataUser, postLimit)
+        const posts: Posts[] = await parsePosts(dataUser, postLimit, proxy)
         const { users, stats } = parseDataUser(dataUser, posts)
 
         resolve({
@@ -53,12 +58,13 @@ export const StalkUser = (username: string, cookie?: any, postLimit?: number): P
  * https://github.com/atharahmed/tiktok-private-api/blob/020ede2eaa6021bcd363282d8cef1aacaff2f88c/src/repositories/user.repository.ts#L148
  */
 
-const request = async (secUid: string, cursor = 0, count = 30) => {
+const request = async (secUid: string, cursor = 0, count = 30, proxy?: string) => {
   const { data } = await Axios.get(`${_tiktokGetPosts(_userPostsParams())}`, {
     headers: {
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
       "X-tt-params": xttparams(_xttParams(secUid, cursor, count))
-    }
+    },
+    httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
   })
 
   return data
@@ -96,7 +102,7 @@ const parseDataUser = (dataUser: any, posts: Posts[]) => {
   return { users, stats }
 }
 
-const parsePosts = async (dataUser: any, postLimit?: number): Promise<Posts[]> => {
+const parsePosts = async (dataUser: any, postLimit?: number, proxy?: string): Promise<Posts[]> => {
   // Posts Result
   let hasMore = true
   let cursor: number | null = null
@@ -107,7 +113,7 @@ const parsePosts = async (dataUser: any, postLimit?: number): Promise<Posts[]> =
 
     // Prevent missing response posts
     for (let i = 0; i < 30; i++) {
-      result2 = await request(dataUser.user.secUid, cursor, 30)
+      result2 = await request(dataUser.user.secUid, cursor, 30, proxy)
       if (result2 !== "") break
     }
 

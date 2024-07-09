@@ -2,23 +2,27 @@ import Axios from "axios"
 import { _tiktokSearchUserFull, _tiktokurl } from "../../constants/api"
 import { TiktokUserSearchResponse } from "../../types/search/userSearch"
 import { _userSearchParams } from "../../constants/params"
+import { HttpsProxyAgent } from "https-proxy-agent"
+import { SocksProxyAgent } from "socks-proxy-agent"
 
 /**
  * Tiktok Search User
  * @param {string} username - The username you want to search
  * @param {object|string} cookie - Your Tiktok cookie (optional)
  * @param {number} page - The page you want to search (optional)
+ * @param {string} proxy - Your Proxy (optional)
  * @returns {Promise<TiktokUserSearchResponse>}
  */
 
-export const SearchUser = (username: string, cookie?: any, page?: number): Promise<TiktokUserSearchResponse> =>
+export const SearchUser = (username: string, cookie?: any, page: number = 1, proxy?: string): Promise<TiktokUserSearchResponse> =>
   new Promise(async (resolve) => {
     Axios(_tiktokSearchUserFull(_userSearchParams(username, page)), {
       method: "GET",
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
         cookie: typeof cookie === "object" ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ") : cookie
-      }
+      },
+      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
     })
       .then(({ data }) => {
         // Cookie Invalid

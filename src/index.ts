@@ -57,18 +57,18 @@ export = {
    * @param {number} options.page - The page of search (optional)
    * @returns {Promise<TiktokSearchResponse>}
    */
-  Search: async <T extends "user" | "live">(query: string, options: { type: T; cookie?: string; page?: number }): Promise<TiktokSearchResponse<T>> => {
+  Search: async <T extends "user" | "live">(query: string, options: { type: T; cookie?: string; page?: number; proxy?: string }): Promise<TiktokSearchResponse<T>> => {
     switch (options?.type) {
       case "user": {
-        const response = await SearchUser(query, options?.cookie, options?.page)
+        const response = await SearchUser(query, options?.cookie, options?.page, options?.proxy)
         return response as TiktokSearchResponse<T>
       }
       case "live": {
-        const response = await SearchLive(query, options?.cookie, options?.page)
+        const response = await SearchLive(query, options?.cookie, options?.page, options?.proxy)
         return response as TiktokSearchResponse<T>
       }
       default: {
-        const response = await SearchUser(query, options?.cookie, options?.page)
+        const response = await SearchUser(query, options?.cookie, options?.page, options?.proxy)
         return response as TiktokSearchResponse<T>
       }
     }
@@ -80,8 +80,8 @@ export = {
    * @param {string} options.cookie - Your Tiktok Cookie (optional)
    * @returns {Promise<StalkResult>}
    */
-  StalkUser: async (username: string, options?: { cookie?: string; postLimit?: number }): Promise<StalkResult> => {
-    const response = await StalkUser(username, options?.cookie, options?.postLimit)
+  StalkUser: async (username: string, options?: { cookie?: string; postLimit?: number; proxy?: string }): Promise<StalkResult> => {
+    const response = await StalkUser(username, options?.cookie, options?.postLimit, options?.proxy)
     return response
   }
 }
