@@ -21,8 +21,8 @@ export type MusicalDownResponse = {
     images?: string[]
     video1?: string
     video2?: string
-    video_hd?: string
-    video_watermark?: string
+    videoHD?: string
+    videoWatermark?: string
   }
 }
 

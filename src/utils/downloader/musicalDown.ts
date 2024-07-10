@@ -1,7 +1,15 @@
 import Axios from "axios"
 import { load } from "cheerio"
-import { MusicalDownResponse, getMusic, getRequest } from "../../types/downloader/musicaldown"
-import { _musicaldownapi, _musicaldownmusicapi, _musicaldownurl } from "../../constants/api"
+import {
+  MusicalDownResponse,
+  getMusic,
+  getRequest
+} from "../../types/downloader/musicaldown"
+import {
+  _musicaldownapi,
+  _musicaldownmusicapi,
+  _musicaldownurl
+} from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
 
@@ -10,7 +18,8 @@ import { SocksProxyAgent } from "socks-proxy-agent"
  * BASE URL : https://ssstik.io
  */
 
-const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
+const TiktokURLregex =
+  /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 const getRequest = (url: string, proxy?: string) =>
   new Promise<getRequest>((resolve) => {
@@ -23,12 +32,24 @@ const getRequest = (url: string, proxy?: string) =>
     Axios(_musicaldownurl, {
       method: "GET",
       headers: {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+
+        "Update-Insecure-Requests": "1",
+        "User-Agent":
+          "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0"
       },
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then((data) => {
-        const cookie = data.headers["set-cookie"][0].split(";")[0] + "; " + "lang=en"
+        const cookie = data.headers["set-cookie"][0].split(";")[0]
         const $ = load(data.data)
         const input = $("div > input").map((_, el) => $(el))
         const request = {
@@ -38,7 +59,9 @@ const getRequest = (url: string, proxy?: string) =>
         }
         resolve({ status: "success", request, cookie })
       })
-      .catch((e) => resolve({ status: "error", message: "Failed to get the request form!" }))
+      .catch((e) =>
+        resolve({ status: "error", message: "Failed to get the request form!" })
+      )
   })
 
 const getMusic = (cookie: string, proxy?: string) =>
@@ -48,9 +71,17 @@ const getMusic = (cookie: string, proxy?: string) =>
       headers: {
         cookie: cookie,
         "Upgrade-Insecure-Requests": "1",
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+        "User-Agent":
+          "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0"
       },
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then(({ data }) => {
         const $ = load(data)
@@ -70,17 +101,28 @@ const getMusic = (cookie: string, proxy?: string) =>
 export const MusicalDown = (url: string, proxy?: string) =>
   new Promise<MusicalDownResponse>(async (resolve) => {
     const request: getRequest = await getRequest(url)
-    if (request.status !== "success") return resolve({ status: "error", message: request.message })
+    if (request.status !== "success")
+      return resolve({ status: "error", message: request.message })
     Axios(_musicaldownapi, {
       method: "POST",
       headers: {
         cookie: request.cookie,
-        "Upgrade-Insecure-Requests": "1",
         "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+        Origin: "https://musicaldown.com",
+        Referer: "https://musicaldown.com/en",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent":
+          "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0"
       },
       data: new URLSearchParams(Object.entries(request.request)),
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then(async ({ data }) => {
         const $ = load(data)
@@ -100,8 +142,19 @@ export const MusicalDown = (url: string, proxy?: string) =>
           .get()
           .map((v) => {
             if ($(v).attr("href") !== "#modal2") {
-              let text = $(v).text().trim().replace(/\s/, " ").replace("arrow_downward", "").toLowerCase()
-              videos[text.includes("hd") ? "video_hd" : text.includes("watermark") ? "video_watermark" : `video${i}`] = $(v).attr("href")
+              let text = $(v)
+                .text()
+                .trim()
+                .replace(/\s/, " ")
+                .replace("arrow_downward", "")
+                .toLowerCase()
+              videos[
+                text.includes("hd")
+                  ? "videoHD"
+                  : text.includes("watermark")
+                  ? "videoWatermark"
+                  : `video${i}`
+              ] = $(v).attr("href")
               i++
             }
           })
@@ -113,7 +166,19 @@ export const MusicalDown = (url: string, proxy?: string) =>
             result: {
               type: "image",
               author: {
-                nickname: $("h2.white-text").text().trim().replace("Download Now: Check out ", "").replace("’s video! #TikTok >If MusicallyDown has helped you, you can help us too", "").replace("Download Now: ", "").replace("If MusicallyDown has helped you, you can help us too", "")
+                nickname: $("h2.white-text")
+                  .text()
+                  .trim()
+                  .replace("Download Now: Check out ", "")
+                  .replace(
+                    "’s video! #TikTok >If MusicallyDown has helped you, you can help us too",
+                    ""
+                  )
+                  .replace("Download Now: ", "")
+                  .replace(
+                    "If MusicallyDown has helped you, you can help us too",
+                    ""
+                  )
               },
               images,
               music: $("a.download").attr("href")
