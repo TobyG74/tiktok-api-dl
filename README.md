@@ -292,8 +292,8 @@ Tiktok.StalkUser(username, {
     images?: string[]
     video1?: string
     video2?: string
-    video_hd?: string
-    video_watermark?: string
+    videoHD?: string
+    videoWatermark?: string
   }
 }
 ```
@@ -403,4 +403,4 @@ Tiktok.StalkUser(username, {
 
 # License
 
-- This project is licensed under the MIT License - see the [LICENSE](https://github.com/TobyG74/tiktok-api-dl/blob/master/LICENSE) file for details.
+- This project is licensed under the Apache License - see the [LICENSE](https://github.com/TobyG74/tiktok-api-dl/blob/master/LICENSE) file for details.
