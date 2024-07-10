@@ -14,22 +14,46 @@ import { HttpsProxyAgent } from "https-proxy-agent"
  * @returns {Promise<TiktokLiveSearchResponse>}
  */
 
-export const SearchLive = async (keyword: string, cookie?: any, page: number = 1, proxy?: string) =>
+export const SearchLive = async (
+  keyword: string,
+  cookie?: any,
+  page: number = 1,
+  proxy?: string
+) =>
   new Promise(async (resolve) => {
     Axios(_tiktokSearchLiveFull(_liveSearchParams(keyword, page)), {
       method: "GET",
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
-        cookie: typeof cookie === "object" ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ") : cookie
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
+        cookie:
+          typeof cookie === "object"
+            ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ")
+            : cookie
       },
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then(({ data }) => {
         // Cookie Invalid
-        if (data.status_code === 2483) return resolve({ status: "error", message: "Invalid cookie!" })
+        if (data.status_code === 2483)
+          return resolve({ status: "error", message: "Invalid cookie!" })
         // Another Error
-        if (data.status_code !== 0) return resolve({ status: "error", message: data.status_msg || "An error occurred! Please report this issue to the developer." })
-        if (!data.data) return resolve({ status: "error", message: "Live not found!" })
+        if (data.status_code !== 0)
+          return resolve({
+            status: "error",
+            message:
+              data.status_msg ||
+              "An error occurred! Please report this issue to the developer."
+          })
+        if (!data.data)
+          return resolve({ status: "error", message: "Live not found!" })
 
         const result = []
         data.data.forEach((v: any) => {
@@ -63,7 +87,9 @@ export const SearchLive = async (keyword: string, cookie?: any, page: number = 1
                 followingCount: content.owner.follow_info.following_count,
                 followerCount: content.owner.follow_info.follower_count
               } as OwnerStats,
-              isVerified: content.owner?.authentication_info?.custom_verify === "verified account" || false
+              isVerified:
+                content.owner?.authentication_info?.custom_verify ===
+                  "verified account" || false
             } as Owner
           }
 

@@ -16,8 +16,18 @@ import { StalkResult } from "./types/search/stalker"
 import { SearchLive } from "./utils/search/liveSearch"
 import { TiktokLiveSearchResponse } from "./types/search/liveSearch"
 
-type TiktokDownloaderResponse<T extends "v1" | "v2" | "v3"> = T extends "v1" ? TiktokAPIResponse : T extends "v2" ? SSSTikResponse : T extends "v3" ? MusicalDownResponse : TiktokAPIResponse
-type TiktokSearchResponse<T extends "user" | "live"> = T extends "user" ? TiktokUserSearchResponse : T extends "live" ? any : TiktokLiveSearchResponse
+type TiktokDownloaderResponse<T extends "v1" | "v2" | "v3"> = T extends "v1"
+  ? TiktokAPIResponse
+  : T extends "v2"
+  ? SSSTikResponse
+  : T extends "v3"
+  ? MusicalDownResponse
+  : TiktokAPIResponse
+type TiktokSearchResponse<T extends "user" | "live"> = T extends "user"
+  ? TiktokUserSearchResponse
+  : T extends "live"
+  ? any
+  : TiktokLiveSearchResponse
 
 export = {
   /**
@@ -28,8 +38,11 @@ export = {
    * @returns {Promise<TiktokDownloaderResponse>}
    */
 
-  Downloader: async <T extends "v1" | "v2" | "v3">(url: string, options?: { version: T }): Promise<TiktokDownloaderResponse<T>> => {
-    switch (options?.version) {
+  Downloader: async <T extends "v1" | "v2" | "v3">(
+    url: string,
+    options?: { version: T }
+  ): Promise<TiktokDownloaderResponse<T>> => {
+    switch (options?.version.toLowerCase()) {
       case "v1": {
         const response = await TiktokAPI(url)
         return response as TiktokDownloaderResponse<T>
@@ -57,18 +70,36 @@ export = {
    * @param {number} options.page - The page of search (optional)
    * @returns {Promise<TiktokSearchResponse>}
    */
-  Search: async <T extends "user" | "live">(query: string, options: { type: T; cookie?: string; page?: number; proxy?: string }): Promise<TiktokSearchResponse<T>> => {
-    switch (options?.type) {
+  Search: async <T extends "user" | "live">(
+    query: string,
+    options: { type: T; cookie?: string; page?: number; proxy?: string }
+  ): Promise<TiktokSearchResponse<T>> => {
+    switch (options?.type.toLowerCase()) {
       case "user": {
-        const response = await SearchUser(query, options?.cookie, options?.page, options?.proxy)
+        const response = await SearchUser(
+          query,
+          options?.cookie,
+          options?.page,
+          options?.proxy
+        )
         return response as TiktokSearchResponse<T>
       }
       case "live": {
-        const response = await SearchLive(query, options?.cookie, options?.page, options?.proxy)
+        const response = await SearchLive(
+          query,
+          options?.cookie,
+          options?.page,
+          options?.proxy
+        )
         return response as TiktokSearchResponse<T>
       }
       default: {
-        const response = await SearchUser(query, options?.cookie, options?.page, options?.proxy)
+        const response = await SearchUser(
+          query,
+          options?.cookie,
+          options?.page,
+          options?.proxy
+        )
         return response as TiktokSearchResponse<T>
       }
     }
@@ -80,8 +111,16 @@ export = {
    * @param {string} options.cookie - Your Tiktok Cookie (optional)
    * @returns {Promise<StalkResult>}
    */
-  StalkUser: async (username: string, options?: { cookie?: string; postLimit?: number; proxy?: string }): Promise<StalkResult> => {
-    const response = await StalkUser(username, options?.cookie, options?.postLimit, options?.proxy)
+  StalkUser: async (
+    username: string,
+    options?: { cookie?: string; postLimit?: number; proxy?: string }
+  ): Promise<StalkResult> => {
+    const response = await StalkUser(
+      username,
+      options?.cookie,
+      options?.postLimit,
+      options?.proxy
+    )
     return response
   }
 }

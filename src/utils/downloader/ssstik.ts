@@ -1,7 +1,12 @@
 import Axios from "axios"
 import asyncRetry from "async-retry"
 import { load } from "cheerio"
-import { Author, Statistics, SSSTikFetchTT, SSSTikResponse } from "../../types/downloader/ssstik"
+import {
+  Author,
+  Statistics,
+  SSSTikFetchTT,
+  SSSTikResponse
+} from "../../types/downloader/ssstik"
 import { _ssstikapi, _ssstikurl } from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
@@ -11,16 +16,25 @@ import { SocksProxyAgent } from "socks-proxy-agent"
  * BASE URL : https://ssstik.io
  */
 
-const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
+const TiktokURLregex =
+  /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 const fetchTT = (proxy?: string) =>
   new Promise<SSSTikFetchTT>(async (resolve) => {
     Axios(_ssstikurl, {
       method: "GET",
       headers: {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+        "User-Agent":
+          "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
       },
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then(({ data }) => {
         const regex = /s_tt\s*=\s*["']([^"']+)["']/
@@ -29,7 +43,10 @@ const fetchTT = (proxy?: string) =>
           const value = match[1]
           return resolve({ status: "success", result: value })
         } else {
-          return resolve({ status: "error", message: "Failed to get the request form!" })
+          return resolve({
+            status: "error",
+            message: "Failed to get the request form!"
+          })
         }
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
@@ -52,17 +69,20 @@ export const SSSTik = (url: string, proxy?: string) =>
         })
       }
       const tt: SSSTikFetchTT = await fetchTT(proxy)
-      if (tt.status !== "success") return resolve({ status: "error", message: tt.message })
+      if (tt.status !== "success")
+        return resolve({ status: "error", message: tt.message })
 
       const response = asyncRetry(
         async () => {
           const res = await Axios(_ssstikapi, {
             method: "POST",
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+              "Content-Type":
+                "application/x-www-form-urlencoded; charset=UTF-8",
               Origin: _ssstikurl,
               Referer: _ssstikurl + "/en",
-              "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+              "User-Agent":
+                "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
             },
             data: new URLSearchParams(
               Object.entries({
@@ -71,7 +91,14 @@ export const SSSTik = (url: string, proxy?: string) =>
                 tt: tt.result
               })
             ),
-            httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+            httpsAgent:
+              (proxy &&
+                (proxy.startsWith("http") || proxy.startsWith("https")
+                  ? new HttpsProxyAgent(proxy)
+                  : proxy.startsWith("socks")
+                  ? new SocksProxyAgent(proxy)
+                  : undefined)) ||
+              undefined
           })
 
           if (res.status === 200 && res.data !== "") return res.data
@@ -94,8 +121,12 @@ export const SSSTik = (url: string, proxy?: string) =>
         nickname: $("h2").text().trim()
       }
       const statistics: Statistics = {
-        likeCount: $("#trending-actions > .justify-content-start").text().trim(),
-        commentCount: $("#trending-actions > .justify-content-center").text().trim(),
+        likeCount: $("#trending-actions > .justify-content-start")
+          .text()
+          .trim(),
+        commentCount: $("#trending-actions > .justify-content-center")
+          .text()
+          .trim(),
         shareCount: $("#trending-actions > .justify-content-end").text().trim()
       }
 

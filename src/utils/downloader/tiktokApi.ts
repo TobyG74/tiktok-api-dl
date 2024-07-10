@@ -2,11 +2,19 @@ import Axios from "axios"
 import asyncRetry from "async-retry"
 import { _tiktokvFeed, _tiktokurl } from "../../constants/api"
 import { _tiktokApiParams } from "../../constants/params"
-import { Author, TiktokAPIResponse, Statistics, Music, responseParser, Video } from "../../types/downloader/tiktokApi"
+import {
+  Author,
+  TiktokAPIResponse,
+  Statistics,
+  Music,
+  responseParser,
+  Video
+} from "../../types/downloader/tiktokApi"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
 
-const TiktokURLregex = /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
+const TiktokURLregex =
+  /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
 /**
  * Tiktok API Downloader
@@ -26,7 +34,14 @@ export const TiktokAPI = (url: string, proxy?: string) =>
     url = url.replace("https://vm", "https://vt")
     Axios(url, {
       method: "HEAD",
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then(async ({ request }) => {
         const { responseUrl } = request.res
@@ -34,7 +49,8 @@ export const TiktokAPI = (url: string, proxy?: string) =>
         if (ID === null)
           return resolve({
             status: "error",
-            message: "Failed to fetch tiktok url. Make sure your tiktok url is correct!"
+            message:
+              "Failed to fetch tiktok url. Make sure your tiktok url is correct!"
           })
         ID = ID[0]
 
@@ -43,7 +59,8 @@ export const TiktokAPI = (url: string, proxy?: string) =>
         if (!data2?.content) {
           return resolve({
             status: "error",
-            message: "Failed to fetch tiktok data. Make sure your tiktok url is correct!"
+            message:
+              "Failed to fetch tiktok data. Make sure your tiktok url is correct!"
           })
         }
 
@@ -59,11 +76,16 @@ export const TiktokAPI = (url: string, proxy?: string) =>
               id: content.aweme_id,
               createTime: content.create_time,
               description: content.desc,
-              hashtag: content.text_extra.filter((x) => x.hashtag_name !== undefined).map((v) => v.hashtag_name),
+              hashtag: content.text_extra
+                .filter((x) => x.hashtag_name !== undefined)
+                .map((v) => v.hashtag_name),
               isADS: content.is_ads,
               author,
               statistics,
-              images: content.image_post_info.images?.map((v) => v?.display_image?.url_list[0]) || [],
+              images:
+                content.image_post_info.images?.map(
+                  (v) => v?.display_image?.url_list[0]
+                ) || [],
               music
             }
           })
@@ -86,7 +108,9 @@ export const TiktokAPI = (url: string, proxy?: string) =>
               id: content.aweme_id,
               createTime: content.create_time,
               description: content.desc,
-              hashtag: content.text_extra.filter((x) => x.hashtag_name !== undefined).map((v) => v.hashtag_name),
+              hashtag: content.text_extra
+                .filter((x) => x.hashtag_name !== undefined)
+                .map((v) => v.hashtag_name),
               isADS: content.is_ads,
               author,
               statistics,
@@ -99,7 +123,10 @@ export const TiktokAPI = (url: string, proxy?: string) =>
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
 
-const fetchTiktokData = async (ID: string, proxy?: string): Promise<responseParser> | null => {
+const fetchTiktokData = async (
+  ID: string,
+  proxy?: string
+): Promise<responseParser> | null => {
   try {
     const response = asyncRetry(
       async () => {
@@ -112,9 +139,16 @@ const fetchTiktokData = async (ID: string, proxy?: string): Promise<responsePars
           {
             method: "OPTIONS",
             headers: {
-              "User-Agent": "com.zhiliaoapp.musically/300904 (2018111632; U; Android 10; en_US; Pixel 4; Build/QQ3A.200805.001; Cronet/58.0.2991.0)"
+              "User-Agent":
+                "com.zhiliaoapp.musically/300904 (2018111632; U; Android 10; en_US; Pixel 4; Build/QQ3A.200805.001; Cronet/58.0.2991.0)"
             },
-            httpsAgent: proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)
+            httpsAgent:
+              proxy &&
+              (proxy.startsWith("http") || proxy.startsWith("https")
+                ? new HttpsProxyAgent(proxy)
+                : proxy.startsWith("socks")
+                ? new SocksProxyAgent(proxy)
+                : undefined)
           }
         )
 

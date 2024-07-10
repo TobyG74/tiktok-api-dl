@@ -2,7 +2,13 @@ import Axios from "axios"
 import qs from "qs"
 import { load } from "cheerio"
 import { _tiktokGetPosts, _tiktokurl } from "../../constants/api"
-import { AuthorPost, Posts, StalkResult, Stats, Users } from "../../types/search/stalker"
+import {
+  AuthorPost,
+  Posts,
+  StalkResult,
+  Stats,
+  Users
+} from "../../types/search/stalker"
 import { _userPostsParams, _xttParams } from "../../constants/params"
 import { createCipheriv } from "crypto"
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -17,26 +23,48 @@ import { SocksProxyAgent } from "socks-proxy-agent"
  * @returns {Promise<StalkResult>}
  */
 
-export const StalkUser = (username: string, cookie?: any, postLimit?: number, proxy?: string): Promise<StalkResult> =>
+export const StalkUser = (
+  username: string,
+  cookie?: any,
+  postLimit?: number,
+  proxy?: string
+): Promise<StalkResult> =>
   new Promise(async (resolve) => {
     username = username.replace("@", "")
     Axios.get(`${_tiktokurl}/@${username}`, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
-        cookie: typeof cookie === "object" ? cookie.map((v) => `${v.name}=${v.value}`).join("; ") : cookie
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
+        cookie:
+          typeof cookie === "object"
+            ? cookie.map((v) => `${v.name}=${v.value}`).join("; ")
+            : cookie
       },
-      httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+      httpsAgent:
+        (proxy &&
+          (proxy.startsWith("http") || proxy.startsWith("https")
+            ? new HttpsProxyAgent(proxy)
+            : proxy.startsWith("socks")
+            ? new SocksProxyAgent(proxy)
+            : undefined)) ||
+        undefined
     })
       .then(async ({ data }) => {
         const $ = load(data)
-        const result = JSON.parse($("script#__UNIVERSAL_DATA_FOR_REHYDRATION__").text())
-        if (!result["__DEFAULT_SCOPE__"] && !result["__DEFAULT_SCOPE__"]["webapp.user-detail"]) {
+        const result = JSON.parse(
+          $("script#__UNIVERSAL_DATA_FOR_REHYDRATION__").text()
+        )
+        if (
+          !result["__DEFAULT_SCOPE__"] &&
+          !result["__DEFAULT_SCOPE__"]["webapp.user-detail"]
+        ) {
           return resolve({
             status: "error",
             message: "User not found!"
           })
         }
-        const dataUser = result["__DEFAULT_SCOPE__"]["webapp.user-detail"]["userInfo"]
+        const dataUser =
+          result["__DEFAULT_SCOPE__"]["webapp.user-detail"]["userInfo"]
 
         const posts: Posts[] = await parsePosts(dataUser, postLimit, proxy)
         const { users, stats } = parseDataUser(dataUser, posts)
@@ -58,13 +86,26 @@ export const StalkUser = (username: string, cookie?: any, postLimit?: number, pr
  * https://github.com/atharahmed/tiktok-private-api/blob/020ede2eaa6021bcd363282d8cef1aacaff2f88c/src/repositories/user.repository.ts#L148
  */
 
-const request = async (secUid: string, cursor = 0, count = 30, proxy?: string) => {
+const request = async (
+  secUid: string,
+  cursor = 0,
+  count = 30,
+  proxy?: string
+) => {
   const { data } = await Axios.get(`${_tiktokGetPosts(_userPostsParams())}`, {
     headers: {
-      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
+      "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
       "X-tt-params": xttparams(_xttParams(secUid, cursor, count))
     },
-    httpsAgent: (proxy && (proxy.startsWith("http") || proxy.startsWith("https") ? new HttpsProxyAgent(proxy) : proxy.startsWith("socks") ? new SocksProxyAgent(proxy) : undefined)) || undefined
+    httpsAgent:
+      (proxy &&
+        (proxy.startsWith("http") || proxy.startsWith("https")
+          ? new HttpsProxyAgent(proxy)
+          : proxy.startsWith("socks")
+          ? new SocksProxyAgent(proxy)
+          : undefined)) ||
+      undefined
   })
 
   return data
@@ -102,7 +143,11 @@ const parseDataUser = (dataUser: any, posts: Posts[]) => {
   return { users, stats }
 }
 
-const parsePosts = async (dataUser: any, postLimit?: number, proxy?: string): Promise<Posts[]> => {
+const parsePosts = async (
+  dataUser: any,
+  postLimit?: number,
+  proxy?: string
+): Promise<Posts[]> => {
   // Posts Result
   let hasMore = true
   let cursor: number | null = null
@@ -137,7 +182,9 @@ const parsePosts = async (dataUser: any, postLimit?: number, proxy?: string): Pr
       }
 
       if (v.imagePost) {
-        const images: string[] = v.imagePost.images.map((img: any) => img.imageURL.urlList[0])
+        const images: string[] = v.imagePost.images.map(
+          (img: any) => img.imageURL.urlList[0]
+        )
 
         posts.push({
           id: v.id,
@@ -205,6 +252,12 @@ const parsePosts = async (dataUser: any, postLimit?: number, proxy?: string): Pr
 }
 
 const xttparams = (params: any) => {
-  const cipher = createCipheriv("aes-128-cbc", "webapp1.0+202106", "webapp1.0+202106")
-  return Buffer.concat([cipher.update(params), cipher.final()]).toString("base64")
+  const cipher = createCipheriv(
+    "aes-128-cbc",
+    "webapp1.0+202106",
+    "webapp1.0+202106"
+  )
+  return Buffer.concat([cipher.update(params), cipher.final()]).toString(
+    "base64"
+  )
 }
