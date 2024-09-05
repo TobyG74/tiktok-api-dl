@@ -154,7 +154,7 @@ export const MusicalDown = (url: string, proxy?: string) =>
                   : text.includes("watermark")
                   ? "videoWatermark"
                   : `video${i}`
-              ] = $(v).attr("href")
+              ] = $(v).attr("href") != undefined ? $(v).attr("href") : /downloadX\('([^']+)'\)/.exec($(v).attr('onclick'))[1];
               i++
             }
           })
