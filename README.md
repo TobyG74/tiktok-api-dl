@@ -255,10 +255,10 @@ Tiktok.StalkUser(username, {
   message?: string
   result?: {
     type: "video" | "image"
-    description: string
-    author: {
-      nickname: string
-      avatr: string
+    desc?: string
+    author?: {
+      nickname?: string
+      avatar?: string
     }
     statistics: {
       likeCount: string
@@ -284,14 +284,13 @@ Tiktok.StalkUser(username, {
   result?: {
     type: "video" | "image"
     desc?: string
-    author: {
+    author?: {
       avatar?: string
-      nickname: string
+      nickname?: string
     }
     music?: string
     images?: string[]
-    video1?: string
-    video2?: string
+    videoSD?: string
     videoHD?: string
     videoWatermark?: string
   }
