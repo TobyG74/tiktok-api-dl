@@ -9,3 +9,4 @@ tsconfig.json
 src
 test.js
 bun.lockb
+tsconfig.tsbuildinfo

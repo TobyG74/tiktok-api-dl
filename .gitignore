@@ -5,8 +5,5 @@ package-lock.json
 yarn.lock
 lib
 test.js
-<<<<<<< HEAD
 bun.lockb
-=======
-bun.lockb
->>>>>>> e1924e9 (chore: update to version 1.0.6)
+tsconfig.tsbuildinfo
