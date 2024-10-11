@@ -64,32 +64,32 @@ const getRequest = (url: string, proxy?: string) =>
       )
   })
 
-const getMusic = (cookie: string, proxy?: string) =>
-  new Promise<getMusic>((resolve) => {
-    Axios(_musicaldownmusicapi, {
-      method: "GET",
-      headers: {
-        cookie: cookie,
-        "Upgrade-Insecure-Requests": "1",
-        "User-Agent":
-          "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0"
-      },
-      httpsAgent:
-        (proxy &&
-          (proxy.startsWith("http") || proxy.startsWith("https")
-            ? new HttpsProxyAgent(proxy)
-            : proxy.startsWith("socks")
-            ? new SocksProxyAgent(proxy)
-            : undefined)) ||
-        undefined
-    })
-      .then(({ data }) => {
-        const $ = load(data)
-        const music = $("audio > source").attr("src")
-        resolve({ status: "success", result: music })
-      })
-      .catch((e) => resolve({ status: "error" }))
-  })
+// const getMusic = (cookie: string, proxy?: string) =>
+//   new Promise<getMusic>((resolve) => {
+//     Axios(_musicaldownmusicapi, {
+//       method: "GET",
+//       headers: {
+//         cookie: cookie,
+//         "Upgrade-Insecure-Requests": "1",
+//         "User-Agent":
+//           "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0"
+//       },
+//       httpsAgent:
+//         (proxy &&
+//           (proxy.startsWith("http") || proxy.startsWith("https")
+//             ? new HttpsProxyAgent(proxy)
+//             : proxy.startsWith("socks")
+//             ? new SocksProxyAgent(proxy)
+//             : undefined)) ||
+//         undefined
+//     })
+//       .then(({ data }) => {
+//         const $ = load(data)
+//         const music = $("audio > source").attr("src")
+//         resolve({ status: "success", result: music })
+//       })
+//       .catch((e) => resolve({ status: "error" }))
+//   })
 
 /**
  * Tiktok MusicalDown Downloader
@@ -138,23 +138,26 @@ export const MusicalDown = (url: string, proxy?: string) =>
         // Get Result Video
         let i = 1
         let videos = {}
-        $("div[class='col s12 l8'] > a")
+        $("div.row > div")
+          .map((_, el) => $(el))
+          .get(1)
+          .find("a")
           .get()
-          .map((v) => {
+          .map((v: any) => {
             if ($(v).attr("href") !== "#modal2") {
-              let text = $(v)
-                .text()
-                .trim()
-                .replace(/\s/, " ")
-                .replace("arrow_downward", "")
-                .toLowerCase()
+              if (!isURL($(v).attr("href"))) return
               videos[
-                text.includes("hd")
+                $(v).attr("data-event").includes("hd")
                   ? "videoHD"
-                  : text.includes("watermark")
+                  : $(v).attr("data-event").includes("mp4")
+                  ? "videoSD"
+                  : $(v).attr("data-event").includes("watermark")
                   ? "videoWatermark"
-                  : `video${i}`
-              ] = $(v).attr("href") != undefined ? $(v).attr("href") : /downloadX\('([^']+)'\)/.exec($(v).attr('onclick'))[1];
+                  : $(v).attr("href").includes("type=mp3") && "music"
+              ] =
+                $(v).attr("href") != undefined
+                  ? $(v).attr("href")
+                  : /downloadX\('([^']+)'\)/.exec($(v).attr("onclick"))[1]
               i++
             }
           })
@@ -165,42 +168,26 @@ export const MusicalDown = (url: string, proxy?: string) =>
             status: "success",
             result: {
               type: "image",
-              author: {
-                nickname: $("h2.white-text")
-                  .text()
-                  .trim()
-                  .replace("Download Now: Check out ", "")
-                  .replace(
-                    "’s video! #TikTok >If MusicallyDown has helped you, you can help us too",
-                    ""
-                  )
-                  .replace("Download Now: ", "")
-                  .replace(
-                    "If MusicallyDown has helped you, you can help us too",
-                    ""
-                  )
-              },
-              images,
-              music: $("a.download").attr("href")
+              images
             }
           })
         } else {
           // Video Result
-          const music = await getMusic(request.cookie)
+          // const music = await getMusic(request.cookie)
+          if (Object.keys(videos).length === 0)
+            return resolve({
+              status: "success",
+              message: "There is an error. Can't find download link"
+            })
           resolve({
             status: "success",
             result: {
               type: "video",
               author: {
                 avatar: $("div.img-area > img").attr("src"),
-                nickname: $("div.row > div > div > h2")
-                  .map((_, el) => $(el).text())
-                  .get(0)
+                nickname: $("h2.video-author > b").text()
               },
-              desc: $("div.row > div > div > h2")
-                .map((_, el) => $(el).text())
-                .get(1),
-              music: music.result,
+              desc: $("p.video-desc").text(),
               ...videos
             }
           })
@@ -208,3 +195,14 @@ export const MusicalDown = (url: string, proxy?: string) =>
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
+
+const isURL = (url: string) => {
+  let status = false
+  try {
+    new URL(url)
+    status = true
+  } catch {
+    status = false
+  }
+  return status
+}

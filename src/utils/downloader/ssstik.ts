@@ -115,7 +115,6 @@ export const SSSTik = (url: string, proxy?: string) =>
       const $ = load(await response)
 
       // Result
-      const desc = $("p.maintext").text().trim()
       const author: Author = {
         avatar: $("img.result_author").attr("src"),
         nickname: $("h2").text().trim()
@@ -148,7 +147,6 @@ export const SSSTik = (url: string, proxy?: string) =>
           status: "success",
           result: {
             type: "image",
-            desc,
             author,
             statistics,
             images,
@@ -161,7 +159,7 @@ export const SSSTik = (url: string, proxy?: string) =>
           status: "success",
           result: {
             type: "video",
-            desc,
+            desc: $("p.maintext").text().trim(),
             author,
             statistics,
             video,

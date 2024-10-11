@@ -13,14 +13,12 @@ export type MusicalDownResponse = {
   result?: {
     type: "video" | "image"
     desc?: string
-    author: {
+    author?: {
       avatar?: string
-      nickname: string
+      nickname?: string
     }
     music?: string
     images?: string[]
-    video1?: string
-    video2?: string
     videoHD?: string
     videoWatermark?: string
   }

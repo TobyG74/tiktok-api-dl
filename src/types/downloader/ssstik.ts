@@ -9,7 +9,7 @@ export type SSSTikResponse = {
   message?: string
   result?: {
     type: "image" | "video"
-    desc: string
+    desc?: string
     author: Author
     statistics: Statistics
     images?: string[]
