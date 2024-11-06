@@ -1,13 +1,18 @@
 /** Tiktok */
 export const _tiktokurl: string = "https://www.tiktok.com"
-export const _tiktokSearchUserFull = (params: any): string => `${_tiktokurl}/api/search/user/full/?${params}`
-export const _tiktokSearchVideoFull = (params: any): string => `${_tiktokurl}/api/search/item/full/?${params}`
-export const _tiktokSearchLiveFull = (params: any): string => `${_tiktokurl}/api/search/live/full/?${params}`
-export const _tiktokGetPosts = (params: any): string => `${_tiktokurl}/api/post/item_list/?${params}`
+export const _tiktokSearchUserFull = (params: any): string =>
+  `${_tiktokurl}/api/search/user/full/?${params}`
+export const _tiktokSearchVideoFull = (params: any): string =>
+  `${_tiktokurl}/api/search/item/full/?${params}`
+export const _tiktokSearchLiveFull = (params: any): string =>
+  `${_tiktokurl}/api/search/live/full/?${params}`
+export const _tiktokGetPosts = (params: any): string =>
+  `${_tiktokurl}/api/post/item_list/?${params}`
 
 /** Tiktokv */
-export const _tiktokvApi: string = `https://api.tiktokv.com`
-export const _tiktokvFeed = (params: any): string => `${_tiktokvApi}/aweme/v1/feed/?${params}`
+export const _tiktokvApi: string = `https://api16-normal-useast5.tiktokv.us`
+export const _tiktokvFeed = (params: any): string =>
+  `${_tiktokvApi}/aweme/v1/feed/?${params}`
 
 /** SSSTik */
 export const _ssstikurl: string = "https://ssstik.io"
