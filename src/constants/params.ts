@@ -11,7 +11,8 @@ export const _userPostsParams = () => {
       browser_name: "Mozilla",
       browser_online: true,
       browser_platform: "Win32",
-      browser_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
+      browser_version:
+        "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
       channel: "tiktok_web",
       cookie_enabled: true,
       device_id: "7002566096994190854",
@@ -31,17 +32,22 @@ export const _userPostsParams = () => {
       tz_name: "Europe/Bucharest",
       verifyFp: "verify_lacphy8d_z2ux9idt_xdmu_4gKb_9nng_NNTTTvsFS8ao",
       webcast_language: "en"
-    }) + "&msToken=7UfjxOYL5mVC8QFOKQRhmLR3pCjoxewuwxtfFIcPweqC05Q6C_qjW-5Ba6_fE5-fkZc0wkLSWaaesA4CZ0LAqRrXSL8b88jGvEjbZPwLIPnHeyQq6VifzyKf5oGCQNw_W4Xq12Q-8KCuyiKGLOw=&X-Bogus=DFSzswVL-XGANHVWS0OnS2XyYJUm"
+    }) +
+    "&msToken=7UfjxOYL5mVC8QFOKQRhmLR3pCjoxewuwxtfFIcPweqC05Q6C_qjW-5Ba6_fE5-fkZc0wkLSWaaesA4CZ0LAqRrXSL8b88jGvEjbZPwLIPnHeyQq6VifzyKf5oGCQNw_W4Xq12Q-8KCuyiKGLOw=&X-Bogus=DFSzswVL-XGANHVWS0OnS2XyYJUm"
   )
 }
 
-export const _userSearchParams = (keyword: string, page: number = 1) => {
+export const _userSearchParams = (
+  keyword: string,
+  page: number = 1,
+  xbogus?: any
+) => {
   let cursor = 0
   for (let i = 1; i < page; i++) {
     cursor += 10
   }
 
-  return qs.stringify({
+  const params = {
     WebIdLastTime: Date.now(),
     aid: "1988",
     app_language: "en",
@@ -50,7 +56,8 @@ export const _userSearchParams = (keyword: string, page: number = 1) => {
     browser_name: "Mozilla",
     browser_online: true,
     browser_platform: "Win32",
-    browser_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
+    browser_version:
+      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
     channel: "tiktok_web",
     cookie_enabled: true,
     cursor: cursor,
@@ -68,11 +75,27 @@ export const _userSearchParams = (keyword: string, page: number = 1) => {
     region: "ID",
     screen_height: 768,
     screen_width: 1366,
-    search_id: "20240329123238075BE0FECBA0FE11C76B",
+    search_id: "202411061124377BCAEF0ACBDA9105BAFB",
     tz_name: "Asia/Jakarta",
-    web_search_code: { tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } },
+    web_search_code: {
+      tiktok: {
+        client_params_x: {
+          search_engine: {
+            ies_mt_user_live_video_card_use_libra: 1,
+            mt_search_general_user_live_card: 1
+          }
+        },
+        search_server: {}
+      }
+    },
     webcast_language: "en"
-  })
+  }
+
+  if (xbogus) {
+    params["X-Bogus"] = xbogus
+  }
+
+  return qs.stringify(params)
 }
 
 export const _liveSearchParams = (keyword: string, page: number = 1) => {
@@ -113,7 +136,8 @@ export const _liveSearchParams = (keyword: string, page: number = 1) => {
     screen_height: "768",
     screen_width: "1366",
     tz_name: "Asia/Jakarta",
-    web_search_code: "{ tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } }",
+    web_search_code:
+      "{ tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } }",
     webcast_language: "en"
   })
 }
