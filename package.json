@@ -1,10 +1,11 @@
 {
   "name": "@tobyg74/tiktok-api-dl",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Scraper for downloading media in the form of videos, images and audio from Tiktok. Also for stalking Tiktok Users",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "test": "jest test/utils.test.ts",
     "build": "tsc --build"
   },
   "repository": {
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@types/cheerio": "^0.22.31",
     "@types/node": "^18.15.11",
+    "jest-cli": "^29.7.0",
     "typescript": "^5.0.3"
   }
 }
