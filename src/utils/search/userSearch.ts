@@ -4,6 +4,29 @@ import { TiktokUserSearchResponse } from "../../types/search/userSearch"
 import { _userSearchParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
+import xbogus from "../../../helper/xbogus"
+
+const userAgent =
+  "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
+
+/**
+ * Generate URL with X-Bogus
+ * Special thanks to https://github.com/iamatef/xbogus
+ * @param {string} username - The username you want to search
+ * @param {number} page - The page you want to search
+ * @returns {string}
+ */
+
+export const generateURLXbogus = (username: string, page: number) => {
+  const url =
+    "https://www.tiktok.com/api/search/user/full/?" +
+    _userSearchParams(username, page)
+  const xbogusParams = xbogus(url, userAgent)
+  const urlXbogus =
+    "https://www.tiktok.com/api/search/user/full/?" +
+    _userSearchParams(username, page, xbogusParams)
+  return urlXbogus
+}
 
 /**
  * Tiktok Search User
@@ -21,11 +44,10 @@ export const SearchUser = (
   proxy?: string
 ): Promise<TiktokUserSearchResponse> =>
   new Promise(async (resolve) => {
-    Axios(_tiktokSearchUserFull(_userSearchParams(username, page)), {
+    Axios(generateURLXbogus(username, page), {
       method: "GET",
       headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
+        "User-Agent": userAgent,
         cookie:
           typeof cookie === "object"
             ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ")
