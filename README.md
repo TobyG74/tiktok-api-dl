@@ -45,17 +45,10 @@ This project uses the Unofficial API from Tiktok.
 
 You can use cookies in the form of String or JSON
 
-- Method 1 (String) :
-
-  Login to the [Tiktok website](https://tiktok/.com) -> Open the **Inspect Element** or you can press the shortcut **CTRL + SHIFT + I** -> Go to network -> Find the request that goes to tiktok then open the request and look for **Cookie**
-
-![Capture](https://github.com/TobyG74/tiktok-api-dl/assets/32604979/c516e5e8-7b8f-43cb-aa2e-2bbe92944dac)
-
-- Method 2 (JSON) :
-
-  You can use the chrome extension [EditThisCookies](https://chromewebstore.google.com/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg) -> Login to the [Tiktok website](https://tiktok/.com) -> Then open the **EditThisCookie** extension -> Then click **Export Cookie**
-
-![Capture2](https://github.com/TobyG74/tiktok-api-dl/assets/32604979/fa0e4bc7-a646-4551-a974-160881a98198)
+1. Download Extension [Cookie-Editor](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm)
+2. Login to the [Tiktok Website](https://tiktok/.com)
+3. Open the Cookie-Editor Extension
+4. Copy the Cookie and paste it into the code `COOKIE: "YOUR_COOKIE"`
 
 # Build this project
 
@@ -97,7 +90,9 @@ npm install github:TobyG74/tiktok-api-dl
 ## Tiktok Downloader
 
 - V1 uses the API from TiktokAPI
+  - Support Video, Images / Slide, Music
 - V2 uses the API from [SSSTik](https://ssstik.io/)
+  -
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
 ### Options
@@ -267,7 +262,7 @@ Tiktok.StalkUser(username, {
     }
     video?: string
     images?: string[]
-    music: string
+    music?: string
   }
 }
 ```
