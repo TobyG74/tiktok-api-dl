@@ -141,32 +141,35 @@ export const SSSTik = (url: string, proxy?: string) =>
           images.push($(img).find("a").attr("href"))
         })
 
-      if (images.length !== 0 && music) {
+      let result: SSSTikResponse["result"]
+      if (images.length !== 0) {
         // Images / Slide Result
-        resolve({
-          status: "success",
-          result: {
-            type: "image",
-            author,
-            statistics,
-            images,
-            music
-          }
-        })
-      } else if (video && music) {
+        result = {
+          type: "image",
+          desc: $("p.maintext").text().trim(),
+          author,
+          statistics,
+          images
+        }
+
+        if (music) {
+          result.music = music
+        }
+      } else if (video) {
         // Video Result
-        resolve({
-          status: "success",
-          result: {
-            type: "video",
-            desc: $("p.maintext").text().trim(),
-            author,
-            statistics,
-            video,
-            music
-          }
-        })
+        result = {
+          type: "video",
+          desc: $("p.maintext").text().trim(),
+          author,
+          statistics,
+          video
+        }
+
+        if (music) {
+          result.music = music
+        }
       }
+      resolve({ status: "success", result })
     } catch (err) {
       resolve({ status: "error", message: err.message })
     }
