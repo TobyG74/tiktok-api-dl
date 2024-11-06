@@ -1,7 +1,7 @@
 node_modules
-yarn-lock.json
 pnpm-lock.yaml
 package-lock.json
+yarn.lock
 .gitignore
 tsconfig.json
 .eslintrc
