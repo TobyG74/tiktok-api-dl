@@ -29,6 +29,7 @@
   - [Tiktok Search](#tiktok-search)
   - [Tiktok Stalker](#tiktok-stalker)
 - [Response](#response)
+- [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -91,8 +92,7 @@ npm install github:TobyG74/tiktok-api-dl
 
 - V1 uses the API from TiktokAPI
   - Support Video, Images / Slide, Music
-- V2 uses the API from [SSSTik](https://ssstik.io/)
-  -
+- ## V2 uses the API from [SSSTik](https://ssstik.io/)
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
 ### Options
@@ -389,6 +389,10 @@ Tiktok.StalkUser(username, {
 
 </details>
 <br>
+
+# Changelog
+
+All updates and changes can be viewed in the [CHANGELOG.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CHANGELOG.md) file.
 
 # Contributing
 
