@@ -6,7 +6,7 @@ function _0x5cd844(e) {
     };
     return e(b, b.exports), b.exports
 }
-jsvmp = function(e, b, a) {
+let jsvmp = function(e, b, a) {
     function f(e, b, a) {
         return (f = function() {
             if ("undefined" == typeof Reflect || !Reflect.construct || Reflect.construct.sham) return !1;
