@@ -185,7 +185,7 @@ Tiktok.StalkUser(username, {
 
 ### Options
 
-- `postLimit` : Limit the number of posts to display
+- `commentLimit` : Limit the number of comments to display
 - `proxy` : Proxy for request
 
 ```js
