@@ -1,6 +1,7 @@
 import qs from "qs"
 
-export const _userPostsParams = () => {
+/** Get Params */
+export const _getUserPostsParams = () => {
   return (
     qs.stringify({
       aid: 1988,
@@ -37,14 +38,70 @@ export const _userPostsParams = () => {
   )
 }
 
+export const _xttParams = (secUid: string, cursor: number, count: number) => {
+  return qs.stringify({
+    aid: "1988",
+    cookie_enabled: true,
+    screen_width: 0,
+    screen_height: 0,
+    browser_language: "",
+    browser_platform: "",
+    browser_name: "",
+    browser_version: "",
+    browser_online: "",
+    timezone_name: "Europe/London",
+    secUid,
+    cursor,
+    count,
+    is_encryption: 1
+  })
+}
+
+export const _getCommentsParams = (id: string, count: number) => {
+  let cursor = 0
+
+  // 50 comments per page
+  if (count > 50) {
+    for (let i = 1; i < count; i++) {
+      cursor += 50
+    }
+  }
+
+  return qs.stringify({
+    aid: "1988",
+    app_language: "ja-JP",
+    app_name: "tiktok_web",
+    aweme_id: id,
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Linux x86_64",
+    browser_version: "5.0 (X11)",
+    channel: "tiktok_web",
+    cookie_enabled: true,
+    count: 50,
+    cursor: cursor,
+    device_id: "7445428925624813064",
+    os: "linux",
+    region: "ID",
+    screen_height: 768,
+    screen_width: 1366
+  })
+}
+
+/** Search */
 export const _userSearchParams = (
   keyword: string,
-  page: number = 1,
+  page: number,
   xbogus?: any
 ) => {
   let cursor = 0
-  for (let i = 1; i < page; i++) {
-    cursor += 10
+
+  // 10 users per page
+  if (page > 1) {
+    for (let i = 1; i < page; i++) {
+      cursor += 10
+    }
   }
 
   const params = {
@@ -98,10 +155,14 @@ export const _userSearchParams = (
   return qs.stringify(params)
 }
 
-export const _liveSearchParams = (keyword: string, page: number = 1) => {
+export const _liveSearchParams = (keyword: string, page: number) => {
   let cursor = 0
-  for (let i = 1; i < page; i++) {
-    cursor += 12
+
+  // 12 cursor for 20 lives per page
+  if (page > 1) {
+    for (let i = 1; i < page; i++) {
+      cursor += 12
+    }
   }
 
   let offset = `${cursor}`
@@ -142,6 +203,7 @@ export const _liveSearchParams = (keyword: string, page: number = 1) => {
   })
 }
 
+/** Downloader Params */
 export const _tiktokApiParams = (args: any) => {
   return new URLSearchParams({
     ...args,
@@ -176,25 +238,6 @@ export const _tiktokApiParams = (args: any) => {
     as: "a1qwert123",
     cp: "cbfhckdckkde1"
   }).toString()
-}
-
-export const _xttParams = (secUid: string, cursor: number, count: number) => {
-  return qs.stringify({
-    aid: "1988",
-    cookie_enabled: true,
-    screen_width: 0,
-    screen_height: 0,
-    browser_language: "",
-    browser_platform: "",
-    browser_name: "",
-    browser_version: "",
-    browser_online: "",
-    timezone_name: "Europe/London",
-    secUid,
-    cursor,
-    count,
-    is_encryption: 1
-  })
 }
 
 const randomChar = (char: string, range: number) => {
