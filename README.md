@@ -3,14 +3,25 @@
 </h1>
 
 <div align="center">
-  <a href="https://github.com/TobyG74/tiktok-api-dl/graphs/contributors" title="contributors"><img src="https://img.shields.io/github/contributors/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
-  <a href="https://github.com/TobyG74/tiktok-api-dl/network/members" title="forks"><img src="https://img.shields.io/github/forks/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
-  <a href="https://github.com/TobyG74/tiktok-api-dl/issues" title="issues"><img src="https://img.shields.io/github/issues/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
-  <a href="https://github.com/TobyG74/tiktok-api-dl/stargazers" title="stargazer"><img src="https://img.shields.io/github/stars/TobyG74/tiktok-api-dl.svg?style=for-the-badge"></img></a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/graphs/contributors" title="contributors">
+    <img src="https://img.shields.io/github/contributors/TobyG74/tiktok-api-dl.svg?style=for-the-badge">
+  </a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/network/members" title="forks">
+    <img src="https://img.shields.io/github/forks/TobyG74/tiktok-api-dl.svg?style=for-the-badge">
+  </a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/issues" title="issues">
+    <img src="https://img.shields.io/github/issues/TobyG74/tiktok-api-dl.svg?style=for-the-badge">
+  </a>
+  <a href="https://github.com/TobyG74/tiktok-api-dl/stargazers" title="stargazer">
+    <img src="https://img.shields.io/github/stars/TobyG74/tiktok-api-dl.svg?style=for-the-badge">
+  </a>
+
 </div>
 <br>
 <div align="center">
-  <a href="https://nodei.co/npm/@tobyg74/tiktok-api-dl" title="npm"><img src="https://nodei.co/npm/@tobyg74/tiktok-api-dl.png?downloads=true&downloadRank=true&stars=true"></img></a>
+  <a href="https://nodei.co/npm/@tobyg74/tiktok-api-dl" title="npm">
+    <img src="https://nodei.co/npm/@tobyg74/tiktok-api-dl.png?downloads=true&downloadRank=true&stars=true">
+  </a>
 </div>
 
 <br>
@@ -88,11 +99,11 @@ npm install github:TobyG74/tiktok-api-dl
 
 # Examples
 
-## Tiktok Downloader
+## Tiktok Downloader By URL
 
 - V1 uses the API from TiktokAPI
   - Support Video, Images / Slide, Music
-- ## V2 uses the API from [SSSTik](https://ssstik.io/)
+- V2 uses the API from [SSSTik](https://ssstik.io/)
 - V3 uses the API from [MusicalDown](https://musicaldown.com/)
 
 ### Options
@@ -102,15 +113,17 @@ npm install github:TobyG74/tiktok-api-dl
   - `v2` : SSSTik
   - `v3` : MusicalDown
 - `proxy` : Proxy for request
+- `showOriginalResponse` : Show original response from API && Only for V1
 
 ```js
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
-const tiktok_url = "https://vt.tiktok.com/ZS84BnrU9"
+const tiktok_url = "https://vt.tiktok.com/xxxxxxxx"
 
 Tiktok.Downloader(tiktok_url, {
   version: "v1", //  version: "v1" | "v2" | "v3"
   proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
+  showOriginalResponse: true // Only for V1
 }).then((result) => {
   console.log(result)
 })
@@ -146,7 +159,7 @@ Tiktok.Search(username, {
 })
 ```
 
-## Tiktok Stalker
+## Tiktok Get Profile By Username
 
 ### Options
 
@@ -162,6 +175,26 @@ const username = "tobz2k19"
 Tiktok.StalkUser(username, {
   cookie: process.env.COOKIE || "Your Cookie"
   postLimit: 10, // Limit the number of posts to display
+  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
+}).then((result) => {
+  console.log(result)
+})
+```
+
+## Tiktok Get Comments From Video
+
+### Options
+
+- `postLimit` : Limit the number of posts to display
+- `proxy` : Proxy for request
+
+```js
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const url = "https://vt.tiktok.com/xxxxxxxx"
+
+Tiktok.GetComments(url, {
+  commentLimit: 20, // Limit the number of comments to display
   proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
 }).then((result) => {
   console.log(result)
@@ -184,6 +217,7 @@ Tiktok.StalkUser(username, {
     id: string
     createTime: number
     description: string
+    isTurnOffComment: boolean
     isADS: boolean
     hashtag: string[]
     author: {
@@ -236,6 +270,7 @@ Tiktok.StalkUser(username, {
       isAuthorArtist: boolean
     }
   }
+  resultNotParsed?: any
 }
 ```
 
@@ -359,7 +394,7 @@ Tiktok.StalkUser(username, {
 
 </details>
 <details>
-  <summary><b>Tiktok Stalker</b></summary>
+  <summary><b>Tiktok Get Profile</b></summary>
   <br>
 
 ```ts
@@ -384,6 +419,33 @@ Tiktok.StalkUser(username, {
     }
     posts: Posts[]
   }
+  totalPosts: number
+}
+```
+
+</details>
+<details>
+  <summary><b>Tiktok Get Comments</b></summary>
+  <br>
+
+```ts
+{
+  status: "success" | "error"
+  message?: string
+  result?: [{
+    cid: string
+    text: string
+    commentLanguage: string
+    createTime: number
+    likeCount: number
+    isAuthorLiked: boolean
+    isCommentTranslatable: boolean
+    replyCommentTotal: number
+    replyComment: []
+    user: User
+    url: string
+  }],
+  totalComments: number
 }
 ```
 
