@@ -9,6 +9,7 @@ export type TiktokAPIResponse = {
     author: Author
     statistics: Statistics
     hashtag: string[]
+    isTurnOffComment: boolean
     isADS: boolean
     cover?: string[]
     dynamicCover?: string[]
@@ -17,6 +18,7 @@ export type TiktokAPIResponse = {
     images?: string[]
     music: Music
   }
+  resultNotParsed?: any
 }
 
 export type Author = {

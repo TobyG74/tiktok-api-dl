@@ -20,11 +20,16 @@ const TiktokURLregex =
  * Tiktok API Downloader
  * @param {string} url - Tiktok URL
  * @param {string} proxy - Your Proxy (optional)
+ * @param {boolean} showOriginalResponse - Show Original Response (optional)
  * @returns {Promise<TiktokAPIResponse>}
  */
 
-export const TiktokAPI = (url: string, proxy?: string) =>
-  new Promise<TiktokAPIResponse>((resolve) => {
+export const TiktokAPI = (
+  url: string,
+  proxy?: string,
+  showOriginalResponse?: boolean
+): Promise<TiktokAPIResponse> =>
+  new Promise((resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
         status: "error",
@@ -66,29 +71,31 @@ export const TiktokAPI = (url: string, proxy?: string) =>
 
         const { content, author, statistics, music } = data2
 
+        let response: TiktokAPIResponse
         // Download Result
         if (content.image_post_info) {
           // Images or Slide Result
-          resolve({
+          response = {
             status: "success",
             result: {
               type: "image",
               id: content.aweme_id,
               createTime: content.create_time,
               description: content.desc,
+              isTurnOffComment: content.item_comment_settings === 3,
               hashtag: content.text_extra
-                .filter((x) => x.hashtag_name !== undefined)
-                .map((v) => v.hashtag_name),
+                .filter((x: any) => x.hashtag_name !== undefined)
+                .map((v: any) => v.hashtag_name),
               isADS: content.is_ads,
               author,
               statistics,
               images:
                 content.image_post_info.images?.map(
-                  (v) => v?.display_image?.url_list[0]
+                  (v: any) => v?.display_image?.url_list[0]
                 ) || [],
               music
             }
-          })
+          }
         } else {
           // Video Result
           const video: Video = {
@@ -101,24 +108,34 @@ export const TiktokAPI = (url: string, proxy?: string) =>
             originCover: content.video?.origin_cover?.url_list || []
           }
 
-          resolve({
+          response = {
             status: "success",
             result: {
               type: "video",
               id: content.aweme_id,
               createTime: content.create_time,
               description: content.desc,
+              isTurnOffComment: content.item_comment_settings === 3,
               hashtag: content.text_extra
-                .filter((x) => x.hashtag_name !== undefined)
-                .map((v) => v.hashtag_name),
+                .filter((x: any) => x.hashtag_name !== undefined)
+                .map((v: any) => v.hashtag_name),
               isADS: content.is_ads,
               author,
               statistics,
               video,
               music
             }
-          })
+          }
         }
+
+        // Show Original Response
+        if (showOriginalResponse) {
+          response = {
+            status: "success",
+            resultNotParsed: data2
+          }
+        }
+        resolve(response)
       })
       .catch((e) => resolve({ status: "error", message: e.message }))
   })
