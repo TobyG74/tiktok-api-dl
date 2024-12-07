@@ -5,7 +5,7 @@ import {
   Author,
   Statistics,
   SSSTikFetchTT,
-  SSSTikResponse
+  SSSTikResponse,
 } from "../../types/downloader/ssstik"
 import { _ssstikapi, _ssstikurl } from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -132,6 +132,7 @@ export const SSSTik = (url: string, proxy?: string): Promise<SSSTikResponse> =>
       // Video & Music Result
       const video = $("a.without_watermark").attr("href")
       const music = $("a.music").attr("href")
+      const direct = $("a.music_direct").attr("href")
 
       // Images / Slide Result
       const images: string[] = []
@@ -168,7 +169,15 @@ export const SSSTik = (url: string, proxy?: string): Promise<SSSTikResponse> =>
         if (music) {
           result.music = music
         }
+      } else if (music) {
+        // Music Result
+        result = {
+          type: "music",
+          music,
+          direct: direct || "",
+        }
       }
+
       resolve({ status: "success", result })
     } catch (err) {
       resolve({ status: "error", message: err.message })
