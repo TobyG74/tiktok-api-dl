@@ -297,3 +297,13 @@
 ### Fixed
 
 - Fixed SSSTik error when downloading Tiktok Story [978afeb](https://github.com/TobyG74/tiktok-api-dl/commit/978afeb713346e3e8db697d6bf189a6271507a12)
+
+### Version 1.2.2 - 07-11-2024
+
+### Added
+
+- Added Tiktok Get Comment [3bcbecb](https://github.com/TobyG74/tiktok-api-dl/commit/3bcbecbb6e2d772ce8ae396266d7e02a50b41931)
+- Added Tiktok Get Comment Documentation [46acd69](https://github.com/TobyG74/tiktok-api-dl/commit/46acd692e373b5a5c69f8a6c06a0dfae5e834773)
+- Added `page` & `totalResults` to Tiktok Search User & Live Response [1bae63d2](https://github.com/TobyG74/tiktok-api-dl/commit/1bae63d2e82f8d80c8b307e189209e488a76c266)
+- Added `page` & `totalResults` to Tiktok Search User & Live Documentation [27d69c2](https://github.com/TobyG74/tiktok-api-dl/commit/27d69c28e7b7a394d1b0fc50fd801ba0e983856e)
+- Added `isTurnOffComment` to Tiktok Downloader V1 Response [03a081d](https://github.com/TobyG74/tiktok-api-dl/commit/03a081d87b60b8431ce61aa076be87c5f33951d0)
