@@ -1,14 +1,19 @@
 import Axios from "axios"
 import { _tiktokSearchLiveFull } from "../../constants/api"
 import { _liveSearchParams } from "../../constants/params"
-import { LiveInfo, Owner, OwnerStats } from "../../types/search/liveSearch"
+import {
+  LiveInfo,
+  Owner,
+  OwnerStats,
+  TiktokLiveSearchResponse
+} from "../../types/search/liveSearch"
 import { SocksProxyAgent } from "socks-proxy-agent"
 import { HttpsProxyAgent } from "https-proxy-agent"
 
 /**
  * Tiktok Search Live
  * @param {string} keyword - The keyword you want to search
- * @param {object|string} cookie - Your Tiktok cookie (optional)
+ * @param {string | any[]} cookie - Your Tiktok cookie (optional)
  * @param {number} page - The page you want to search (optional)
  * @param {string} proxy - Your Proxy (optional)
  * @returns {Promise<TiktokLiveSearchResponse>}
@@ -16,11 +21,17 @@ import { HttpsProxyAgent } from "https-proxy-agent"
 
 export const SearchLive = async (
   keyword: string,
-  cookie?: any,
+  cookie: string | any[],
   page: number = 1,
   proxy?: string
-) =>
+): Promise<TiktokLiveSearchResponse> =>
   new Promise(async (resolve) => {
+    if (!cookie) {
+      return resolve({
+        status: "error",
+        message: "Cookie is required!"
+      })
+    }
     Axios(_tiktokSearchLiveFull(_liveSearchParams(keyword, page)), {
       method: "GET",
       headers: {
@@ -75,7 +86,7 @@ export const SearchLive = async (
               likeCount: content.like_count
             },
             owner: {
-              id: content.owner.id,
+              uid: content.owner.id,
               nickname: content.owner.nickname,
               username: content.owner.display_id,
               signature: content.owner.bio_description,
@@ -101,7 +112,12 @@ export const SearchLive = async (
           result.push({ roomInfo, liveInfo })
         })
 
-        resolve({ status: "success", result })
+        resolve({
+          status: "success",
+          result,
+          page,
+          totalResults: data.result.length
+        })
       })
       .catch((e) => {
         resolve({ status: "error", message: e.message })

@@ -31,7 +31,7 @@ export const generateURLXbogus = (username: string, page: number) => {
 /**
  * Tiktok Search User
  * @param {string} username - The username you want to search
- * @param {object|string} cookie - Your Tiktok cookie (optional)
+ * @param {string | any[]} cookie - Your Tiktok cookie (optional)
  * @param {number} page - The page you want to search (optional)
  * @param {string} proxy - Your Proxy (optional)
  * @returns {Promise<TiktokUserSearchResponse>}
@@ -39,11 +39,17 @@ export const generateURLXbogus = (username: string, page: number) => {
 
 export const SearchUser = (
   username: string,
-  cookie?: any,
+  cookie: string | any[],
   page: number = 1,
   proxy?: string
 ): Promise<TiktokUserSearchResponse> =>
   new Promise(async (resolve) => {
+    if (!cookie) {
+      return resolve({
+        status: "error",
+        message: "Cookie is required!"
+      })
+    }
     Axios(generateURLXbogus(username, page), {
       method: "GET",
       headers: {
@@ -93,7 +99,12 @@ export const SearchUser = (
           })
         }
 
-        resolve({ status: "success", result })
+        resolve({
+          status: "success",
+          result,
+          page,
+          totalResults: data.result.length
+        })
       })
       .catch((e) => {
         resolve({ status: "error", message: e.message })

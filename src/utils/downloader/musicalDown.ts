@@ -21,8 +21,8 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 const TiktokURLregex =
   /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
-const getRequest = (url: string, proxy?: string) =>
-  new Promise<getRequest>((resolve) => {
+const getRequest = (url: string, proxy?: string): Promise<getRequest> =>
+  new Promise((resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
         status: "error",
@@ -98,8 +98,11 @@ const getRequest = (url: string, proxy?: string) =>
  * @returns {Promise<MusicalDownResponse>}
  */
 
-export const MusicalDown = (url: string, proxy?: string) =>
-  new Promise<MusicalDownResponse>(async (resolve) => {
+export const MusicalDown = (
+  url: string,
+  proxy?: string
+): Promise<MusicalDownResponse> =>
+  new Promise(async (resolve) => {
     const request: getRequest = await getRequest(url)
     if (request.status !== "success")
       return resolve({ status: "error", message: request.message })

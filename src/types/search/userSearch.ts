@@ -2,6 +2,8 @@ export type TiktokUserSearchResponse = {
   status: "success" | "error"
   message?: string
   result?: Result[]
+  page?: number
+  totalResults?: number
 }
 
 export type Result = {

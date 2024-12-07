@@ -2,6 +2,8 @@ export type TiktokLiveSearchResponse = {
   status: "success" | "error"
   message?: string
   result?: Result[]
+  page?: number
+  totalResults?: number
 }
 
 export type Result = {
@@ -34,7 +36,7 @@ export type Stats = {
 }
 
 export type Owner = {
-  id: string
+  uid: string
   nickname: string
   username: string
   signature: string

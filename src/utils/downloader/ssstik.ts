@@ -19,8 +19,8 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 const TiktokURLregex =
   /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
-const fetchTT = (proxy?: string) =>
-  new Promise<SSSTikFetchTT>(async (resolve) => {
+const fetchTT = (proxy?: string): Promise<SSSTikFetchTT> =>
+  new Promise(async (resolve) => {
     Axios(_ssstikurl, {
       method: "GET",
       headers: {
@@ -59,8 +59,8 @@ const fetchTT = (proxy?: string) =>
  * @returns {Promise<SSSTikResponse>}
  */
 
-export const SSSTik = (url: string, proxy?: string) =>
-  new Promise<SSSTikResponse>(async (resolve) => {
+export const SSSTik = (url: string, proxy?: string): Promise<SSSTikResponse> =>
+  new Promise(async (resolve) => {
     try {
       if (!TiktokURLregex.test(url)) {
         return resolve({
