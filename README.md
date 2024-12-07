@@ -347,6 +347,8 @@ Tiktok.GetComments(url, {
     secUid: string
     url: string
   }]
+  page: number
+  totalResults: number
 }
 ```
 
@@ -389,6 +391,8 @@ Tiktok.GetComments(url, {
       isVerified: boolean
     }
   }]
+  page: number
+  totalResults: number
 }
 ```
 
