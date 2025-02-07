@@ -304,6 +304,18 @@
 
 - Added Tiktok Get Comment [3bcbecb](https://github.com/TobyG74/tiktok-api-dl/commit/3bcbecbb6e2d772ce8ae396266d7e02a50b41931)
 - Added Tiktok Get Comment Documentation [46acd69](https://github.com/TobyG74/tiktok-api-dl/commit/46acd692e373b5a5c69f8a6c06a0dfae5e834773)
-- Added `page` & `totalResults` to Tiktok Search User & Live Response [1bae63d2](https://github.com/TobyG74/tiktok-api-dl/commit/1bae63d2e82f8d80c8b307e189209e488a76c266)
+- Added `page` & `totalResults` to Tiktok Search User & Live Response [1bae63d](https://github.com/TobyG74/tiktok-api-dl/commit/1bae63d2e82f8d80c8b307e189209e488a76c266)
 - Added `page` & `totalResults` to Tiktok Search User & Live Documentation [27d69c2](https://github.com/TobyG74/tiktok-api-dl/commit/27d69c28e7b7a394d1b0fc50fd801ba0e983856e)
 - Added `isTurnOffComment` to Tiktok Downloader V1 Response [03a081d](https://github.com/TobyG74/tiktok-api-dl/commit/03a081d87b60b8431ce61aa076be87c5f33951d0)
+
+### Version 1.2.3 - 07-02-2025
+
+### Added
+
+- Update README.md [24e69df](https://github.com/TobyG74/tiktok-api-dl/commit/24e69dfe3a107ff81e4750c39b7d3401ea201f07)
+
+### Fixed
+
+- Fixed Tiktok User Search (Error Length) [990a50f](https://github.com/TobyG74/tiktok-api-dl/commit/990a50f98c41d0627908de43466e60078825bc68)
+- Fixed Tiktok Live Search (Error Length) [80cbe6d](https://github.com/TobyG74/tiktok-api-dl/commit/80cbe6d5e9bc5a3717acf658b57801aef9839de4)
+- Fixed Requests Take Too Long When Taking Comments & Posts [990a50f](https://github.com/TobyG74/tiktok-api-dl/commit/990a50f98c41d0627908de43466e60078825bc68)
