@@ -105,7 +105,7 @@ const parseComments = async (
 
     const result = await requestComments(id, cursor, proxy)
 
-    // Check if the result has more comments
+    // Check if the result has more comments &
     if (result.has_more === 0) hasMore = false
 
     result.comments?.forEach((v: any) => {
@@ -162,6 +162,7 @@ const parseComments = async (
     if (commentLimit) {
       let loopCount = Math.floor(commentLimit / 50)
       if (counter >= loopCount) hasMore = false
+      break
     }
 
     hasMore = result.has_more === 1
@@ -169,8 +170,10 @@ const parseComments = async (
     counter++
   }
 
+  const response =
+    total > commentLimit ? comments.slice(0, commentLimit) : comments
   return {
-    total: total,
-    comments: commentLimit ? comments.slice(0, commentLimit) : comments
+    total: response.length,
+    comments: response
   }
 }

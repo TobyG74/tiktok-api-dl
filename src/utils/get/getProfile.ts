@@ -247,6 +247,7 @@ const parsePosts = async (
     if (postLimit !== 0) {
       let loopCount = Math.floor(postLimit / 30)
       if (counter >= loopCount) hasMore = false
+      break
     }
 
     hasMore = result.hasMore
