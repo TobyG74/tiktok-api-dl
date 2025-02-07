@@ -46,12 +46,11 @@
 
 # Description
 
-This project uses the Unofficial API from Tiktok.
+Note : `This project uses the API from Tiktok. This project is made for educational purposes only. This project is not affiliated with Tiktok. This project is not intended to harm or damage the Tiktok platform.`
 
-- Can be used to download videos, images / slides and music from Tiktok
-- Can be used to view someone's profile from Tiktok
-- No login or password are required
-- It is recommended to use your own cookies on Tiktok Stalker
+- This project is made to help users to download videos, images / slides and music from Tiktok.
+- This project is also made to help users to view someone's profile from Tiktok.
+- This project is also made to help users to view comments from a video on Tiktok.
 
 # How to get Tiktok Cookie
 
@@ -122,7 +121,7 @@ const tiktok_url = "https://vt.tiktok.com/xxxxxxxx"
 
 Tiktok.Downloader(tiktok_url, {
   version: "v1", //  version: "v1" | "v2" | "v3"
-  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
+  proxy: "YOUR_PROXY", // Support Proxy Http, Https, Socks5
   showOriginalResponse: true // Only for V1
 }).then((result) => {
   console.log(result)
@@ -448,7 +447,7 @@ Tiktok.GetComments(url, {
     replyComment: []
     user: User
     url: string
-  }],
+  }]
   totalComments: number
 }
 ```
