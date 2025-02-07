@@ -116,7 +116,7 @@ export const SearchLive = async (
           status: "success",
           result,
           page,
-          totalResults: data.result.length
+          totalResults: result.length
         })
       })
       .catch((e) => {
