@@ -103,7 +103,7 @@ export const SearchUser = (
           status: "success",
           result,
           page,
-          totalResults: data.result.length
+          totalResults: result.length
         })
       })
       .catch((e) => {
