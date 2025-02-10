@@ -158,9 +158,9 @@ const parsePosts = async (
   let hasMore = true
   let cursor: number | null = null
   const posts: Posts[] = []
+  let counter = 0
   while (hasMore) {
     let result: any | null = null
-    let counter = 0
 
     // Prevent missing response posts
     for (let i = 0; i < 30; i++) {
@@ -246,8 +246,10 @@ const parsePosts = async (
     // Restrict too many data requests
     if (postLimit !== 0) {
       let loopCount = Math.floor(postLimit / 30)
-      if (counter >= loopCount) hasMore = false
-      break
+      if (counter >= loopCount) {
+        hasMore = false
+        break
+      }
     }
 
     hasMore = result.hasMore
