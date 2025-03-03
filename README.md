@@ -29,18 +29,22 @@
 # Table of Contents
 
 - [Description](#description)
-- [How to get Tiktok Cookie](#how-to-get-tiktok-cookie)
-- [Build this project](#build-this-project)
-- [Install](#install)
-  - [From NPM](#from-npm)
-  - [From Yarn](#from-yarn)
-  - [From Github](#from-github)
-- [Examples](#examples)
-  - [Tiktok Downloader](#tiktok-downloader)
-  - [Tiktok Search](#tiktok-search)
-  - [Tiktok Stalker](#tiktok-stalker)
-- [Response](#response)
-- [Changelog](#changelog)
+- [Quick Installation](#quick-installation)
+- [Installation Methods](#installation-methods)
+  - [Using Installation Script](#using-installation-script)
+  - [Using NPM](#using-npm)
+  - [Using Yarn](#using-yarn)
+  - [Using Github](#using-github)
+- [Usage Guide](#usage-guide)
+  - [Getting TikTok Cookie](#getting-tiktok-cookie)
+  - [Using CLI](#using-cli)
+  - [Building from Source](#building-from-source)
+- [Features](#features)
+  - [TikTok Downloader](#tiktok-downloader)
+  - [TikTok Search](#tiktok-search)
+  - [TikTok Profile Stalker](#tiktok-stalker)
+  - [TikTok Comments](#tiktok-comments)
+- [API Response Types](#api-response-types)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -52,20 +56,97 @@ Note : `This project uses the API from Tiktok. This project is made for educatio
 - This project is also made to help users to view someone's profile from Tiktok.
 - This project is also made to help users to view comments from a video on Tiktok.
 
-# How to get Tiktok Cookie
+# Quick Installation
 
-You can use cookies in the form of String or JSON
+Install using our automated script:
 
-1. Download Extension [Cookie-Editor](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm)
-2. Login to the [Tiktok Website](https://tiktok/.com)
-3. Open the Cookie-Editor Extension
-4. Copy the Cookie and paste it into the code `COOKIE: "YOUR_COOKIE"`
+```bash
+curl -o install.sh https://raw.githubusercontent.com/TobyG74/tiktok-api-dl/master/install.sh
+chmod +x install.sh
+./install.sh
+```
 
-# Build this project
+The script automatically:
 
-- Clone the repository
-- Install the dependencies
-- Run the build script
+- Verifies Node.js installation and version
+- Installs the library using npm or yarn
+- Provides usage examples
+
+# Installation Methods
+
+## Using NPM
+
+```bash
+npm install @tobyg74/tiktok-api-dl
+```
+
+## Using Yarn
+
+```bash
+yarn add @tobyg74/tiktok-api-dl
+```
+
+## Using Github
+
+```bash
+npm install github:TobyG74/tiktok-api-dl
+```
+
+# Usage Guide
+
+## Getting TikTok Cookie
+
+1. Install [Cookie-Editor](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm)
+2. Login to [TikTok](https://tiktok.com)
+3. Open Cookie-Editor
+4. Copy the cookie and use it in your code: `COOKIE: "YOUR_COOKIE"`
+
+## Using CLI
+
+### Global Installation
+
+```bash
+npm install -g @tobyg74/tiktok-api-dl
+tiktokdl [command] [options]
+```
+
+### Direct Usage
+
+```bash
+git clone https://github.com/TobyG74/tiktok-api-dl.git
+cd tiktok-api-dl
+npm install
+npx ts-node src/cli/index.ts [command] [options]
+```
+
+### NPM Script
+
+```bash
+npm run cli -- [command] [options]
+```
+
+### Examples
+
+```bash
+$ tiktokdl -h
+Usage: tiktokdl [options] [command]
+
+TikTok downloader and search CLI tool
+
+Options:
+  -V, --version                output the version number
+  -h, --help                   display help for command
+
+Commands:
+  download [options] <url>     Download TikTok Video / Slide / Music
+  cookie                       Cookie Manager
+  search                       Search TikTok users or live streams
+  getcomments [options] <url>  Get comments from a TikTok video
+  stalk [options] <username>   Stalk a TikTok user
+  help [command]               display help for command
+```
+
+## Building from Source
 
 ```bash
 git clone https://github.com/TobyG74/tiktok-api-dl.git
@@ -74,135 +155,38 @@ npm install
 npm run build
 ```
 
-# Install
+# Features
 
-- This module requires Node.js v10+ to run.
+## TikTok Downloader
 
-## From NPM
-
-```
-npm install @tobyg74/tiktok-api-dl
-```
-
-## From YARN
-
-```
-yarn add @tobyg74/tiktok-api-dl
-```
-
-## From Github
-
-```
-npm install github:TobyG74/tiktok-api-dl
-```
-
-# Examples
-
-## Tiktok Downloader By URL
-
-- V1 uses the API from TiktokAPI
-  - Support Video, Images / Slide, Music
-- V2 uses the API from [SSSTik](https://ssstik.io/)
-- V3 uses the API from [MusicalDown](https://musicaldown.com/)
-
-### Options
-
-- `version` : The version of the downloader you want to use
-  - `v1` : TiktokAPI
-  - `v2` : SSSTik
-  - `v3` : MusicalDown
-- `proxy` : Proxy for request
-- `showOriginalResponse` : Show original response from API && Only for V1
-
-```js
-const Tiktok = require("@tobyg74/tiktok-api-dl")
-
-const tiktok_url = "https://vt.tiktok.com/xxxxxxxx"
-
-Tiktok.Downloader(tiktok_url, {
-  version: "v1", //  version: "v1" | "v2" | "v3"
-  proxy: "YOUR_PROXY", // Support Proxy Http, Https, Socks5
-  showOriginalResponse: true // Only for V1
-}).then((result) => {
-  console.log(result)
-})
-```
-
-## Tiktok Search
-
-Note : Cookies are required for searching users or live
-
-### Options
-
-- `type` : The type of search you want to use
-  - `user` : Search User
-  - `live` : Search Live
-- `page` : The page you want to search
-- `cookie` : Your Tiktok Cookie
-- `proxy` : Proxy for request
-
-### Search User | Live
-
-```js
-const Tiktok = require("@tobyg74/tiktok-api-dl")
-
-const username = "tobz2k19"
-
-Tiktok.Search(username, {
-  type: "user" || "live",
-  page: 1,
-  cookie: process.env.COOKIE || "Your Cookie",
-  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
-}).then((result) => {
-  console.log(result)
-})
-```
-
-## Tiktok Get Profile By Username
-
-### Options
-
-- `cookie` : Only needed if you want to get all user posts
-- `postLimit` : Limit the number of posts to display
-- `proxy` : Proxy for request
-
-```js
-const Tiktok = require("@tobyg74/tiktok-api-dl")
-
-const username = "tobz2k19"
-
-Tiktok.StalkUser(username, {
-  cookie: process.env.COOKIE || "Your Cookie"
-  postLimit: 10, // Limit the number of posts to display
-  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
-}).then((result) => {
-  console.log(result)
-})
-```
-
-## Tiktok Get Comments From Video
-
-### Options
-
-- `commentLimit` : Limit the number of comments to display
-- `proxy` : Proxy for request
-
-```js
+```javascript
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const url = "https://vt.tiktok.com/xxxxxxxx"
-
-Tiktok.GetComments(url, {
-  commentLimit: 20, // Limit the number of comments to display
-  proxy: "YOUR_PROXY" // Support Proxy Http, Https, Socks5
-}).then((result) => {
-  console.log(result)
-})
+Tiktok.Downloader(url, {
+  version: "v1", // "v1" | "v2" | "v3"
+  proxy: "YOUR_PROXY", // optional
+  showOriginalResponse: true // optional, v1 only
+}).then((result) => console.log(result))
 ```
 
-## Response
+## TikTok Search
 
-<br>
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+Tiktok.Search("username", {
+  type: "user", // "user" | "live"
+  page: 1,
+  cookie: "YOUR_COOKIE",
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+[View more examples and full API documentation in our wiki](#examples)
+
+# API Response Types
+
 <details>
   <summary><b>Tiktok Downloader V1</b></summary>
   <br>
@@ -457,7 +441,7 @@ Tiktok.GetComments(url, {
 
 # Changelog
 
-All updates and changes can be viewed in the [CHANGELOG.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CHANGELOG.md) file.
+- All changes will be documented in the [CHANGELOG.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CHANGELOG.md) file.
 
 # Contributing
 
