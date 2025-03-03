@@ -319,3 +319,22 @@
 - Fixed Tiktok User Search (Error Length) [990a50f](https://github.com/TobyG74/tiktok-api-dl/commit/990a50f98c41d0627908de43466e60078825bc68)
 - Fixed Tiktok Live Search (Error Length) [80cbe6d](https://github.com/TobyG74/tiktok-api-dl/commit/80cbe6d5e9bc5a3717acf658b57801aef9839de4)
 - Fixed Requests Take Too Long When Taking Comments & Posts [990a50f](https://github.com/TobyG74/tiktok-api-dl/commit/990a50f98c41d0627908de43466e60078825bc68)
+
+### Version 1.2.4 - 03-03-2025
+
+### Added
+
+- Added CLI Commands for Tiktok Downloader V1, V2, V3, Stalk, Search User, Search Live, & Get Comments [545734d](https://github.com/TobyG74/tiktok-api-dl/commit/545734d86554aadea2467be51950cdda1093d294)
+- Added CLI Commands Documentation [3b3827b](https://github.com/TobyG74/tiktok-api-dl/commit/3b3827b30f9cefa022c65daf732f1b0b7dd412d8)
+- Added CookieManager for managing cookies [1ed22e9](https://github.com/TobyG74/tiktok-api-dl/commit/1ed22e9b1055a3ddfdfd8a66f7bcf0ab351b250d)
+- Added install.sh for installing the library [7249bdb](https://github.com/TobyG74/tiktok-api-dl/commit/7249bdb4ecc5eeca529f4f931184cf69d0ccdb6d)
+- Added Logger for CLI [288b347](https://github.com/TobyG74/tiktok-api-dl/commit/288b347d5abbb10f5ca880880fdd7167eda3cd1d)
+
+### Fixed
+
+- Fixed Get Posts & Get Comments Limit [635738a](https://github.com/TobyG74/tiktok-api-dl/commit/635738a9c3cc2ddd359047861d5e49e962aeed5e)
+- Fixed Error when downloading Images via Musicaldown [97b261c](https://github.com/TobyG74/tiktok-api-dl/commit/97b261ca8d0da14c0dc0fc0a037b7332e43d7c6e)
+
+### Changed
+
+- Tiktok Stalk doesn't use cookies anymore [c718c93](https://github.com/TobyG74/tiktok-api-dl/commit/c718c93416cfdd52d4d0932d335c9f7b3c2bce08)
