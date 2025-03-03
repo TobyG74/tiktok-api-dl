@@ -1,12 +1,15 @@
 {
   "name": "@tobyg74/tiktok-api-dl",
-  "version": "1.2.3",
+  "version": "1.2.5",
   "description": "Scraper for downloading media in the form of videos, images and audio from Tiktok. Also for stalking Tiktok Users",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "jest test/utils.test.ts",
-    "build": "tsc --build"
+    "build": "tsc",
+    "cli": "ts-node src/cli/index.ts"
+  },
+  "bin": {
+    "tiktokdl": "./lib/cli/index.js"
   },
   "repository": {
     "type": "git",
@@ -34,14 +37,19 @@
   },
   "homepage": "https://github.com/TobyG74/tiktok-api-dl#readme",
   "dependencies": {
+    "@tobyg74/tiktok-api-dl": "^1.2.3",
     "async-retry": "^1.3.3",
     "axios": "^1.3.4",
+    "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
+    "commander": "^11.0.0",
     "crypto-js": "^4.2.0",
+    "g": "^2.0.1",
     "https-proxy-agent": "^7.0.5",
     "node-fetch": "^2.7.0",
     "qs": "^6.12.0",
     "socks-proxy-agent": "^8.0.4",
+    "ts-node": "^10.9.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
