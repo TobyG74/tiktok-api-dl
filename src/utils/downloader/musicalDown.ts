@@ -138,32 +138,6 @@ export const MusicalDown = (
             images.push($(v).find("img").attr("src"))
           })
 
-        // Get Result Video
-        let i = 1
-        let videos = {}
-        $("div.row > div")
-          .map((_, el) => $(el))
-          .get(1)
-          .find("a")
-          .get()
-          .map((v: any) => {
-            if ($(v).attr("href") !== "#modal2") {
-              if (!isURL($(v).attr("href"))) return
-              videos[
-                $(v).attr("data-event").includes("hd")
-                  ? "videoHD"
-                  : $(v).attr("data-event").includes("mp4")
-                  ? "videoSD"
-                  : $(v).attr("data-event").includes("watermark")
-                  ? "videoWatermark"
-                  : $(v).attr("href").includes("type=mp3") && "music"
-              ] =
-                $(v).attr("href") != undefined
-                  ? $(v).attr("href")
-                  : /downloadX\('([^']+)'\)/.exec($(v).attr("onclick"))[1]
-              i++
-            }
-          })
         // Result
         if (images.length !== 0) {
           // Images or Slide Result
@@ -176,7 +150,33 @@ export const MusicalDown = (
           })
         } else {
           // Video Result
-          // const music = await getMusic(request.cookie)
+          // Get Result Video
+          let i = 1
+          let videos = {}
+          $("div.row > div")
+            .map((_, el) => $(el))
+            .get(1)
+            .find("a")
+            .get()
+            .map((v: any) => {
+              if ($(v).attr("href") !== "#modal2") {
+                if (!isURL($(v).attr("href"))) return
+                videos[
+                  $(v).attr("data-event").includes("hd")
+                    ? "videoHD"
+                    : $(v).attr("data-event").includes("mp4")
+                    ? "videoSD"
+                    : $(v).attr("data-event").includes("watermark")
+                    ? "videoWatermark"
+                    : $(v).attr("href").includes("type=mp3") && "music"
+                ] =
+                  $(v).attr("href") != undefined
+                    ? $(v).attr("href")
+                    : /downloadX\('([^']+)'\)/.exec($(v).attr("onclick"))[1]
+                i++
+              }
+            })
+
           if (Object.keys(videos).length === 0)
             return resolve({
               status: "success",

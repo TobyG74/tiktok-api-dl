@@ -1,7 +1,17 @@
 export type TiktokUserSearchResponse = {
   status: "success" | "error"
   message?: string
-  result?: Result[]
+  result?: Array<{
+    uid: string
+    username: string
+    nickname: string
+    signature: string
+    followerCount: number
+    avatarThumb: string
+    isVerified: boolean
+    secUid: string
+    url: string
+  }>
   page?: number
   totalResults?: number
 }
@@ -16,4 +26,9 @@ export type Result = {
   isVerified: boolean
   secUid: string
   url: string
+}
+
+export interface IUserSearch {
+  saveSearch(searchTerm: string): void
+  getLastSearch(): string | null
 }
