@@ -6,3 +6,4 @@ lib
 test.js
 bun.lockb
 tsconfig.tsbuildinfo
+cookies.json
