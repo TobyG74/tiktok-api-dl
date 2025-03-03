@@ -143,7 +143,6 @@ export = {
   ): Promise<StalkResult> => {
     const response = await StalkUser(
       username,
-      options?.cookie,
       options?.postLimit,
       options?.proxy
     )
