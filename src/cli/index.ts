@@ -142,7 +142,18 @@ searchCommand
         for (const [index, live] of data.entries()) {
           Logger.info(`---- LIVE ${index + 1} ----`)
           Logger.result(`Title: ${live.liveInfo.title}`, chalk.green)
-          Logger.result(`Owner: ${live.liveInfo.owner}`, chalk.green)
+          Logger.result(
+            `Nickname: ${live.liveInfo.owner.nickname}`,
+            chalk.green
+          )
+          Logger.result(
+            `Username: ${live.liveInfo.owner.username}`,
+            chalk.green
+          )
+          Logger.result(
+            `Verified: ${live.liveInfo.owner.isVerified ? "Yes" : "No"}`,
+            chalk.green
+          )
           Logger.result(
             `Type Third Party: ${
               live.liveInfo.liveTypeThirdParty ? "Yes" : "No"
