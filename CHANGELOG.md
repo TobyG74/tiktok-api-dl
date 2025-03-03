@@ -320,7 +320,7 @@
 - Fixed Tiktok Live Search (Error Length) [80cbe6d](https://github.com/TobyG74/tiktok-api-dl/commit/80cbe6d5e9bc5a3717acf658b57801aef9839de4)
 - Fixed Requests Take Too Long When Taking Comments & Posts [990a50f](https://github.com/TobyG74/tiktok-api-dl/commit/990a50f98c41d0627908de43466e60078825bc68)
 
-### Version 1.2.4 - 03-03-2025
+### Version 1.2.7 - 03-03-2025
 
 ### Added
 
@@ -334,6 +334,8 @@
 
 - Fixed Get Posts & Get Comments Limit [635738a](https://github.com/TobyG74/tiktok-api-dl/commit/635738a9c3cc2ddd359047861d5e49e962aeed5e)
 - Fixed Error when downloading Images via Musicaldown [97b261c](https://github.com/TobyG74/tiktok-api-dl/commit/97b261ca8d0da14c0dc0fc0a037b7332e43d7c6e)
+- Fixed Error Live Types [ebe9ff4](https://github.com/TobyG74/tiktok-api-dl/commit/ebe9ff4c2257fa9ae6653c8b82d1e03755a40a25)
+- Fixed Error Cookie Manager [e23952a](https://github.com/TobyG74/tiktok-api-dl/commit/e23952abe35854aff358e0948e4461a7a0bdd9db)
 
 ### Changed
 
