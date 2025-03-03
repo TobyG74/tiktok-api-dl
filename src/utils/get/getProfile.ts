@@ -16,7 +16,6 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 /**
  * Tiktok Stalk User
  * @param {string} username - The username you want to stalk
- * @param {object|string} cookie - Your Tiktok Cookie (optional)
  * @param {number} postLimit - The limit of post you want to get (optional)
  * @param {string} proxy - Your Proxy (optional)
  * @returns {Promise<StalkResult>}
@@ -24,7 +23,6 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 
 export const StalkUser = (
   username: string,
-  cookie?: any,
   postLimit?: number,
   proxy?: string
 ): Promise<StalkResult> =>
@@ -34,11 +32,7 @@ export const StalkUser = (
       method: "GET",
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
-        cookie:
-          typeof cookie === "object"
-            ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ")
-            : cookie
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
       },
       httpsAgent:
         (proxy &&
@@ -156,7 +150,7 @@ const parsePosts = async (
 ): Promise<Posts[]> => {
   // Posts Result
   let hasMore = true
-  let cursor: number | null = null
+  let cursor = 0
   const posts: Posts[] = []
   let counter = 0
   while (hasMore) {
@@ -169,7 +163,10 @@ const parsePosts = async (
     }
 
     // Validate
-    if (result === "") hasMore = false // No More Post
+    if (result === "") {
+      hasMore = false
+      break
+    }
 
     result?.itemList?.forEach((v: any) => {
       const author: AuthorPost = {
@@ -243,18 +240,16 @@ const parsePosts = async (
       }
     })
 
-    // Restrict too many data requests
-    if (postLimit !== 0) {
-      let loopCount = Math.floor(postLimit / 30)
-      if (counter >= loopCount) {
-        hasMore = false
-        break
-      }
-    }
-
+    // Update hasMore and cursor for next iteration
     hasMore = result.hasMore
     cursor = hasMore ? result.cursor : null
     counter++
+
+    // Check post limit if specified
+    if (postLimit && posts.length >= postLimit) {
+      hasMore = false
+      break
+    }
   }
 
   return postLimit ? posts.slice(0, postLimit) : posts

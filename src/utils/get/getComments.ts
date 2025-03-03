@@ -95,83 +95,75 @@ const parseComments = async (
 ) => {
   const comments: Comments[] = []
   let cursor: number = 0
-  let counter: number = 0
-  let count: number = 50
   let total: number = 0
   let hasMore: boolean = true
 
   while (hasMore) {
-    for (let i = 0; i < count; i++) {}
-
     const result = await requestComments(id, cursor, proxy)
 
-    // Check if the result has more comments &
-    if (result.has_more === 0) hasMore = false
+    // Check if the result has more comments
+    hasMore = result.has_more === 1
+    cursor = hasMore ? result.cursor : 0
 
-    result.comments?.forEach((v: any) => {
-      const comment = {
-        cid: v.cid,
-        text: v.text,
-        commentLanguage: v.comment_language,
-        createTime: v.create_time,
-        likeCount: v.digg_count,
-        isAuthorLiked: v.is_author_digged,
-        isCommentTranslatable: v.is_comment_translatable,
-        replyCommentTotal: v.reply_comment_total,
-        user: {
-          uid: v.user.uid,
-          avatarThumb: v.user.avatar_thumb.url_list,
-          nickname: v.user.nickname,
-          username: v.user.unique_id,
-          isVerified: v.user.custom_verify !== ""
-        } as User,
-        url: v.share_info?.url || "",
-        replyComment: []
-      }
+    if (result.comments) {
+      result.comments.forEach((v: any) => {
+        const comment = {
+          cid: v.cid,
+          text: v.text,
+          commentLanguage: v.comment_language,
+          createTime: v.create_time,
+          likeCount: v.digg_count,
+          isAuthorLiked: v.is_author_digged,
+          isCommentTranslatable: v.is_comment_translatable,
+          replyCommentTotal: v.reply_comment_total,
+          user: {
+            uid: v.user.uid,
+            avatarThumb: v.user.avatar_thumb.url_list,
+            nickname: v.user.nickname,
+            username: v.user.unique_id,
+            isVerified: v.user.custom_verify !== ""
+          } as User,
+          url: v.share_info?.url || "",
+          replyComment: []
+        }
 
-      if (v.reply_comment !== null) {
-        v.reply_comment.forEach((v: any) => {
-          comment.replyComment.push({
-            cid: v.cid,
-            text: v.text,
-            commentLanguage: v.comment_language,
-            createTime: v.create_time,
-            likeCount: v.digg_count,
-            isAuthorLiked: v.is_author_digged,
-            isCommentTranslatable: v.is_comment_translatable,
-            replyCommentTotal: v.reply_comment_total,
-            user: {
-              uid: v.user.uid,
-              avatarThumb: v.user.avatar_thumb.url_list,
-              nickname: v.user.nickname,
-              username: v.user.unique_id,
-              isVerified: v.user.custom_verify !== ""
-            } as User,
-            url: v.share_info?.url || "",
-            replyComment: []
+        if (v.reply_comment !== null) {
+          v.reply_comment.forEach((v: any) => {
+            comment.replyComment.push({
+              cid: v.cid,
+              text: v.text,
+              commentLanguage: v.comment_language,
+              createTime: v.create_time,
+              likeCount: v.digg_count,
+              isAuthorLiked: v.is_author_digged,
+              isCommentTranslatable: v.is_comment_translatable,
+              replyCommentTotal: v.reply_comment_total,
+              user: {
+                uid: v.user.uid,
+                avatarThumb: v.user.avatar_thumb.url_list,
+                nickname: v.user.nickname,
+                username: v.user.unique_id,
+                isVerified: v.user.custom_verify !== ""
+              } as User,
+              url: v.share_info?.url || "",
+              replyComment: []
+            })
+            total++
           })
-
-          total++
-        })
-      }
-      total++
-      comments.push(comment)
-    })
-
-    // Check if the comments length is equal to the comment limit
-    if (commentLimit) {
-      let loopCount = Math.floor(commentLimit / 50)
-      if (counter >= loopCount) hasMore = false
-      break
+        }
+        total++
+        comments.push(comment)
+      })
     }
 
-    hasMore = result.has_more === 1
-    cursor = result.has_more === 1 ? result.cursor : 0
-    counter++
+    // Check if we've reached the comment limit
+    if (commentLimit && comments.length >= commentLimit) {
+      hasMore = false
+      break
+    }
   }
 
-  const response =
-    total > commentLimit ? comments.slice(0, commentLimit) : comments
+  const response = commentLimit ? comments.slice(0, commentLimit) : comments
   return {
     total: response.length,
     comments: response
