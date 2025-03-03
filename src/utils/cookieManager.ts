@@ -1,33 +1,57 @@
-import { ICookieManager } from "../types/cookieManager"
+import fs from "fs"
+import path from "path"
 
-export class CookieManager implements ICookieManager {
-  private cookieName: string
+export class CookieManager {
+  private cookieFile: string
+  private cookieData: { [key: string]: string }
 
-  constructor(cookieName: string) {
-    this.cookieName = cookieName
+  constructor(name: string) {
+    // Create cookies directory in user's home directory
+    const homeDir = process.env.HOME || process.env.USERPROFILE
+    const cookieDir = path.join(homeDir!, ".tiktok-api")
+
+    if (!fs.existsSync(cookieDir)) {
+      fs.mkdirSync(cookieDir, { recursive: true })
+    }
+
+    this.cookieFile = path.join(cookieDir, "cookies.json")
+    this.cookieData = this.loadCookies()
   }
 
-  public getCookie(): string | null {
-    if (typeof window === "undefined") return null
-    const cookies = document.cookie.split(";")
-    const cookie = cookies.find((c) =>
-      c.trim().startsWith(`${this.cookieName}=`)
-    )
-    if (!cookie) return null
-    return decodeURIComponent(cookie.split("=")[1])
+  private loadCookies(): { [key: string]: string } {
+    try {
+      if (fs.existsSync(this.cookieFile)) {
+        const data = fs.readFileSync(this.cookieFile, "utf8")
+        return JSON.parse(data)
+      }
+    } catch (error) {
+      console.error("Error loading cookies:", error)
+    }
+    return {}
+  }
+
+  private saveCookies(): void {
+    try {
+      fs.writeFileSync(
+        this.cookieFile,
+        JSON.stringify(this.cookieData, null, 2)
+      )
+    } catch (error) {
+      console.error("Error saving cookies:", error)
+    }
   }
 
   public setCookie(value: string): void {
-    if (typeof window === "undefined") return
-    const date = new Date()
-    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000) // 30 days
-    document.cookie = `${this.cookieName}=${encodeURIComponent(
-      value
-    )}; expires=${date.toUTCString()}; path=/`
+    this.cookieData["tiktok"] = value
+    this.saveCookies()
+  }
+
+  public getCookie(): string | null {
+    return this.cookieData["tiktok"] || null
   }
 
   public deleteCookie(): void {
-    if (typeof window === "undefined") return
-    document.cookie = `${this.cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+    delete this.cookieData["tiktok"]
+    this.saveCookies()
   }
 }
