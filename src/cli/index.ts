@@ -141,11 +141,22 @@ searchCommand
         const data = results.result
         for (const [index, live] of data.entries()) {
           Logger.info(`---- LIVE ${index + 1} ----`)
-          Logger.result(`Title: ${live.title}`, chalk.green)
-          Logger.result(`Viewers: ${live.viewCount}`, chalk.yellow)
-          Logger.result(`Likes: ${live.likeCount}`, chalk.yellow)
-          Logger.result(`Comments: ${live.commentCount}`, chalk.yellow)
-          Logger.result(`Live URL: ${live.url}`, chalk.yellow)
+          Logger.result(`Title: ${live.liveInfo.title}`, chalk.green)
+          Logger.result(`Owner: ${live.liveInfo.owner}`, chalk.green)
+          Logger.result(
+            `Type Third Party: ${
+              live.liveInfo.liveTypeThirdParty ? "Yes" : "No"
+            }`,
+            chalk.green
+          )
+          Logger.result(`Hashtag: ${live.liveInfo.hashtag}`, chalk.green)
+          Logger.info(`---- STATISTICS ----`)
+          Logger.result(`Likes: ${live.liveInfo.stats.likeCount}`, chalk.yellow)
+          Logger.result(
+            `Views: ${live.liveInfo.stats.viewerCount}`,
+            chalk.yellow
+          )
+          Logger.result(`Users: ${live.liveInfo.stats.totalUser}`, chalk.yellow)
         }
         Logger.info(`Total live streams: ${data.length}`)
       } else {

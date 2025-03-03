@@ -30,8 +30,8 @@ type TiktokDownloaderResponse<T extends "v1" | "v2" | "v3"> = T extends "v1"
 type TiktokSearchResponse<T extends "user" | "live"> = T extends "user"
   ? TiktokUserSearchResponse
   : T extends "live"
-  ? any
-  : TiktokLiveSearchResponse
+  ? TiktokLiveSearchResponse
+  : any
 
 export = {
   /**
