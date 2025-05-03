@@ -55,7 +55,7 @@
   - [Tiktok Stalk User Profile](#tiktok-stalk-user-profile-1)
   - [Tiktok Video Comments](#tiktok-video-comments-1)
   - [Tiktok User Posts](#tiktok-user-posts)
-  - [Tiktok User Favorites](#tiktok-user-favorites)
+  - [Tiktok User Liked Videos](#tiktok-user-liked-videos)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -243,20 +243,22 @@ Tiktok.GetUserPosts(username, {
 
 - [Tiktok User Posts Response](#tiktok-user-posts)
 
-## Tiktok Get User Favorite Videos
+## Tiktok Get User Liked Videos
+
+- Note: To use this feature, you must be logged in with valid TikTok cookies to access user's liked videos
 
 ```javascript
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const username = "Tobz2k19"
-Tiktok.GetUserFavorites(username, {
+Tiktok.GetUserLiked(username, {
   postLimit: 10, // optional, default is 30
   cookie: "YOUR_COOKIE", // needed
   proxy: "YOUR_PROXY" // optional
 })
 ```
 
-- [Tiktok User Favorites Response](#tiktok-user-favorites)
+- [Tiktok User Liked Videos Response](#tiktok-user-liked-videos)
 
 # API Response Types
 
@@ -273,18 +275,14 @@ interface TiktokAPIResponse {
     id: string
     createTime: number
     description: string
-    isTurnOffComment: boolean
-    isADS: boolean
-    hashtag: string[]
     author: {
-      uid: string
+      uid: number
       username: string
       nickname: string
       signature: string
       region: string
-      avatarLarger: string
-      avatarThumb: string
-      avatarMedium: string
+      avatarThumb: string[]
+      avatarMedium: string[]
       url: string
     }
     statistics: {
@@ -300,14 +298,20 @@ interface TiktokAPIResponse {
       loseCommentCount: number
       repostCount: number
     }
+    hashtag: string[]
+    isTurnOffComment: boolean
+    isADS: boolean
+    cover?: string[]
+    dynamicCover?: string[]
+    originCover?: string[]
     video?: {
       ratio: string
       duration: number
-      playAddr: string
-      downloadAddr: string
-      cover: string
-      originCover: string
-      dynamicCover: string
+      playAddr: string[]
+      downloadAddr: string[]
+      cover: string[]
+      dynamicCover: string[]
+      originCover: string[]
     }
     images?: string[]
     music: {
@@ -336,20 +340,21 @@ interface SSSTikResponse {
   status: "success" | "error"
   message?: string
   result?: {
-    type: "video" | "image"
+    type: "image" | "video" | "music"
     desc?: string
     author?: {
-      nickname?: string
-      avatar?: string
+      avatar: string
+      nickname: string
     }
-    statistics: {
+    statistics?: {
       likeCount: string
       commentCount: string
       shareCount: string
     }
-    video?: string
     images?: string[]
+    video?: string
     music?: string
+    direct?: string
   }
 }
 ```
@@ -369,7 +374,6 @@ interface MusicalDownResponse {
     }
     music?: string
     images?: string[]
-    videoSD?: string
     videoHD?: string
     videoWatermark?: string
   }
@@ -390,13 +394,13 @@ interface TiktokUserSearchResponse {
     nickname: string
     signature: string
     followerCount: number
-    avatarThumb: string[]
+    avatarThumb: string
     isVerified: boolean
     secUid: string
     url: string
   }>
-  page: number
-  totalResults: number
+  page?: number
+  totalResults?: number
 }
 ```
 
@@ -436,8 +440,70 @@ interface TiktokLiveSearchResponse {
       isVerified: boolean
     }
   }>
-  page: number
-  totalResults: number
+  page?: number
+  totalResults?: number
+}
+```
+
+### Video Search Response
+
+```typescript
+interface TiktokVideoSearchResponse {
+  status: "success" | "error"
+  message?: string
+  result?: Array<{
+    id: string
+    desc: string
+    createTime: number
+    author: {
+      id: string
+      uniqueId: string
+      nickname: string
+      avatarThumb: string
+      avatarMedium: string
+      avatarLarger: string
+      signature: string
+      verified: boolean
+      secUid: string
+      openFavorite: boolean
+      privateAccount: boolean
+      isADVirtual: boolean
+      tiktokSeller: boolean
+      isEmbedBanned: boolean
+    }
+    stats: {
+      collectCount: number
+      commentCount: number
+      diggCount: number
+      playCount: number
+      shareCount: number
+    }
+    video: {
+      id: string
+      ratio: string
+      cover: string
+      originCover: string
+      dynamicCover: string
+      playAddr: string
+      downloadAddr: string
+      format: string
+    }
+    music: {
+      id: string
+      title: string
+      playUrl: string
+      coverThumb: string
+      coverMedium: string
+      coverLarge: string
+      authorName: string
+      original: boolean
+      album: string
+      duration: number
+      isCopyrighted: boolean
+    }
+  }>
+  page?: number
+  totalResults?: number
 }
 ```
 
@@ -450,7 +516,7 @@ interface TiktokStalkUserResponse {
   status: "success" | "error"
   message?: string
   result?: {
-    users: {
+    user: {
       username: string
       nickname: string
       avatar: string
@@ -490,7 +556,7 @@ interface TiktokVideoCommentsResponse {
     user: User
     url: string
   }>
-  totalComments: number
+  totalComments?: number
 }
 ```
 
@@ -560,18 +626,33 @@ interface TiktokUserPostsResponse {
     }
     images?: string[]
   }>
+  totalPosts?: number
 }
 ```
 
-## Tiktok User Favorites
+## Tiktok User Liked Videos
 
-### User Favorites Response
+### User Liked Videos Response
 
 ```typescript
-interface TiktokUserFavoritesResponse {
+interface TiktokUserFavoriteVideosResponse {
   status: "success" | "error"
   message?: string
   result?: Array<{
+    id: string
+    desc: string
+    createTime: string
+    duetEnabled: boolean
+    digged: boolean
+    forFriend: boolean
+    isAd: boolean
+    originalItem: boolean
+    privateItem: boolean
+    officialItem: boolean
+    secret: boolean
+    shareEnabled: boolean
+    stitchEanbled: boolean
+    textTranslatable: boolean
     author: {
       id: string
       username: string
@@ -585,16 +666,57 @@ interface TiktokUserFavoritesResponse {
       privateAccount: string
       isADVirtual: string
       isEmbedBanned: string
+      stats: {
+        likeCount: string
+        followerCount: string
+        followingCount: string
+        friendCount: string
+        heartCount: string
+        postsCount: string
+      }
     }
     stats: {
-      likeCount: string
-      followerCount: string
-      followingCount: string
-      friendCount: string
-      heartCount: string
-      postsCount: string
+      collectCount: string
+      commentCount: string
+      diggCount: string
+      playCount: string
+      repostCount: string
+      shareCount: string
+    }
+    video?: {
+      id: string
+      videoID: string
+      duration: number
+      ratio: string
+      cover: string
+      originCover: string
+      dynamicCover: string
+      playAddr: string
+      downloadAddr: string
+      format: string
+      bitrate: number
+      bitrateInfo: any[]
+    }
+    imagePost?: Array<{
+      title: string
+      images: string[]
+    }>
+    music: {
+      id: string
+      title: string
+      playUrl: string
+      coverThumb: string
+      coverMedium: string
+      coverLarge: string
+      authorName: string
+      original: boolean
+      album: string
+      duration: number
+      isCopyrighted: boolean
+      private: boolean
     }
   }>
+  totalPosts?: number
 }
 ```
 
