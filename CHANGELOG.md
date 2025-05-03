@@ -341,7 +341,7 @@
 
 - Tiktok Stalk doesn't use cookies anymore [c718c93](https://github.com/TobyG74/tiktok-api-dl/commit/c718c93416cfdd52d4d0932d335c9f7b3c2bce08)
 
-## Version 1.2.9 - 05-03-2025
+## Version 1.3.0 - 05-03-2025
 
 ### Added
 
@@ -351,4 +351,5 @@
 
 ### Fixed
 
-- Fixed Naming Similarities in Types [973a94e](https://github.com/TobyG74/tiktok-api-dl/commit/973a94e)
+- Fixed Naming Similarities in Types [973a94e](https://github.com/TobyG74/tiktok-api-dl/commit/973a94e51761fbd61e37bebb1644c60c15f93dfe)
+- Fixed Error When Searching for a Video After Page 1 [050bdf4](https://github.com/TobyG74/tiktok-api-dl/commit/050bdf4fa2926989445af6d0f1349805e630b223)
