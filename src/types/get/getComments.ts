@@ -1,4 +1,4 @@
-export type CommentsResult = {
+export type TiktokVideoCommentsResponse = {
   status: "success" | "error"
   message?: string
   result?: Comments[]

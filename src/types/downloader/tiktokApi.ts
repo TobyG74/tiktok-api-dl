@@ -6,22 +6,22 @@ export type TiktokAPIResponse = {
     id: string
     createTime: number
     description: string
-    author: Author
-    statistics: Statistics
+    author: AuthorTiktokAPI
+    statistics: StatisticsTiktokAPI
     hashtag: string[]
     isTurnOffComment: boolean
     isADS: boolean
     cover?: string[]
     dynamicCover?: string[]
     originCover?: string[]
-    video?: Video
+    video?: VideoTiktokAPI
     images?: string[]
-    music: Music
+    music: MusicTiktokAPI
   }
   resultNotParsed?: any
 }
 
-export type Author = {
+export type AuthorTiktokAPI = {
   uid: number
   username: string
   nickname: string
@@ -32,7 +32,7 @@ export type Author = {
   url: string
 }
 
-export type Statistics = {
+export type StatisticsTiktokAPI = {
   playCount: number
   downloadCount: number
   shareCount: number
@@ -46,7 +46,7 @@ export type Statistics = {
   repostCount: number
 }
 
-export type Video = {
+export type VideoTiktokAPI = {
   ratio: string
   duration: number
   playAddr: string[]
@@ -56,7 +56,7 @@ export type Video = {
   originCover: string[]
 }
 
-export type Music = {
+export type MusicTiktokAPI = {
   id: number
   title: string
   author: string
@@ -71,9 +71,9 @@ export type Music = {
   isAuthorArtist: boolean
 }
 
-export type responseParser = {
+export type ResponseParserTiktokAPI = {
   content?: any
-  statistics?: Statistics
-  author?: Author
-  music?: Music
+  statistics?: StatisticsTiktokAPI
+  author?: AuthorTiktokAPI
+  music?: MusicTiktokAPI
 }

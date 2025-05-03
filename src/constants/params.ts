@@ -38,6 +38,42 @@ export const _getUserPostsParams = () => {
   )
 }
 
+export const _getUserLikedParams = (
+  id: string,
+  secUid: string,
+  count: number
+) => {
+  let cursor = 0
+  if (count > 50) {
+    for (let i = 1; i < count; i++) {
+      cursor += 50
+    }
+  }
+
+  return qs.stringify({
+    aid: "1988",
+    cookie_enabled: true,
+    screen_width: 0,
+    screen_height: 0,
+    browser_language: "",
+    browser_platform: "",
+    browser_name: "",
+    browser_version:
+      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0",
+    browser_online: "",
+    timezone_name: "Europe/London",
+    is_page_visible: true,
+    id,
+    secUid,
+    count,
+    cursor,
+    needPinnedItemIds: true,
+    odinId: "7002566096994190854",
+    history_len: 3,
+    user_is_login: true
+  })
+}
+
 export const _xttParams = (secUid: string, cursor: number, count: number) => {
   return qs.stringify({
     aid: "1988",
@@ -59,8 +95,6 @@ export const _xttParams = (secUid: string, cursor: number, count: number) => {
 
 export const _getCommentsParams = (id: string, count: number) => {
   let cursor = 0
-
-  // 50 comments per page
   if (count > 50) {
     for (let i = 1; i < count; i++) {
       cursor += 50
@@ -89,15 +123,13 @@ export const _getCommentsParams = (id: string, count: number) => {
   })
 }
 
-/** Search */
+/** Search Params */
 export const _userSearchParams = (
   keyword: string,
   page: number,
   xbogus?: any
 ) => {
   let cursor = 0
-
-  // 10 users per page
   if (page > 1) {
     for (let i = 1; i < page; i++) {
       cursor += 10
@@ -157,8 +189,6 @@ export const _userSearchParams = (
 
 export const _liveSearchParams = (keyword: string, page: number) => {
   let cursor = 0
-
-  // 12 cursor for 20 lives per page
   if (page > 1) {
     for (let i = 1; i < page; i++) {
       cursor += 12
@@ -188,6 +218,53 @@ export const _liveSearchParams = (keyword: string, page: number) => {
     history_len: "10",
     is_fullscreen: "false",
     is_page_visible: "true",
+    keyword,
+    offset,
+    os: "linux",
+    priority_region: "",
+    referer: "",
+    region: "ID",
+    screen_height: "768",
+    screen_width: "1366",
+    tz_name: "Asia/Jakarta",
+    web_search_code:
+      "{ tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } }",
+    webcast_language: "en"
+  })
+}
+
+export const _videoSearchParams = (keyword: string, page: number) => {
+  let cursor = 0
+  if (page > 1) {
+    for (let i = 1; i < page; i++) {
+      cursor += 12
+    }
+  }
+
+  let offset = `${cursor}`
+
+  return qs.stringify({
+    WebIdLastTime: "1720342268",
+    aid: "1988",
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: "true",
+    browser_platform: "Linux x86_64",
+    browser_version: "5.0 (X11)",
+    channel: "tiktok_web",
+    cookie_enabled: "true",
+    count: "20",
+    device_id: "7388813454814086664",
+    device_platform: "web_pc",
+    device_type: "web_h264",
+    focus_state: "true",
+    from_page: "search",
+    history_len: "10",
+    is_fullscreen: "false",
+    is_page_visible: "true",
+    is_user_login: "true",
     keyword,
     offset,
     os: "linux",
@@ -240,12 +317,11 @@ export const _tiktokApiParams = (args: any) => {
   }).toString()
 }
 
+/** Helper Functions */
 const randomChar = (char: string, range: number) => {
   let chars = ""
-
   for (let i = 0; i < range; i++) {
     chars += char[Math.floor(Math.random() * char.length)]
   }
-
   return chars
 }

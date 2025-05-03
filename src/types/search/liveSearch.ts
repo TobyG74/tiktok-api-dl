@@ -1,12 +1,12 @@
 export type TiktokLiveSearchResponse = {
   status: "success" | "error"
   message?: string
-  result?: Result[]
+  result?: LiveSearchResult[]
   page?: number
   totalResults?: number
 }
 
-export type Result = {
+export type LiveSearchResult = {
   roomInfo: RoomInfo
   liveInfo: LiveInfo
 }

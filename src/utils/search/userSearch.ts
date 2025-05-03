@@ -1,32 +1,14 @@
 import Axios from "axios"
 import { _tiktokSearchUserFull, _tiktokurl } from "../../constants/api"
-import { TiktokUserSearchResponse } from "../../types/search/userSearch"
+import {
+  UserSearchResult,
+  TiktokUserSearchResponse
+} from "../../types/search/userSearch"
 import { _userSearchParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
-import xbogus from "../../../helper/xbogus"
-
-const userAgent =
-  "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"
-
-/**
- * Generate URL with X-Bogus
- * Special thanks to https://github.com/iamatef/xbogus
- * @param {string} username - The username you want to search
- * @param {number} page - The page you want to search
- * @returns {string}
- */
-
-export const generateURLXbogus = (username: string, page: number) => {
-  const url =
-    "https://www.tiktok.com/api/search/user/full/?" +
-    _userSearchParams(username, page)
-  const xbogusParams = xbogus(url, userAgent)
-  const urlXbogus =
-    "https://www.tiktok.com/api/search/user/full/?" +
-    _userSearchParams(username, page, xbogusParams)
-  return urlXbogus
-}
+import { TiktokService } from "../../services/tiktokService"
+import { userAgent } from "../../constants/headers"
 
 /**
  * Tiktok Search User
@@ -50,7 +32,10 @@ export const SearchUser = (
         message: "Cookie is required!"
       })
     }
-    Axios(generateURLXbogus(username, page), {
+
+    const Tiktok = new TiktokService()
+
+    Axios(Tiktok.generateURLXbogus(username, page), {
       method: "GET",
       headers: {
         "User-Agent": userAgent,
@@ -83,7 +68,7 @@ export const SearchUser = (
         if (!data.user_list)
           return resolve({ status: "error", message: "User not found!" })
 
-        const result = []
+        const result: UserSearchResult[] = []
         for (let i = 0; i < data.user_list.length; i++) {
           const user = data.user_list[i]
           result.push({

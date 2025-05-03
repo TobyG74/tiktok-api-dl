@@ -10,8 +10,8 @@ export type SSSTikResponse = {
   result?: {
     type: "image" | "video" | "music"
     desc?: string
-    author?: Author
-    statistics?: Statistics
+    author?: AuthorSSSTik
+    statistics?: StatisticsSSSTik
     images?: string[]
     video?: string
     music?: string
@@ -19,12 +19,12 @@ export type SSSTikResponse = {
   }
 }
 
-export type Author = {
+export type AuthorSSSTik = {
   avatar: string
   nickname: string
 }
 
-export type Statistics = {
+export type StatisticsSSSTik = {
   likeCount: string
   commentCount: string
   shareCount: string

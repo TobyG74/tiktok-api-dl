@@ -2,7 +2,7 @@ import * as path from "path"
 import * as os from "os"
 import axios from "axios"
 import * as fs from "fs"
-import { Logger } from "./logger"
+import { Logger } from "../lib/logger"
 
 function getDefaultDownloadPath(): string {
   const homeDir = os.homedir()

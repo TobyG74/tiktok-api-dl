@@ -3,7 +3,11 @@ import { _tiktokGetComments } from "../../constants/api"
 import { _getCommentsParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
-import { Comments, CommentsResult, User } from "../../types/get/getComments"
+import {
+  Comments,
+  TiktokVideoCommentsResponse,
+  User
+} from "../../types/get/getComments"
 
 const TiktokURLregex =
   /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
@@ -13,14 +17,14 @@ const TiktokURLregex =
  * @param {string} url - Tiktok URL
  * @param {string} proxy - Your Proxy (optional)
  * @param {number} commentLimit - Comment Limit (optional)
- * @returns {Promise<CommentsResult>}
+ * @returns {Promise<TiktokVideoCommentsResponse>}
  */
 
 export const getComments = async (
   url: string,
   proxy?: string,
   commentLimit?: number
-): Promise<CommentsResult> =>
+): Promise<TiktokVideoCommentsResponse> =>
   new Promise(async (resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
@@ -99,7 +103,7 @@ const parseComments = async (
   let hasMore: boolean = true
 
   while (hasMore) {
-    const result = await requestComments(id, cursor, proxy)
+    const result = await requestComments(id, commentLimit, proxy)
 
     // Check if the result has more comments
     hasMore = result.has_more === 1

@@ -5,6 +5,7 @@ import {
   LiveInfo,
   Owner,
   OwnerStats,
+  LiveSearchResult,
   TiktokLiveSearchResponse
 } from "../../types/search/liveSearch"
 import { SocksProxyAgent } from "socks-proxy-agent"
@@ -66,7 +67,7 @@ export const SearchLive = async (
         if (!data.data)
           return resolve({ status: "error", message: "Live not found!" })
 
-        const result = []
+        const result: LiveSearchResult[] = []
         data.data.forEach((v: any) => {
           const content = JSON.parse(v.live_info.raw_data)
 

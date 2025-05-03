@@ -2,10 +2,10 @@ import Axios from "axios"
 import asyncRetry from "async-retry"
 import { load } from "cheerio"
 import {
-  Author,
-  Statistics,
+  AuthorSSSTik,
+  StatisticsSSSTik,
   SSSTikFetchTT,
-  SSSTikResponse,
+  SSSTikResponse
 } from "../../types/downloader/ssstik"
 import { _ssstikapi, _ssstikurl } from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -115,11 +115,11 @@ export const SSSTik = (url: string, proxy?: string): Promise<SSSTikResponse> =>
       const $ = load(await response)
 
       // Result
-      const author: Author = {
+      const author: AuthorSSSTik = {
         avatar: $("img.result_author").attr("src"),
         nickname: $("h2").text().trim()
       }
-      const statistics: Statistics = {
+      const statistics: StatisticsSSSTik = {
         likeCount: $("#trending-actions > .justify-content-start")
           .text()
           .trim(),
@@ -174,7 +174,7 @@ export const SSSTik = (url: string, proxy?: string): Promise<SSSTikResponse> =>
         result = {
           type: "music",
           music,
-          direct: direct || "",
+          direct: direct || ""
         }
       }
 

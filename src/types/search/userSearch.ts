@@ -16,7 +16,7 @@ export type TiktokUserSearchResponse = {
   totalResults?: number
 }
 
-export type Result = {
+export type UserSearchResult = {
   uid: string
   username: string
   nickname: string

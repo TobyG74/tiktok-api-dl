@@ -1,4 +1,4 @@
-export type getRequest = {
+export type GetMusicalDownReuqest = {
   status: "success" | "error"
   request?: {
     [key: string]: string
@@ -24,7 +24,7 @@ export type MusicalDownResponse = {
   }
 }
 
-export type getMusic = {
+export type GetMusicalDownMusic = {
   status: "success" | "error"
   result?: string
 }

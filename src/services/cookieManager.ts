@@ -5,7 +5,7 @@ export class CookieManager {
   private cookieFile: string
   private cookieData: { [key: string]: string }
 
-  constructor(name: string) {
+  constructor() {
     // Create cookies directory in user's home directory
     const homeDir = process.env.HOME || process.env.USERPROFILE
     const cookieDir = path.join(homeDir!, ".tiktok-api")

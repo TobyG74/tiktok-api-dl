@@ -3,12 +3,12 @@ import asyncRetry from "async-retry"
 import { _tiktokvFeed, _tiktokurl } from "../../constants/api"
 import { _tiktokApiParams } from "../../constants/params"
 import {
-  Author,
+  AuthorTiktokAPI,
   TiktokAPIResponse,
-  Statistics,
-  Music,
-  responseParser,
-  Video
+  StatisticsTiktokAPI,
+  MusicTiktokAPI,
+  ResponseParserTiktokAPI,
+  VideoTiktokAPI
 } from "../../types/downloader/tiktokApi"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
@@ -98,7 +98,7 @@ export const TiktokAPI = (
           }
         } else {
           // Video Result
-          const video: Video = {
+          const video: VideoTiktokAPI = {
             ratio: content.video.ratio,
             duration: content.video.duration,
             playAddr: content.video?.play_addr?.url_list || [], // No Watermark Video
@@ -143,7 +143,7 @@ export const TiktokAPI = (
 const fetchTiktokData = async (
   ID: string,
   proxy?: string
-): Promise<responseParser> | null => {
+): Promise<ResponseParserTiktokAPI> | null => {
   try {
     const response = asyncRetry(
       async () => {
@@ -191,7 +191,7 @@ const fetchTiktokData = async (
   }
 }
 
-const parseTiktokData = (ID: string, data: any): responseParser => {
+const parseTiktokData = (ID: string, data: any): ResponseParserTiktokAPI => {
   let content = data?.aweme_list
 
   if (!content) return { content: null }
@@ -199,7 +199,7 @@ const parseTiktokData = (ID: string, data: any): responseParser => {
   content = content.find((v: any) => v.aweme_id === ID)
 
   // Statistics Result
-  const statistics: Statistics = {
+  const statistics: StatisticsTiktokAPI = {
     commentCount: content.statistics.comment_count,
     diggCount: content.statistics.digg_count,
     downloadCount: content.statistics.download_count,
@@ -214,7 +214,7 @@ const parseTiktokData = (ID: string, data: any): responseParser => {
   }
 
   // Author Result
-  const author: Author = {
+  const author: AuthorTiktokAPI = {
     uid: content.author.uid,
     username: content.author.unique_id,
     nickname: content.author.nickname,
@@ -226,7 +226,7 @@ const parseTiktokData = (ID: string, data: any): responseParser => {
   }
 
   // Music Result
-  const music: Music = {
+  const music: MusicTiktokAPI = {
     id: content.music.id,
     title: content.music.title,
     author: content.music.author,

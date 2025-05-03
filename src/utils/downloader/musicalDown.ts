@@ -2,8 +2,8 @@ import Axios from "axios"
 import { load } from "cheerio"
 import {
   MusicalDownResponse,
-  getMusic,
-  getRequest
+  GetMusicalDownMusic,
+  GetMusicalDownReuqest
 } from "../../types/downloader/musicaldown"
 import {
   _musicaldownapi,
@@ -21,7 +21,10 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 const TiktokURLregex =
   /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 
-const getRequest = (url: string, proxy?: string): Promise<getRequest> =>
+const getRequest = (
+  url: string,
+  proxy?: string
+): Promise<GetMusicalDownReuqest> =>
   new Promise((resolve) => {
     if (!TiktokURLregex.test(url)) {
       return resolve({
@@ -103,7 +106,7 @@ export const MusicalDown = (
   proxy?: string
 ): Promise<MusicalDownResponse> =>
   new Promise(async (resolve) => {
-    const request: getRequest = await getRequest(url)
+    const request: GetMusicalDownReuqest = await getRequest(url)
     if (request.status !== "success")
       return resolve({ status: "error", message: request.message })
     Axios(_musicaldownapi, {
