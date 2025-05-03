@@ -2,15 +2,16 @@
 
 import { program } from "commander"
 import Tiktok from ".."
-import { CookieManager } from "../utils/cookieManager"
-import { Logger } from "../utils/logger"
+import { CookieManager } from "../services/cookieManager"
+import { Logger } from "../lib/logger"
 import chalk from "chalk"
 import {
   getDefaultDownloadPath,
   handleMediaDownload
-} from "../utils/downloadManager"
+} from "../services/downloadManager"
+import { _tiktokurl } from "../constants/api"
 
-const cookieManager = new CookieManager("tiktok")
+const cookieManager = new CookieManager()
 
 program
   .name("tiktokdl")
@@ -178,10 +179,52 @@ searchCommand
     }
   })
 
+searchCommand
+  .command("video")
+  .description("Search TikTok videos")
+  .argument("<keyword>", "Search keyword")
+  .option("-p, --page <number>", "Page number", "1")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .action(async (keyword, options) => {
+    try {
+      const page = parseInt(options.page)
+      const results = await Tiktok.Search(keyword, {
+        type: "video",
+        cookie: cookieManager.getCookie(),
+        page: page,
+        proxy: options.proxy
+      })
+      if (results.status === "success") {
+        const data = results.result
+        for (const [index, video] of data.entries()) {
+          Logger.info(`---- VIDEO ${index + 1} ----`)
+          Logger.result(`Video ID: ${video.id}`, chalk.green)
+          Logger.result(`Description: ${video.desc}`, chalk.yellow)
+          Logger.result(`Author: ${video.author.nickname}`, chalk.yellow)
+          Logger.result(
+            `Video URL: ${_tiktokurl}/@${video.author}/video/${video.id}`,
+            chalk.yellow
+          )
+          Logger.info(`---- STATISTICS ----`)
+          Logger.result(`Likes: ${video.stats.diggCount}`, chalk.yellow)
+          Logger.result(`Favorites: ${video.stats.collectCount}`, chalk.yellow)
+          Logger.result(`Views: ${video.stats.playCount}`, chalk.yellow)
+          Logger.result(`Shares: ${video.stats.shareCount}`, chalk.yellow)
+          Logger.result(`Comments: ${video.stats.commentCount}`, chalk.yellow)
+        }
+        Logger.info(`Total videos: ${data.length}`)
+      } else {
+        Logger.error(`Error: ${results.message}`)
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
 // Get Comments Command
 
 program
-  .command("getcomments")
+  .command("getvideocomments")
   .description("Get comments from a TikTok video")
   .argument("<url>", "TikTok video URL")
   .option("-l, --limit <number>", "Limit of comments", "10")
@@ -189,7 +232,7 @@ program
   .action(async (url, options) => {
     try {
       const limit = parseInt(options.limit)
-      const comments = await Tiktok.GetComments(url, {
+      const comments = await Tiktok.GetVideoComments(url, {
         commentLimit: limit,
         proxy: options.proxy
       })
@@ -204,6 +247,87 @@ program
         Logger.info(`Total comments: ${data.length}`)
       } else {
         Logger.error(`Error: ${comments.message}`)
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
+// Get User Posts Command
+
+program
+  .command("getuserposts")
+  .description("Get posts from a TikTok user")
+  .argument("<username>", "TikTok username")
+  .option("-l, --limit <number>", "Limit of posts", "5")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .action(async (username, options) => {
+    try {
+      const postLimit = parseInt(options.limit)
+      const results = await Tiktok.GetUserPosts(username, {
+        postLimit: postLimit,
+        proxy: options.proxy
+      })
+      if (results.status === "success") {
+        const data = results.result
+        for (const [index, post] of data.entries()) {
+          Logger.info(`---- POST ${index + 1} ----`)
+          Logger.result(`Video ID: ${post.id}`, chalk.green)
+          Logger.result(`Description: ${post.desc}`, chalk.yellow)
+          Logger.info(`---- STATISTICS ----`)
+          Logger.result(`Likes: ${post.stats.diggCount}`, chalk.yellow)
+          Logger.result(`Favorites: ${post.stats.collectCount}`, chalk.yellow)
+          Logger.result(`Views: ${post.stats.playCount}`, chalk.yellow)
+          Logger.result(`Shares: ${post.stats.shareCount}`, chalk.yellow)
+          Logger.result(`Comments: ${post.stats.commentCount}`, chalk.yellow)
+        }
+        Logger.info(`Total posts: ${data.length}`)
+      } else {
+        Logger.error(`Error: ${results.message}`)
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
+// Get User Favorites Command
+
+program
+  .command("getuserliked")
+  .description("Get user liked videos from a TikTok user")
+  .argument("<username>", "TikTok username")
+  .option("-l, --limit <number>", "Limit of posts", "5")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .action(async (username, options) => {
+    try {
+      const postLimit = parseInt(options.limit)
+      const results = await Tiktok.GetUserLiked(username, {
+        cookie: cookieManager.getCookie(),
+        postLimit: postLimit,
+        proxy: options.proxy
+      })
+      if (results.status === "success") {
+        const data = results.result
+        for (const [index, liked] of data.entries()) {
+          Logger.info(`---- FAVORITE ${index + 1} ----`)
+          Logger.result(`Video ID: ${liked.id}`, chalk.green)
+          Logger.result(`Description: ${liked.desc}`, chalk.yellow)
+          Logger.result(`Author: ${liked.author.nickname}`, chalk.yellow)
+          Logger.result(
+            `Video URL: ${_tiktokurl}/@${liked.author.username}/video/${liked.video.id}`,
+            chalk.yellow
+          )
+          Logger.info(`---- STATISTICS ----`)
+          Logger.result(`Likes: ${liked.stats.diggCount}`, chalk.yellow)
+          Logger.result(`Favorites: ${liked.stats.collectCount}`, chalk.yellow)
+          Logger.result(`Views: ${liked.stats.playCount}`, chalk.yellow)
+          Logger.result(`Shares: ${liked.stats.shareCount}`, chalk.yellow)
+          Logger.result(`Comments: ${liked.stats.commentCount}`, chalk.yellow)
+          Logger.result(`Reposts: ${liked.stats.repostCount}`, chalk.yellow)
+        }
+        Logger.info(`Total Liked Videos: ${data.length}`)
+      } else {
+        Logger.error(`Error: ${results.message}`)
       }
     } catch (error) {
       Logger.error(`Error: ${error.message}`)
@@ -228,44 +352,29 @@ program
       if (results.status === "success") {
         const data = results.result
         Logger.info("---- TIKTOK STALKER ----")
-        Logger.result(`Username:${data.users.username}`, chalk.green)
-        Logger.result(`Nickname:${data.users.nickname}`, chalk.green)
-        Logger.result(`Bio:${data.users.signature}`, chalk.green)
+        Logger.result(`Username:${data.user.username}`, chalk.green)
+        Logger.result(`Nickname:${data.user.nickname}`, chalk.green)
+        Logger.result(`Bio:${data.user.signature}`, chalk.green)
         Logger.result(
-          `Verified:${data.users.verified ? "Yes" : "No"}`,
+          `Verified:${data.user.verified ? "Yes" : "No"}`,
           chalk.green
         )
         Logger.result(
-          `Commerce User:${data.users.commerceUser ? "Yes" : "No"}`,
+          `Commerce User:${data.user.commerceUser ? "Yes" : "No"}`,
           chalk.green
         )
         Logger.result(
-          `Private Account:${data.users.privateAccount ? "Yes" : "No"}`,
+          `Private Account:${data.user.privateAccount ? "Yes" : "No"}`,
           chalk.green
         )
-        Logger.result(`Region:${data.users.region}`, chalk.green)
+        Logger.result(`Region:${data.user.region}`, chalk.green)
         Logger.info("---- STATISTICS ----")
         Logger.result(`Followers:${data.stats.followerCount}`, chalk.yellow)
         Logger.result(`Following:${data.stats.followingCount}`, chalk.yellow)
         Logger.result(`Hearts:${data.stats.heartCount}`, chalk.yellow)
         Logger.result(`Videos:${data.stats.videoCount}`, chalk.yellow)
-        Logger.result(`Posts:${data.stats.postCount}`, chalk.yellow)
         Logger.result(`Likes:${data.stats.likeCount}`, chalk.yellow)
         Logger.result(`Friends:${data.stats.friendCount}`, chalk.yellow)
-        Logger.info("---- POSTS ----")
-        for (const [index, post] of data.posts.entries()) {
-          Logger.info(`---- POST ${index + 1} ----`)
-          Logger.result(`Title: ${post.desc}`, chalk.green)
-          Logger.result(`Likes: ${post.stats.diggCount}`, chalk.yellow)
-          Logger.result(`Comments: ${post.stats.commentCount}`, chalk.yellow)
-          Logger.result(`Shares: ${post.stats.shareCount}`, chalk.yellow)
-          Logger.result(`Views: ${post.stats.playCount}`, chalk.yellow)
-          Logger.result(
-            `Music: ${post.music.title} - ${post.music.authorName}`,
-            chalk.cyan
-          )
-          Logger.result(`Music URL: ${post.music.playUrl}`, chalk.cyan)
-        }
       } else {
         Logger.error(`Error: ${results.message}`)
       }
