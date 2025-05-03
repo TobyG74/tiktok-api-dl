@@ -36,15 +36,26 @@
   - [Using Yarn](#using-yarn)
   - [Using Github](#using-github)
 - [Usage Guide](#usage-guide)
-  - [Getting TikTok Cookie](#getting-tiktok-cookie)
+  - [Getting Tiktok Cookie](#getting-tiktok-cookie)
   - [Using CLI](#using-cli)
   - [Building from Source](#building-from-source)
 - [Features](#features)
-  - [TikTok Downloader](#tiktok-downloader)
-  - [TikTok Search](#tiktok-search)
-  - [TikTok Profile Stalker](#tiktok-stalker)
-  - [TikTok Comments](#tiktok-comments)
+  - [Tiktok Downloader](#tiktok-downloader)
+  - [Tiktok Search](#tiktok-search)
+  - [Tiktok Stalk User Profile](#tiktok-stalk-user-profile)
+  - [Tiktok Video User Comments](#tiktok-video-comments)
+  - [Tiktok Get User Posts](#tiktok-get-user-posts)
+  - [Tiktok Get User Favorite Videos](#tiktok-get-user-favorite-videos)
 - [API Response Types](#api-response-types)
+  - [Tiktok Downloader](#tiktok-downloader-1)
+    - [Version 1 Response](#version-1-response)
+    - [Version 2 Response](#version-2-response)
+    - [Version 3 Response](#version-3-response)
+  - [Tiktok Search](#tiktok-search-1)
+  - [Tiktok Stalk User Profile](#tiktok-stalk-user-profile-1)
+  - [Tiktok Video Comments](#tiktok-video-comments-1)
+  - [Tiktok User Posts](#tiktok-user-posts)
+  - [Tiktok User Favorites](#tiktok-user-favorites)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -94,10 +105,10 @@ npm install github:TobyG74/tiktok-api-dl
 
 # Usage Guide
 
-## Getting TikTok Cookie
+## Getting Tiktok Cookie
 
 1. Install [Cookie-Editor](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm)
-2. Login to [TikTok](https://tiktok.com)
+2. Login to [Tiktok](https://tiktok.com)
 3. Open Cookie-Editor
 4. Copy the cookie and use it in your code: `COOKIE: "YOUR_COOKIE"`
 
@@ -131,18 +142,18 @@ npm run cli -- [command] [options]
 $ tiktokdl -h
 Usage: tiktokdl [options] [command]
 
-TikTok downloader and search CLI tool
+Tiktok downloader and search CLI tool
 
 Options:
   -V, --version                output the version number
   -h, --help                   display help for command
 
 Commands:
-  download [options] <url>     Download TikTok Video / Slide / Music
+  download [options] <url>     Download Tiktok Video / Slide / Music
   cookie                       Cookie Manager
-  search                       Search TikTok users or live streams
-  getcomments [options] <url>  Get comments from a TikTok video
-  stalk [options] <username>   Stalk a TikTok user
+  search                       Search Tiktok users or live streams
+  getcomments [options] <url>  Get comments from a Tiktok video
+  stalk [options] <username>   Stalk a Tiktok user
   help [command]               display help for command
 ```
 
@@ -157,7 +168,7 @@ npm run build
 
 # Features
 
-## TikTok Downloader
+## Tiktok Downloader
 
 ```javascript
 const Tiktok = require("@tobyg74/tiktok-api-dl")
@@ -170,7 +181,11 @@ Tiktok.Downloader(url, {
 }).then((result) => console.log(result))
 ```
 
-## TikTok Search
+- [Version 1 Response](#version-1-response)
+- [Version 2 Response](#version-2-response)
+- [Version 3 Response](#version-3-response)
+
+## Tiktok Search
 
 ```javascript
 const Tiktok = require("@tobyg74/tiktok-api-dl")
@@ -178,21 +193,79 @@ const Tiktok = require("@tobyg74/tiktok-api-dl")
 Tiktok.Search("username", {
   type: "user", // "user" | "live"
   page: 1,
-  cookie: "YOUR_COOKIE",
+  cookie: "YOUR_COOKIE", // needed
   proxy: "YOUR_PROXY" // optional
 }).then((result) => console.log(result))
 ```
 
-[View more examples and full API documentation in our wiki](#examples)
+- [User Search Response](#user-search-response)
+- [Live Search Response](live-search-response)
+
+## Tiktok Stalk User Profile
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const username = "Tobz2k19"
+Tiktok.Stalker(username, {
+  cookie: "YOUR_COOKIE", // optional, if response null
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+- [Tiktok Stalk User Response](#tiktok-stalk-user-profile-1)
+
+## Tiktok Video Comments
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const url = "https://vt.tiktok.com/xxxxxxxx"
+Tiktok.GetVideoComments(url, {
+  commentLimit: 10, // optional, default is 30
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+- [Tiktok Video Comments Response](#tiktok-video-comments-1)
+
+## Tiktok Get User Posts
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const username = "Tobz2k19"
+Tiktok.GetUserPosts(username, {
+  postLimit: 10, // optional, default is 30
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+- [Tiktok User Posts Response](#tiktok-user-posts)
+
+## Tiktok Get User Favorite Videos
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const username = "Tobz2k19"
+Tiktok.GetUserFavorites(username, {
+  postLimit: 10, // optional, default is 30
+  cookie: "YOUR_COOKIE", // needed
+  proxy: "YOUR_PROXY" // optional
+})
+```
+
+- [Tiktok User Favorites Response](#tiktok-user-favorites)
 
 # API Response Types
 
-<details>
-  <summary><b>Tiktok Downloader V1</b></summary>
-  <br>
+## Tiktok Downloader
 
-```ts
-{
+### Version 1 Response
+
+```typescript
+interface TiktokAPIResponse {
   status: "success" | "error"
   message?: string
   result?: {
@@ -225,7 +298,6 @@ Tiktok.Search("username", {
       whatsappShareCount: number
       loseCount: number
       loseCommentCount: number
-      whatsappShareCount: number
       repostCount: number
     }
     video?: {
@@ -257,13 +329,10 @@ Tiktok.Search("username", {
 }
 ```
 
-</details>
-<details>
-  <summary><b>Tiktok Downloader V2</b></summary>
-  <br>
+### Version 2 Response
 
-```ts
-{
+```typescript
+interface SSSTikResponse {
   status: "success" | "error"
   message?: string
   result?: {
@@ -285,13 +354,10 @@ Tiktok.Search("username", {
 }
 ```
 
-</details>
-<details>
-  <summary><b>Tiktok Downloader V3</b></summary>
-  <br>
+### Version 3 Response
 
-```ts
-{
+```typescript
+interface MusicalDownResponse {
   status: "success" | "error"
   message?: string
   result?: {
@@ -310,16 +376,15 @@ Tiktok.Search("username", {
 }
 ```
 
-</details>
-<details>
-  <summary><b>Tiktok Search "User"</b></summary>
-  <br>
+## Tiktok Search
 
-```ts
-{
+### User Search Response
+
+```typescript
+interface TiktokUserSearchResponse {
   status: "success" | "error"
   message?: string
-  result?: [{
+  result?: Array<{
     uid: string
     username: string
     nickname: string
@@ -329,22 +394,19 @@ Tiktok.Search("username", {
     isVerified: boolean
     secUid: string
     url: string
-  }]
+  }>
   page: number
   totalResults: number
 }
 ```
 
-</details>
-<details>
-  <summary><b>Tiktok Search "Live"</b></summary>
-  <br>
+### Live Search Response
 
-```ts
-{
+```typescript
+interface TiktokLiveSearchResponse {
   status: "success" | "error"
   message?: string
-  result?: [{
+  result?: Array<{
     id: string
     title: string
     cover: string[]
@@ -373,19 +435,18 @@ Tiktok.Search("username", {
       }
       isVerified: boolean
     }
-  }]
+  }>
   page: number
   totalResults: number
 }
 ```
 
-</details>
-<details>
-  <summary><b>Tiktok Get Profile</b></summary>
-  <br>
+## Tiktok Stalk User Profile
 
-```ts
-{
+### Profile Response
+
+```typescript
+interface TiktokStalkUserResponse {
   status: "success" | "error"
   message?: string
   result?: {
@@ -404,22 +465,19 @@ Tiktok.Search("username", {
       videoCount: number
       likeCount: number
     }
-    posts: Posts[]
   }
-  totalPosts: number
 }
 ```
 
-</details>
-<details>
-  <summary><b>Tiktok Get Comments</b></summary>
-  <br>
+## Tiktok Video Comments
 
-```ts
-{
+### Comments Response
+
+```typescript
+interface TiktokVideoCommentsResponse {
   status: "success" | "error"
   message?: string
-  result?: [{
+  result?: Array<{
     cid: string
     text: string
     commentLanguage: string
@@ -431,13 +489,114 @@ Tiktok.Search("username", {
     replyComment: []
     user: User
     url: string
-  }]
+  }>
   totalComments: number
 }
 ```
 
-</details>
-<br>
+## Tiktok User Posts
+
+### User Posts Response
+
+```typescript
+interface TiktokUserPostsResponse {
+  status: "success" | "error"
+  message?: string
+  result?: Array<{
+    id: string
+    desc: string
+    createTime: number
+    digged: number
+    duetEnabled: number
+    forFriend: number
+    officalItem: number
+    originalItem: number
+    privateItem: number
+    shareEnabled: number
+    stitchEnabled: number
+    stats: {
+      collectCount: number
+      commentCount: number
+      diggCount: number
+      playCount: number
+      shareCount: number
+    }
+    author: {
+      id: string
+      username: string
+      nickname: string
+      avatarLarger: string
+      avatarThumb: string
+      avatarMedium: string
+      signature: string
+      verified: boolean
+      openFavorite: boolean
+      privateAccount: boolean
+      isADVirtual: boolean
+      isEmbedBanned: boolean
+    }
+    video?: {
+      id: string
+      duration: number
+      ratio: string
+      cover: string
+      originCover: string
+      dynamicCover: string
+      playAddr: string
+      downloadAddr: string
+      format: string
+      bitrate: number
+    }
+    music: {
+      authorName: string
+      coverLarge: string
+      coverMedium: string
+      coverThumb: string
+      duration: number
+      id: string
+      title: string
+      playUrl: string
+      original: boolean
+    }
+    images?: string[]
+  }>
+}
+```
+
+## Tiktok User Favorites
+
+### User Favorites Response
+
+```typescript
+interface TiktokUserFavoritesResponse {
+  status: "success" | "error"
+  message?: string
+  result?: Array<{
+    author: {
+      id: string
+      username: string
+      nickname: string
+      avatarLarger: string
+      avatarThumb: string
+      avatarMedium: string
+      signature: string
+      verified: string
+      openFavorite: string
+      privateAccount: string
+      isADVirtual: string
+      isEmbedBanned: string
+    }
+    stats: {
+      likeCount: string
+      followerCount: string
+      followingCount: string
+      friendCount: string
+      heartCount: string
+      postsCount: string
+    }
+  }>
+}
+```
 
 # Changelog
 
