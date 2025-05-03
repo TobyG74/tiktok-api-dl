@@ -320,7 +320,7 @@
 - Fixed Tiktok Live Search (Error Length) [80cbe6d](https://github.com/TobyG74/tiktok-api-dl/commit/80cbe6d5e9bc5a3717acf658b57801aef9839de4)
 - Fixed Requests Take Too Long When Taking Comments & Posts [990a50f](https://github.com/TobyG74/tiktok-api-dl/commit/990a50f98c41d0627908de43466e60078825bc68)
 
-### Version 1.2.7 - 03-03-2025
+## Version 1.2.7 - 03-03-2025
 
 ### Added
 
@@ -340,3 +340,15 @@
 ### Changed
 
 - Tiktok Stalk doesn't use cookies anymore [c718c93](https://github.com/TobyG74/tiktok-api-dl/commit/c718c93416cfdd52d4d0932d335c9f7b3c2bce08)
+
+## Version 1.2.9 - 05-03-2025
+
+### Added
+
+- Added New Helper File [signature](https://github.com/TobyG74/tiktok-api-dl/blob/master/helper/signature.js) & [webmssdk](https://github.com/TobyG74/tiktok-api-dl/blob/master/helper/webmssdk.js) [ecbba4e](https://github.com/TobyG74/tiktok-api-dl/commit/ecbba4e1f09986128f340bfcee33f4c27baf363f)
+- Add Documentation for Tiktok User Favorite Videos and Tiktok User Posts [aecd17d](https://github.com/TobyG74/tiktok-api-dl/commit/aecd17d1dbc3298aef51f484741730aa1bcc4fe8)
+- Add New Feature (Tiktok Get User Liked Videos, User Posts & Search Videos) [973a94e](https://github.com/TobyG74/tiktok-api-dl/commit/973a94e)
+
+### Fixed
+
+- Fixed Naming Similarities in Types [973a94e](https://github.com/TobyG74/tiktok-api-dl/commit/973a94e)
