@@ -202,7 +202,7 @@ searchCommand
           Logger.result(`Description: ${video.desc}`, chalk.yellow)
           Logger.result(`Author: ${video.author.nickname}`, chalk.yellow)
           Logger.result(
-            `Video URL: ${_tiktokurl}/@${video.author}/video/${video.id}`,
+            `Video URL: ${_tiktokurl}/@${video.author.uniqueId}/video/${video.id}`,
             chalk.yellow
           )
           Logger.info(`---- STATISTICS ----`)

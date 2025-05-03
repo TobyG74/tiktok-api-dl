@@ -17,23 +17,35 @@ export const getUserPosts = (
   postLimit?: number
 ): Promise<TiktokUserPostsResponse> =>
   new Promise((resolve) => {
-    StalkUser(username).then(async (res) => {
-      if (res.status === "error") {
+    try {
+      StalkUser(username).then(async (res) => {
+        if (res.status === "error") {
+          return resolve({
+            status: "error",
+            message: res.message
+          })
+        }
+
+        const secUid = res.result.user.secUid
+        const data = await parseUserPosts(secUid, postLimit, proxy)
+
+        resolve({
+          status: "success",
+          result: data,
+          totalPosts: data.length
+        })
+      })
+    } catch (err) {
+      if (
+        err.status == 400 ||
+        (err.response.data && err.response.data.statusCode == 10201)
+      ) {
         return resolve({
           status: "error",
-          message: res.message
+          message: "Video not found!"
         })
       }
-
-      const secUid = res.result.user.secUid
-      const data = await parseUserPosts(secUid, postLimit, proxy)
-
-      resolve({
-        status: "success",
-        result: data,
-        totalPosts: data.length
-      })
-    })
+    }
   })
 
 const parseUserPosts = async (

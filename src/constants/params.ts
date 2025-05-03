@@ -16,7 +16,7 @@ export const _getUserPostsParams = () => {
         "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
       channel: "tiktok_web",
       cookie_enabled: true,
-      device_id: "7002566096994190854",
+      device_id: generateDeviceId(),
       device_platform: "web_pc",
       focus_state: false,
       from_page: "user",
@@ -68,7 +68,7 @@ export const _getUserLikedParams = (
     count,
     cursor,
     needPinnedItemIds: true,
-    odinId: "7002566096994190854",
+    odinId: generateOdinId(),
     history_len: 3,
     user_is_login: true
   })
@@ -115,7 +115,7 @@ export const _getCommentsParams = (id: string, count: number) => {
     cookie_enabled: true,
     count: 50,
     cursor: cursor,
-    device_id: "7445428925624813064",
+    device_id: generateDeviceId(),
     os: "linux",
     region: "ID",
     screen_height: 768,
@@ -150,7 +150,7 @@ export const _userSearchParams = (
     channel: "tiktok_web",
     cookie_enabled: true,
     cursor: cursor,
-    device_id: "7340508178566366722",
+    device_id: generateDeviceId(),
     device_platform: "web_pc",
     focus_state: false,
     from_page: "search",
@@ -164,7 +164,7 @@ export const _userSearchParams = (
     region: "ID",
     screen_height: 768,
     screen_width: 1366,
-    search_id: "202411061124377BCAEF0ACBDA9105BAFB",
+    search_id: generateSearchId(),
     tz_name: "Asia/Jakarta",
     web_search_code: {
       tiktok: {
@@ -194,9 +194,7 @@ export const _liveSearchParams = (keyword: string, page: number) => {
       cursor += 12
     }
   }
-
   let offset = `${cursor}`
-
   return new URLSearchParams({
     WebIdLastTime: "1720342268",
     aid: "1988",
@@ -210,7 +208,7 @@ export const _liveSearchParams = (keyword: string, page: number) => {
     channel: "tiktok_web",
     cookie_enabled: "true",
     count: "20",
-    device_id: "7388813454814086664",
+    device_id: generateDeviceId(),
     device_platform: "web_pc",
     device_type: "web_h264",
     focus_state: "true",
@@ -227,6 +225,7 @@ export const _liveSearchParams = (keyword: string, page: number) => {
     screen_height: "768",
     screen_width: "1366",
     tz_name: "Asia/Jakarta",
+    search_id: generateSearchId(),
     web_search_code:
       "{ tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } }",
     webcast_language: "en"
@@ -256,7 +255,7 @@ export const _videoSearchParams = (keyword: string, page: number) => {
     channel: "tiktok_web",
     cookie_enabled: "true",
     count: "20",
-    device_id: "7388813454814086664",
+    device_id: generateDeviceId(),
     device_platform: "web_pc",
     device_type: "web_h264",
     focus_state: "true",
@@ -274,6 +273,7 @@ export const _videoSearchParams = (keyword: string, page: number) => {
     screen_height: "768",
     screen_width: "1366",
     tz_name: "Asia/Jakarta",
+    search_id: generateSearchId(),
     web_search_code:
       "{ tiktok: { client_params_x: { search_engine: { ies_mt_user_live_video_card_use_libra: 1, mt_search_general_user_live_card: 1 } }, search_server: {} } }",
     webcast_language: "en"
@@ -287,8 +287,8 @@ export const _tiktokApiParams = (args: any) => {
     version_name: "1.1.9",
     version_code: "2018111632",
     build_number: "1.1.9",
-    device_id: "7238642534011110914",
-    iid: "7318518857994389254",
+    device_id: generateDeviceId(),
+    iid: generateDeviceId(),
     manifest_version_code: "2018111632",
     update_version_code: "2018111632",
     openudid: randomChar("0123456789abcdef", 16),
@@ -317,7 +317,6 @@ export const _tiktokApiParams = (args: any) => {
   }).toString()
 }
 
-/** Helper Functions */
 const randomChar = (char: string, range: number) => {
   let chars = ""
   for (let i = 0; i < range; i++) {
@@ -325,3 +324,33 @@ const randomChar = (char: string, range: number) => {
   }
   return chars
 }
+
+const generateSearchId = () => {
+  const now = new Date()
+  const timestamp =
+    now.getFullYear().toString() +
+    (now.getMonth() + 1).toString().padStart(2, "0") +
+    now.getDate().toString().padStart(2, "0") +
+    now.getHours().toString().padStart(2, "0") +
+    now.getMinutes().toString().padStart(2, "0") +
+    now.getSeconds().toString().padStart(2, "0")
+
+  const hex = randomChar("0123456789ABCDEF", 32)
+  return `${timestamp}${hex}`
+}
+
+const generateDeviceId = () => {
+  // Generate 19-digit number
+  const prefix = "7" // Common prefix for device_id
+  const random = randomChar("0123456789", 18)
+  return `${prefix}${random}`
+}
+
+const generateOdinId = () => {
+  // Generate 19-digit number
+  const prefix = "7" // Common prefix for OdinId
+  const random = randomChar("0123456789", 18)
+  return `${prefix}${random}`
+}
+
+export { randomChar, generateSearchId, generateDeviceId, generateOdinId }
