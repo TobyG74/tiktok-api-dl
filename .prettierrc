@@ -1,8 +1,8 @@
 {
-  "arrowParens": "always",
-  "endOfLine": "auto",
-  "printWidth": 80,
-  "semi": false,
-  "tabWidth": 2,
-  "trailingComma": "none"
+    "arrowParens": "always",
+    "endOfLine": "auto",
+    "printWidth": 80,
+    "semi": false,
+    "tabWidth": 2,
+    "trailingComma": "none"
 }
