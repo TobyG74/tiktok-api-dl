@@ -353,3 +353,21 @@
 
 - Fixed Naming Similarities in Types [973a94e](https://github.com/TobyG74/tiktok-api-dl/commit/973a94e51761fbd61e37bebb1644c60c15f93dfe)
 - Fixed Error When Searching for a Video After Page 1 [050bdf4](https://github.com/TobyG74/tiktok-api-dl/commit/050bdf4fa2926989445af6d0f1349805e630b223)
+
+## Version 1.3.1 - 13-05-2025
+
+### Added
+
+- Adding a validator for the Cookie [a19dd9c](https://github.com/TobyG74/tiktok-api-dl/commit/a19dd9c062b98f54ccd0cc5343eea2bdc0db4245)
+
+### Fixed
+
+- Fix the types in options that are not visible [96b60ed](https://github.com/TobyG74/tiktok-api-dl/commit/96b60ed55a6483b9c8fb378895f608c15ff86c33)
+- Fix the object result in CLI [fb72a4f](https://github.com/TobyG74/tiktok-api-dl/commit/fb72a4f74ada0e6503dd9978bf538f809ec7f2fd)
+- Fixing Several Types [4dda8da](https://github.com/TobyG74/tiktok-api-dl/commit/4dda8daf85149b110d3e965fe67b414099b040de)
+- Applying New Types [cb64f05](https://github.com/TobyG74/tiktok-api-dl/commit/cb64f0585aef011bb6ae5ff7fe907526d37e0067)
+- Fix the Request Errors and Returning Undefined [80b5cbd](https://github.com/TobyG74/tiktok-api-dl/commit/80b5cbdc1d8af1fc45a2d94b818d0fe38d8060e9)
+
+### Changed
+
+- Update Documentation [4260ea6](https://github.com/TobyG74/tiktok-api-dl/commit/4260ea653ee50569f898cc0653cb35e4557992a9)
