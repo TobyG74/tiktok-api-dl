@@ -102,17 +102,19 @@ searchCommand
       })
       if (results.status === "success") {
         const data = results.result
-        for (const [index, user] of data.entries()) {
-          Logger.info(`---- USER ${index + 1} ----`)
-          Logger.result(`Username: ${user.username}`, chalk.green)
-          Logger.result(`Nickname: ${user.nickname}`, chalk.green)
-          Logger.result(`Bio: ${user.signature}`, chalk.green)
-          Logger.result(`Followers: ${user.followerCount}`, chalk.yellow)
-          Logger.result(
-            `Verified: ${user.isVerified ? "Yes" : "No"}`,
-            chalk.yellow
-          )
-          Logger.result(`Profile URL: ${user.url}`, chalk.yellow)
+        for (const [index, item] of data.entries()) {
+          if (item.type === "user") {
+            Logger.info(`---- USER ${index + 1} ----`)
+            Logger.result(`Username: ${item.username}`, chalk.green)
+            Logger.result(`Nickname: ${item.nickname}`, chalk.green)
+            Logger.result(`Bio: ${item.signature}`, chalk.green)
+            Logger.result(`Followers: ${item.followerCount}`, chalk.yellow)
+            Logger.result(
+              `Verified: ${item.isVerified ? "Yes" : "No"}`,
+              chalk.yellow
+            )
+            Logger.result(`Profile URL: ${item.url}`, chalk.yellow)
+          }
         }
         Logger.info(`Total users: ${data.length}`)
       } else {
@@ -140,35 +142,43 @@ searchCommand
       })
       if (results.status === "success") {
         const data = results.result
-        for (const [index, live] of data.entries()) {
-          Logger.info(`---- LIVE ${index + 1} ----`)
-          Logger.result(`Title: ${live.liveInfo.title}`, chalk.green)
-          Logger.result(
-            `Nickname: ${live.liveInfo.owner.nickname}`,
-            chalk.green
-          )
-          Logger.result(
-            `Username: ${live.liveInfo.owner.username}`,
-            chalk.green
-          )
-          Logger.result(
-            `Verified: ${live.liveInfo.owner.isVerified ? "Yes" : "No"}`,
-            chalk.green
-          )
-          Logger.result(
-            `Type Third Party: ${
-              live.liveInfo.liveTypeThirdParty ? "Yes" : "No"
-            }`,
-            chalk.green
-          )
-          Logger.result(`Hashtag: ${live.liveInfo.hashtag}`, chalk.green)
-          Logger.info(`---- STATISTICS ----`)
-          Logger.result(`Likes: ${live.liveInfo.stats.likeCount}`, chalk.yellow)
-          Logger.result(
-            `Views: ${live.liveInfo.stats.viewerCount}`,
-            chalk.yellow
-          )
-          Logger.result(`Users: ${live.liveInfo.stats.totalUser}`, chalk.yellow)
+        for (const [index, item] of data.entries()) {
+          if (item.type === "live") {
+            Logger.info(`---- LIVE ${index + 1} ----`)
+            Logger.result(`Title: ${item.liveInfo.title}`, chalk.green)
+            Logger.result(
+              `Nickname: ${item.liveInfo.owner.nickname}`,
+              chalk.green
+            )
+            Logger.result(
+              `Username: ${item.liveInfo.owner.username}`,
+              chalk.green
+            )
+            Logger.result(
+              `Verified: ${item.liveInfo.owner.isVerified ? "Yes" : "No"}`,
+              chalk.green
+            )
+            Logger.result(
+              `Type Third Party: ${
+                item.liveInfo.liveTypeThirdParty ? "Yes" : "No"
+              }`,
+              chalk.green
+            )
+            Logger.result(`Hashtag: ${item.liveInfo.hashtag}`, chalk.green)
+            Logger.info(`---- STATISTICS ----`)
+            Logger.result(
+              `Likes: ${item.liveInfo.stats.likeCount}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Views: ${item.liveInfo.stats.viewerCount}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Users: ${item.liveInfo.stats.totalUser}`,
+              chalk.yellow
+            )
+          }
         }
         Logger.info(`Total live streams: ${data.length}`)
       } else {
@@ -196,21 +206,23 @@ searchCommand
       })
       if (results.status === "success") {
         const data = results.result
-        for (const [index, video] of data.entries()) {
-          Logger.info(`---- VIDEO ${index + 1} ----`)
-          Logger.result(`Video ID: ${video.id}`, chalk.green)
-          Logger.result(`Description: ${video.desc}`, chalk.yellow)
-          Logger.result(`Author: ${video.author.nickname}`, chalk.yellow)
-          Logger.result(
-            `Video URL: ${_tiktokurl}/@${video.author.uniqueId}/video/${video.id}`,
-            chalk.yellow
-          )
-          Logger.info(`---- STATISTICS ----`)
-          Logger.result(`Likes: ${video.stats.diggCount}`, chalk.yellow)
-          Logger.result(`Favorites: ${video.stats.collectCount}`, chalk.yellow)
-          Logger.result(`Views: ${video.stats.playCount}`, chalk.yellow)
-          Logger.result(`Shares: ${video.stats.shareCount}`, chalk.yellow)
-          Logger.result(`Comments: ${video.stats.commentCount}`, chalk.yellow)
+        for (const [index, item] of data.entries()) {
+          if (item.type === "video") {
+            Logger.info(`---- VIDEO ${index + 1} ----`)
+            Logger.result(`Video ID: ${item.id}`, chalk.green)
+            Logger.result(`Description: ${item.desc}`, chalk.yellow)
+            Logger.result(`Author: ${item.author.nickname}`, chalk.yellow)
+            Logger.result(
+              `Video URL: ${_tiktokurl}/@${item.author.uniqueId}/video/${item.id}`,
+              chalk.yellow
+            )
+            Logger.info(`---- STATISTICS ----`)
+            Logger.result(`Likes: ${item.stats.likeCount}`, chalk.yellow)
+            Logger.result(`Favorites: ${item.stats.collectCount}`, chalk.yellow)
+            Logger.result(`Views: ${item.stats.playCount}`, chalk.yellow)
+            Logger.result(`Shares: ${item.stats.shareCount}`, chalk.yellow)
+            Logger.result(`Comments: ${item.stats.commentCount}`, chalk.yellow)
+          }
         }
         Logger.info(`Total videos: ${data.length}`)
       } else {
@@ -275,7 +287,7 @@ program
           Logger.result(`Video ID: ${post.id}`, chalk.green)
           Logger.result(`Description: ${post.desc}`, chalk.yellow)
           Logger.info(`---- STATISTICS ----`)
-          Logger.result(`Likes: ${post.stats.diggCount}`, chalk.yellow)
+          Logger.result(`Likes: ${post.stats.likeCount}`, chalk.yellow)
           Logger.result(`Favorites: ${post.stats.collectCount}`, chalk.yellow)
           Logger.result(`Views: ${post.stats.playCount}`, chalk.yellow)
           Logger.result(`Shares: ${post.stats.shareCount}`, chalk.yellow)
@@ -340,13 +352,10 @@ program
   .command("stalk")
   .description("Stalk a TikTok user")
   .argument("<username>", "TikTok username")
-  .option("-p, --postLimit <number>", "Limit of posts", "5")
   .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
   .action(async (username, options) => {
     try {
-      const postLimit = parseInt(options.postLimit)
       const results = await Tiktok.StalkUser(username, {
-        postLimit: postLimit,
         proxy: options.proxy
       })
       if (results.status === "success") {
