@@ -30,7 +30,7 @@ export type VideoSearch = {
 export type StatisticsVideoSearch = {
   collectCount: number
   commentCount: number
-  diggCount: number
+  likeCount: number
   playCount: number
   shareCount: number
 }

@@ -27,7 +27,7 @@ export type Posts = {
 export type StatsPost = {
   collectCount: number
   commentCount: number
-  diggCount: number
+  likeCount: number
   playCount: number
   shareCount: number
 }
