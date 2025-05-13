@@ -274,7 +274,7 @@ interface TiktokAPIResponse {
     type: "video" | "image"
     id: string
     createTime: number
-    description: string
+    desc: string
     author: {
       uid: number
       username: string
@@ -290,7 +290,7 @@ interface TiktokAPIResponse {
       downloadCount: number
       shareCount: number
       commentCount: number
-      diggCount: number
+      likeCount: number
       collectCount: number
       forwardCount: number
       whatsappShareCount: number
@@ -474,7 +474,7 @@ interface TiktokVideoSearchResponse {
     stats: {
       collectCount: number
       commentCount: number
-      diggCount: number
+      likeCount: number
       playCount: number
       shareCount: number
     }
@@ -583,7 +583,7 @@ interface TiktokUserPostsResponse {
     stats: {
       collectCount: number
       commentCount: number
-      diggCount: number
+      likeCount: number
       playCount: number
       shareCount: number
     }
@@ -666,19 +666,11 @@ interface TiktokUserFavoriteVideosResponse {
       privateAccount: string
       isADVirtual: string
       isEmbedBanned: string
-      stats: {
-        likeCount: string
-        followerCount: string
-        followingCount: string
-        friendCount: string
-        heartCount: string
-        postsCount: string
-      }
     }
     stats: {
       collectCount: string
       commentCount: string
-      diggCount: string
+      likeCount: string
       playCount: string
       repostCount: string
       shareCount: string
