@@ -15,6 +15,7 @@ import {
   StatisticsAuthorLiked,
   ImagesLiked
 } from "../../types/get/getUserLiked"
+import retry from "async-retry"
 
 export const getUserLiked = (
   username: string,
@@ -215,22 +216,38 @@ const requestUserLiked = async (
   url.searchParams.append("X-Bogus", xbogus)
   const xttparams = Tiktok.generateXTTParams(url.searchParams.toString())
 
-  const { data } = await Axios.get(`${url.toString()}`, {
-    headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
-      cookie,
-      "x-tt-params": xttparams
+  return await retry(
+    async (bail, attempt) => {
+      try {
+        const { data } = await Axios.get(url.toString(), {
+          headers: {
+            "user-agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
+            cookie,
+            "x-tt-params": xttparams
+          },
+          httpsAgent:
+            (proxy &&
+              (proxy.startsWith("http") || proxy.startsWith("https")
+                ? new HttpsProxyAgent(proxy)
+                : proxy.startsWith("socks")
+                ? new SocksProxyAgent(proxy)
+                : undefined)) ||
+            undefined
+        })
+        return data
+      } catch (error) {
+        if (attempt === 3) {
+          bail(error)
+        }
+        throw error
+      }
     },
-    httpsAgent:
-      (proxy &&
-        (proxy.startsWith("http") || proxy.startsWith("https")
-          ? new HttpsProxyAgent(proxy)
-          : proxy.startsWith("socks")
-          ? new SocksProxyAgent(proxy)
-          : undefined)) ||
-      undefined
-  })
-
-  return data
+    {
+      retries: 3,
+      minTimeout: 1000,
+      maxTimeout: 5000,
+      factor: 2
+    }
+  )
 }

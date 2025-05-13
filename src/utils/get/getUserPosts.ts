@@ -10,6 +10,7 @@ import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
 import { TiktokService } from "../../services/tiktokService"
 import { StalkUser } from "../get/getProfile"
+import retry from "async-retry"
 
 export const getUserPosts = (
   username: string,
@@ -58,14 +59,17 @@ const parseUserPosts = async (
   let cursor = 0
   const posts: Posts[] = []
   let counter = 0
+
+  const Tiktok = new TiktokService()
+  const xttparams = Tiktok.generateXTTParams(
+    _xttParams(secUid, cursor, postLimit)
+  )
+
   while (hasMore) {
     let result: any | null = null
 
     // Prevent missing response posts
-    for (let i = 0; i < 30; i++) {
-      result = await requestUserPosts(secUid, cursor, postLimit, proxy)
-      if (result !== "") break
-    }
+    result = await requestUserPosts(proxy, xttparams)
 
     // Validate
     if (result === "") {
@@ -161,33 +165,51 @@ const parseUserPosts = async (
 }
 
 const requestUserPosts = async (
-  secUid: string,
-  cursor: number = 0,
-  count: number = 30,
-  proxy?: string
+  proxy?: string,
+  xttparams: string = ""
 ): Promise<any> => {
-  const Tiktok = new TiktokService()
-
-  const { data } = await Axios.get(
-    `${_tiktokGetPosts(_getUserPostsParams())}`,
-    {
-      headers: {
-        "user-agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
-        "X-tt-params": Tiktok.generateXTTParams(
-          _xttParams(secUid, cursor, count)
+  return retry(
+    async (bail, attempt) => {
+      try {
+        const { data } = await Axios.get(
+          `${_tiktokGetPosts(_getUserPostsParams())}`,
+          {
+            headers: {
+              "user-agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
+              "x-tt-params": xttparams
+            },
+            httpsAgent:
+              (proxy &&
+                (proxy.startsWith("http") || proxy.startsWith("https")
+                  ? new HttpsProxyAgent(proxy)
+                  : proxy.startsWith("socks")
+                  ? new SocksProxyAgent(proxy)
+                  : undefined)) ||
+              undefined
+          }
         )
-      },
-      httpsAgent:
-        (proxy &&
-          (proxy.startsWith("http") || proxy.startsWith("https")
-            ? new HttpsProxyAgent(proxy)
-            : proxy.startsWith("socks")
-            ? new SocksProxyAgent(proxy)
-            : undefined)) ||
-        undefined
+        console.log(data)
+        return data
+      } catch (error) {
+        if (
+          error.response?.status === 400 ||
+          error.response?.data?.statusCode === 10201
+        ) {
+          bail(new Error("Video not found!"))
+          return
+        }
+        throw error
+      }
+    },
+    {
+      retries: 3,
+      minTimeout: 1000,
+      maxTimeout: 5000,
+      factor: 2,
+      onRetry: (error, attempt) => {
+        console.log(`Retry attempt ${attempt} due to: ${error}`)
+      }
     }
   )
-
-  return data
 }
