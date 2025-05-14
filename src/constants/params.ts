@@ -16,7 +16,7 @@ export const _getUserPostsParams = () => {
         "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
       channel: "tiktok_web",
       cookie_enabled: true,
-      device_id: generateDeviceId(),
+      device_id: "7002566096994190854",
       device_platform: "web_pc",
       focus_state: false,
       from_page: "user",
