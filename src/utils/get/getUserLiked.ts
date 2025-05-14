@@ -43,6 +43,12 @@ export const getUserLiked = (
       const secUid = res.result.user.secUid
       const data = await parseUserLiked(id, secUid, cookie, postLimit, proxy)
 
+      if (!data.length)
+        return resolve({
+          status: "error",
+          message: "User not found!"
+        })
+
       resolve({
         status: "success",
         result: data,
@@ -68,12 +74,6 @@ const parseUserLiked = async (
 
     // Prevent missing response favorites
     result = await requestUserLiked(id, secUid, cookie, postLimit, proxy)
-
-    // Validate
-    if (result === "") {
-      hasMore = false
-      break
-    }
 
     result?.itemList?.forEach((v: any) => {
       const statsAuthor: StatisticsAuthorLiked = {
@@ -235,6 +235,11 @@ const requestUserLiked = async (
                 : undefined)) ||
             undefined
         })
+
+        if (data === "") {
+          throw new Error("Empty response")
+        }
+
         return data
       } catch (error) {
         if (attempt === 3) {
@@ -244,7 +249,7 @@ const requestUserLiked = async (
       }
     },
     {
-      retries: 3,
+      retries: 10,
       minTimeout: 1000,
       maxTimeout: 5000,
       factor: 2

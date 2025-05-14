@@ -116,6 +116,9 @@ export const SearchVideo = async (
         })
       })
 
+      if (!result.length)
+        return resolve({ status: "error", message: "Video not found!" })
+
       resolve({
         status: "success",
         result,
@@ -158,13 +161,18 @@ const requestVideoSearch = async (
               undefined
           }
         )
+
+        if (data === "") {
+          throw new Error("Empty response")
+        }
+
         return data
       } catch (error) {
         throw error
       }
     },
     {
-      retries: 3,
+      retries: 10,
       minTimeout: 1000,
       maxTimeout: 5000,
       factor: 2,

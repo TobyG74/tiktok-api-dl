@@ -56,6 +56,13 @@ export const getComments = async (
         ID = ID[0]
 
         const resultComments = await parseComments(ID, commentLimit, proxy)
+
+        if (!resultComments.comments.length)
+          return resolve({
+            status: "error",
+            message: "No comments found!"
+          })
+
         return resolve({
           status: "success",
           result: resultComments.comments,

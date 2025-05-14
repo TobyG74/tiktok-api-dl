@@ -84,6 +84,9 @@ export const SearchUser = (
           })
         }
 
+        if (!result.length)
+          return resolve({ status: "error", message: "User not found!" })
+
         resolve({
           status: "success",
           result,

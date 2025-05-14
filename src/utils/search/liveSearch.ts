@@ -113,6 +113,9 @@ export const SearchLive = async (
           result.push({ roomInfo, liveInfo })
         })
 
+        if (!result.length)
+          return resolve({ status: "error", message: "Live not found!" })
+
         resolve({
           status: "success",
           result,

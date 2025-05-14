@@ -30,6 +30,12 @@ export const getUserPosts = (
         const secUid = res.result.user.secUid
         const data = await parseUserPosts(secUid, postLimit, proxy)
 
+        if (!data.length)
+          return resolve({
+            status: "error",
+            message: "User not found!"
+          })
+
         resolve({
           status: "success",
           result: data,
@@ -70,12 +76,6 @@ const parseUserPosts = async (
 
     // Prevent missing response posts
     result = await requestUserPosts(proxy, xttparams)
-
-    // Validate
-    if (result === "") {
-      hasMore = false
-      break
-    }
 
     result?.itemList?.forEach((v: any) => {
       const author: AuthorPost = {
@@ -189,7 +189,11 @@ const requestUserPosts = async (
               undefined
           }
         )
-        console.log(data)
+
+        if (data === "") {
+          throw new Error("Empty response")
+        }
+
         return data
       } catch (error) {
         if (
@@ -203,7 +207,7 @@ const requestUserPosts = async (
       }
     },
     {
-      retries: 3,
+      retries: 10,
       minTimeout: 1000,
       maxTimeout: 5000,
       factor: 2,
