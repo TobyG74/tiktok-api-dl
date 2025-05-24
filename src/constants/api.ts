@@ -12,6 +12,8 @@ export const _tiktokGetComments = (params: any): string =>
   `${_tiktokurl}/api/comment/list/?${params}`
 export const _tiktokGetUserLiked = (params: any): string =>
   `${_tiktokurl}/api/favorite/item_list/?${params}`
+export const _tiktokGetCollection = (params: any): string =>
+  `${_tiktokurl}/api/collection/item_list/?${params}`
 
 /** Tiktokv */
 export const _tiktokvApi: string = `https://api16-normal-useast5.tiktokv.us`

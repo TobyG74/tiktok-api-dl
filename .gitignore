@@ -7,3 +7,4 @@ test.js
 bun.lockb
 tsconfig.tsbuildinfo
 cookies.json
+dist
