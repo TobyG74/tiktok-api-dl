@@ -12,8 +12,10 @@ export type TiktokAPIResponse = BaseContentResponse
 export type AuthorTiktokAPI = Author & {
   uid: string
   username: string
+  uniqueId: string
   avatarThumb: string
   avatarMedium: string
+  url: string
 }
 
 export type StatisticsTiktokAPI = Statistics
@@ -29,4 +31,24 @@ export type ResponseParserTiktokAPI = {
   statistics?: StatisticsTiktokAPI
   author?: AuthorTiktokAPI
   music?: MusicTiktokAPI
+}
+
+export type TiktokCollectionResponse = {
+  status: "success" | "error"
+  message?: string
+  result?: {
+    itemList: Array<{
+      id: string
+      desc: string
+      createTime: number
+      author: AuthorTiktokAPI
+      statistics: StatisticsTiktokAPI
+      video: VideoTiktokAPI
+      textExtra: Array<{
+        hashtagName?: string
+      }>
+    }>
+    hasMore: boolean
+    cursor: string
+  }
 }

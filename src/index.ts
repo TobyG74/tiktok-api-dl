@@ -18,6 +18,7 @@ import { TiktokStalkUserResponse } from "./types/get/getProfile"
 import { TiktokVideoCommentsResponse } from "./types/get/getComments"
 import { TiktokUserPostsResponse } from "./types/get/getUserPosts"
 import { TiktokUserFavoriteVideosResponse } from "./types/get/getUserLiked"
+import { TiktokCollectionResponse } from "./types/get/getCollection"
 
 /** Services */
 import { TiktokAPI } from "./utils/downloader/tiktokApi"
@@ -30,6 +31,8 @@ import { getComments } from "./utils/get/getComments"
 import { getUserPosts } from "./utils/get/getUserPosts"
 import { getUserLiked } from "./utils/get/getUserLiked"
 import { SearchVideo } from "./utils/search/videoSearch"
+import { getCollection } from "./utils/get/getCollection"
+import { extractCollectionId } from "./utils/downloader/tiktokApi"
 
 /** Constants */
 import { DOWNLOADER_VERSIONS, SEARCH_TYPES } from "./constants"
@@ -120,6 +123,31 @@ export = {
           options?.showOriginalResponse
         )) as TiktokDownloaderResponse<T>
     }
+  },
+
+  /**
+   * Get TikTok Collection
+   * @param {string} collectionIdOrUrl - Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)
+   * @param {Object} options - The options for collection
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @param {string} [options.cursor] - Optional cursor for pagination
+   * @returns {Promise<TiktokCollectionResponse>}
+   */
+  Collection: async (
+    collectionIdOrUrl: string,
+    options?: {
+      proxy?: string
+      cursor?: string
+    }
+  ): Promise<TiktokCollectionResponse> => {
+    const collectionId = extractCollectionId(collectionIdOrUrl)
+    if (!collectionId) {
+      return {
+        status: "error",
+        message: "Invalid collection ID or URL format"
+      }
+    }
+    return await getCollection(collectionId, options?.proxy, options?.cursor)
   },
 
   /**
