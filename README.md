@@ -56,6 +56,7 @@
   - [Tiktok Video Comments](#tiktok-video-comments-1)
   - [Tiktok User Posts](#tiktok-user-posts)
   - [Tiktok User Liked Videos](#tiktok-user-liked-videos)
+  - [Tiktok Collection](#tiktok-collection)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -803,6 +804,62 @@ interface TiktokUserFavoriteVideosResponse {
     }
   }>
   totalPosts?: number
+}
+```
+
+## Tiktok Collection
+
+### Collection Response
+
+```typescript
+interface TiktokCollectionResponse {
+  status: "success" | "error"
+  message?: string
+  result?: {
+    itemList: Array<{
+      id: string
+      desc: string
+      createTime: number
+      author?: {
+        id: string
+        uniqueId: string
+        nickname: string
+        avatarThumb: string
+        avatarMedium: string
+        avatarLarger: string
+        signature: string
+        verified: boolean
+      }
+      statistics?: {
+        playCount: number
+        diggCount: number
+        shareCount: number
+        commentCount: number
+        collectCount: number
+      }
+      video?: {
+        id: string
+        height: number
+        width: number
+        duration: number
+        ratio: string
+        cover: string
+        originCover: string
+        dynamicCover: string
+        playAddr: string
+        downloadAddr: string
+        format: string
+        bitrate: number
+      }
+      textExtra?: Array<{
+        hashtagName: string
+        hashtagId: string
+        type: number
+      }>
+    }>
+    hasMore: boolean
+    cursor: string
+  }
 }
 ```
 
