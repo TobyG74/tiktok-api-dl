@@ -31,27 +31,35 @@ const createProxyAgent = (proxy?: string): ProxyConfig => {
  * @param {string} collectionId - Collection ID
  * @param {string} proxy - Your Proxy (optional)
  * @param {string} cursor - Cursor for pagination (optional)
+ * @param {number} count - Number of items to fetch (optional)
  * @returns {Promise<TiktokCollectionResponse>}
  */
 export const getCollection = async (
   collectionId: string,
   proxy?: string,
-  cursor: string = "0"
+  cursor: string = "0",
+  count: number = 5
 ): Promise<TiktokCollectionResponse> => {
   try {
     const response = await retry(
       async () => {
-        const res = await Axios(_tiktokGetCollection(_getCollectionParams(collectionId, cursor)), {
-          method: "GET",
-          headers: {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
-            "Accept": "*/*",
-            "Accept-Language": "en-US,en;q=0.7",
-            "Referer": "https://www.tiktok.com/",
-            "Origin": "https://www.tiktok.com"
-          },
-          ...createProxyAgent(proxy)
-        })
+        const res = await Axios(
+          _tiktokGetCollection(
+            _getCollectionParams(collectionId, cursor, count)
+          ),
+          {
+            method: "GET",
+            headers: {
+              "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+              Accept: "*/*",
+              "Accept-Language": "en-US,en;q=0.7",
+              Referer: "https://www.tiktok.com/",
+              Origin: "https://www.tiktok.com"
+            },
+            ...createProxyAgent(proxy)
+          }
+        )
 
         if (res.data && res.data.statusCode === 0) {
           return res.data
@@ -78,7 +86,8 @@ export const getCollection = async (
   } catch (error) {
     return {
       status: "error",
-      message: error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
+      message:
+        error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
     }
   }
-} 
+}

@@ -353,9 +353,9 @@ const generateOdinId = () => {
   return `${prefix}${random}`
 }
 
-export const _getCollectionParams = (collectionId: string, cursor: string = "0") => {
+export const _getCollectionParams = (collectionId: string, cursor: string = "0", count: number = 5) => {
   return qs.stringify({
-    WebIdLastTime: 1741246176,
+    WebIdLastTime: Date.now(),
     aid: 1988,
     app_language: "en",
     app_name: "tiktok_web",
@@ -365,13 +365,12 @@ export const _getCollectionParams = (collectionId: string, cursor: string = "0")
     browser_platform: "Win32",
     browser_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
     channel: "tiktok_web",
-    clientABVersions: "70508271,72437276,73356773,73406215,73464037,73558921,73561312,73563784,73607175,73713381,73720541,73737112,73759867,73768252,73787023,73810364,73810951,73811265,73812969,73815488,73815490,73817289,73821742,73849114,73855857,73858886,73858985,73867894,73880997,73902810,70138197,70156809,70405643,71057832,71200802,71381811,71516509,71803300,71962127,72360691,72408100,72854054,72892778,73004916,73171280,73208420,73574728,73628214",
     collectionId,
     cookie_enabled: true,
-    count: 30,
+    count,
     cursor,
     data_collection_enabled: true,
-    device_id: "7478595310673266194",
+    device_id: "7002566096994190854",
     device_platform: "web_pc",
     focus_state: true,
     from_page: "user",
@@ -389,7 +388,7 @@ export const _getCollectionParams = (collectionId: string, cursor: string = "0")
     sourceType: 113,
     tz_name: "Pacific/Auckland",
     user_is_login: true,
-    verifyFp: "verify_mb1zbd2f_sMPZ5W5a_A3yc_4dmk_8NT3_kp4HJQOdrhp5",
+    verifyFp: "verify_lacphy8d_z2ux9idt_xdmu_4gKb_9nng_NNTTTvsFS8ao",
     webcast_language: "en"
   })
 }

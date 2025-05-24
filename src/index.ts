@@ -131,6 +131,7 @@ export = {
    * @param {Object} options - The options for collection
    * @param {string} [options.proxy] - Optional proxy URL
    * @param {string} [options.cursor] - Optional cursor for pagination
+   * @param {number} [options.count] - Optional number of items to fetch
    * @returns {Promise<TiktokCollectionResponse>}
    */
   Collection: async (
@@ -138,6 +139,7 @@ export = {
     options?: {
       proxy?: string
       cursor?: string
+      count?: number
     }
   ): Promise<TiktokCollectionResponse> => {
     const collectionId = extractCollectionId(collectionIdOrUrl)
@@ -147,7 +149,7 @@ export = {
         message: "Invalid collection ID or URL format"
       }
     }
-    return await getCollection(collectionId, options?.proxy, options?.cursor)
+    return await getCollection(collectionId, options?.proxy, options?.cursor, options?.count)
   },
 
   /**

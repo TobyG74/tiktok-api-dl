@@ -404,12 +404,19 @@ program
   )
   .option("-c, --cursor <cursor>", "Cursor for pagination", "0")
   .option("-p, --proxy <proxy>", "Proxy URL (http/https/socks)")
+  .option(
+    "-n, --count <number>",
+    "Number of items to fetch",
+    (val) => parseInt(val),
+    5
+  )
   .action(async (collectionIdOrUrl, options) => {
     try {
-      Logger.info(`Fetching collection...`)
+      Logger.info(`Fetching collection... (count: ${options.count})`)
       const results = await Tiktok.Collection(collectionIdOrUrl, {
         cursor: options.cursor,
-        proxy: options.proxy
+        proxy: options.proxy,
+        count: options.count
       })
 
       if (results.status === "success" && results.result) {
