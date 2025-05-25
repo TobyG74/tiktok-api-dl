@@ -402,8 +402,8 @@ program
     "<collectionIdOrUrl>",
     "Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)"
   )
-  .option("-c, --cursor <cursor>", "Cursor for pagination", "0")
-  .option("-p, --proxy <proxy>", "Proxy URL (http/https/socks)")
+  .option("-p, --page <number>", "Page number", "1")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
   .option(
     "-n, --count <number>",
     "Number of items to fetch",
@@ -412,19 +412,18 @@ program
   )
   .action(async (collectionIdOrUrl, options) => {
     try {
-      Logger.info(`Fetching collection... (count: ${options.count})`)
+      Logger.info(`Fetching page ${options.page} with ${options.count} items per page from collection...`)
       const results = await Tiktok.Collection(collectionIdOrUrl, {
-        cursor: options.cursor,
+        page: options.page,
         proxy: options.proxy,
         count: options.count
       })
 
       if (results.status === "success" && results.result) {
-        const { itemList, hasMore, cursor } = results.result
+        const { itemList, hasMore } = results.result
 
         Logger.info(`Found ${itemList.length} videos in collection`)
         Logger.info(`Has more videos: ${hasMore}`)
-        Logger.info(`Next cursor: ${cursor}\n`)
 
         for (const [index, video] of itemList.entries()) {
           Logger.info(`---- VIDEO ${index + 1} ----`)
@@ -461,9 +460,8 @@ program
 
           if (video.video) {
             Logger.info(`---- VIDEO URLs ----`)
-            const videoUrl = `${_tiktokurl}/@${
-              video.author?.uniqueId || "unknown"
-            }/video/${video.id}`
+            const videoUrl = `${_tiktokurl}/@${video.author?.uniqueId || "unknown"
+              }/video/${video.id}`
             Logger.result(`Video URL: ${videoUrl}`, chalk.blue)
           }
 
@@ -479,7 +477,7 @@ program
 
         if (hasMore) {
           Logger.info("\nTo fetch more videos, use:")
-          Logger.info(`tiktokdl collection ${collectionIdOrUrl} -c ${cursor}`)
+          Logger.info(`tiktokdl collection ${collectionIdOrUrl} -p ${parseInt(options.page) + 1}`)
         }
       } else {
         Logger.error(`Error: ${results.message}`)

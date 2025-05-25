@@ -1,6 +1,6 @@
 import Axios from "axios"
 import asyncRetry from "async-retry"
-import { _tiktokvFeed, _tiktokurl } from "../../constants/api"
+import { _tiktokvFeed, _tiktokurl, _tiktokGetCollection } from "../../constants/api"
 import { _tiktokApiParams, _getCollectionParams } from "../../constants/params"
 import {
   AuthorTiktokAPI,
@@ -282,8 +282,9 @@ export const TiktokAPI = async (
 export const Collection = async (
   collectionIdOrUrl: string,
   options?: {
-    cursor?: string
-    proxy?: string
+    page?: number,
+    proxy?: string,
+    count?: number
   }
 ): Promise<TiktokCollectionResponse> => {
   try {
@@ -296,55 +297,31 @@ export const Collection = async (
     }
 
     const response = await Axios(
-      _tiktokvFeed(_getCollectionParams(collectionId, options?.cursor)),
+      _tiktokGetCollection(
+        _getCollectionParams(collectionId, options.page, options.count)
+      ),
       {
-        method: "OPTIONS",
-        headers: { "User-Agent": USER_AGENT },
+        method: "GET",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+          Accept: "*/*",
+          "Accept-Language": "en-US,en;q=0.7",
+          Referer: "https://www.tiktok.com/",
+          Origin: "https://www.tiktok.com"
+        },
         ...createProxyAgent(options?.proxy)
       }
     )
 
     if (response.data && response.data.status_code === 0) {
       const data = response.data
-      const itemList = data.aweme_list.map((item: any) => ({
-        id: item.aweme_id,
-        desc: item.desc,
-        createTime: item.create_time,
-        author: {
-          uid: item.author.uid,
-          username: item.author.unique_id,
-          uniqueId: item.author.unique_id,
-          nickname: item.author.nickname,
-          signature: item.author.signature,
-          region: item.author.region,
-          avatarThumb: item.author?.avatar_thumb?.url_list || [],
-          avatarMedium: item.author?.avatar_medium?.url_list || [],
-          url: `${_tiktokurl}/@${item.author.unique_id}`
-        },
-        statistics: {
-          likeCount: item.statistics.digg_count,
-          commentCount: item.statistics.comment_count,
-          shareCount: item.statistics.share_count,
-          playCount: item.statistics.play_count
-        },
-        video: {
-          ratio: item.video.ratio,
-          duration: item.video.duration,
-          playAddr: item.video?.play_addr?.url_list || [],
-          downloadAddr: item.video?.download_addr?.url_list || [],
-          cover: item.video?.cover?.url_list || [],
-          dynamicCover: item.video?.dynamic_cover?.url_list || [],
-          originCover: item.video?.origin_cover?.url_list || []
-        },
-        textExtra: item.text_extra || []
-      }))
 
       return {
         status: "success",
         result: {
-          itemList,
-          hasMore: data.has_more,
-          cursor: data.cursor
+          itemList: data.itemList || [],
+          hasMore: data.hasMore
         }
       }
     }

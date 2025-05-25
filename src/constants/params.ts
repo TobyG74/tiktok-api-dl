@@ -353,7 +353,12 @@ const generateOdinId = () => {
   return `${prefix}${random}`
 }
 
-export const _getCollectionParams = (collectionId: string, cursor: string = "0", count: number = 5) => {
+export const _getCollectionParams = (collectionId: string, page: number = 1, count: number = 5) => {
+  let cursor = 0
+  if (page > 0) {
+    cursor = (page - 1) * count
+  }
+
   return qs.stringify({
     WebIdLastTime: Date.now(),
     aid: 1988,
@@ -368,7 +373,7 @@ export const _getCollectionParams = (collectionId: string, cursor: string = "0",
     collectionId,
     cookie_enabled: true,
     count,
-    cursor,
+    cursor: cursor.toString(),
     data_collection_enabled: true,
     device_id: "7002566096994190854",
     device_platform: "web_pc",

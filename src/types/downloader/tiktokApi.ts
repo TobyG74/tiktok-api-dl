@@ -49,6 +49,5 @@ export type TiktokCollectionResponse = {
       }>
     }>
     hasMore: boolean
-    cursor: string
   }
 }

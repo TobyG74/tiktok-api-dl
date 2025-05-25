@@ -130,7 +130,7 @@ export = {
    * @param {string} collectionIdOrUrl - Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)
    * @param {Object} options - The options for collection
    * @param {string} [options.proxy] - Optional proxy URL
-   * @param {string} [options.cursor] - Optional cursor for pagination
+   * @param {string} [options.page] - Optional page for pagination
    * @param {number} [options.count] - Optional number of items to fetch
    * @returns {Promise<TiktokCollectionResponse>}
    */
@@ -138,7 +138,7 @@ export = {
     collectionIdOrUrl: string,
     options?: {
       proxy?: string
-      cursor?: string
+      page?: number
       count?: number
     }
   ): Promise<TiktokCollectionResponse> => {
@@ -149,7 +149,7 @@ export = {
         message: "Invalid collection ID or URL format"
       }
     }
-    return await getCollection(collectionId, options?.proxy, options?.cursor, options?.count)
+    return await getCollection(collectionId, options?.proxy, options?.page, options?.count)
   },
 
   /**

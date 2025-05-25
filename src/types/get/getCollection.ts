@@ -43,7 +43,6 @@ export interface TiktokCollectionResponse {
   status: "success" | "error"
   message?: string
   result?: {
-    cursor: string
     hasMore: boolean
     itemList: CollectionItem[]
     extra?: {

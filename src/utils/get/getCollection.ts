@@ -30,14 +30,14 @@ const createProxyAgent = (proxy?: string): ProxyConfig => {
  * Get TikTok Collection
  * @param {string} collectionId - Collection ID
  * @param {string} proxy - Your Proxy (optional)
- * @param {string} cursor - Cursor for pagination (optional)
+ * @param {string} page - Page for pagination (optional)
  * @param {number} count - Number of items to fetch (optional)
  * @returns {Promise<TiktokCollectionResponse>}
  */
 export const getCollection = async (
   collectionId: string,
   proxy?: string,
-  cursor: string = "0",
+  page: number = 1,
   count: number = 5
 ): Promise<TiktokCollectionResponse> => {
   try {
@@ -45,7 +45,7 @@ export const getCollection = async (
       async () => {
         const res = await Axios(
           _tiktokGetCollection(
-            _getCollectionParams(collectionId, cursor, count)
+            _getCollectionParams(collectionId, page, count)
           ),
           {
             method: "GET",
@@ -77,9 +77,8 @@ export const getCollection = async (
     return {
       status: "success",
       result: {
-        cursor: response.cursor,
         hasMore: response.hasMore,
-        itemList: response.itemList,
+        itemList: response.itemList || [],
         extra: response.extra
       }
     }
