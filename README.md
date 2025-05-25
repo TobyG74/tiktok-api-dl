@@ -271,7 +271,7 @@ const Tiktok = require("@tobyg74/tiktok-api-dl")
 // Using collection ID
 const collectionId = "7507916135931218695"
 Tiktok.Collection(collectionId, {
-  cursor: "0", // optional, default is "0"
+  page: 1, // optional, default is 1
   count: 5, // optional, default is 5
   proxy: "YOUR_PROXY" // optional
 }).then((result) => console.log(result))
@@ -279,7 +279,7 @@ Tiktok.Collection(collectionId, {
 // Using collection URL
 const collectionUrl = "https://www.tiktok.com/@username/collection/name-id"
 Tiktok.Collection(collectionUrl, {
-  cursor: "0",
+  page: 1,
   count: 5,
   proxy: "YOUR_PROXY"
 }).then((result) => console.log(result))
@@ -294,11 +294,11 @@ tiktokdl collection 7507916135931218695 -n 5
 # Using collection URL
 tiktokdl collection "https://www.tiktok.com/@username/collection/name-id" -n 5
 
-# With cursor for pagination
-tiktokdl collection 7507916135931218695 -c 5 -n 5
+# With page for pagination
+tiktokdl collection 7507916135931218695 -p 1 -n 5
 
 # With proxy
-tiktokdl collection 7507916135931218695 -n 5 -p "http://your-proxy-url"
+tiktokdl collection 7507916135931218695 -n 5 -proxy "http://your-proxy-url"
 ```
 
 ### Response Type
@@ -350,7 +350,6 @@ interface TiktokCollectionResponse {
       }>
     }>
     hasMore: boolean
-    cursor: string
   }
 }
 ```
