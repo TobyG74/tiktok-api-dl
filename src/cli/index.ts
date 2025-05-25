@@ -392,4 +392,99 @@ program
     }
   })
 
+// Collection Command
+program
+  .command("collection")
+  .description(
+    "Get videos from a TikTok collection (supports collection ID or URL)"
+  )
+  .argument(
+    "<collectionIdOrUrl>",
+    "Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)"
+  )
+  .option("-p, --page <number>", "Page number", "1")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .option(
+    "-n, --count <number>",
+    "Number of items to fetch",
+    (val) => parseInt(val),
+    5
+  )
+  .action(async (collectionIdOrUrl, options) => {
+    try {
+      Logger.info(`Fetching page ${options.page} with ${options.count} items per page from collection...`)
+      const results = await Tiktok.Collection(collectionIdOrUrl, {
+        page: options.page,
+        proxy: options.proxy,
+        count: options.count
+      })
+
+      if (results.status === "success" && results.result) {
+        const { itemList, hasMore } = results.result
+
+        Logger.info(`Found ${itemList.length} videos in collection`)
+        Logger.info(`Has more videos: ${hasMore}`)
+
+        for (const [index, video] of itemList.entries()) {
+          Logger.info(`---- VIDEO ${index + 1} ----`)
+          Logger.result(`Video ID: ${video.id}`, chalk.green)
+          Logger.result(`Description: ${video.desc}`, chalk.yellow)
+          Logger.result(
+            `Author: ${video.author?.nickname || "Unknown"}`,
+            chalk.yellow
+          )
+          Logger.result(
+            `Created: ${new Date(video.createTime * 1000).toLocaleString()}`,
+            chalk.yellow
+          )
+
+          if (video.statistics) {
+            Logger.info(`---- STATISTICS ----`)
+            Logger.result(
+              `Likes: ${video.statistics.likeCount || 0}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Comments: ${video.statistics.commentCount || 0}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Shares: ${video.statistics.shareCount || 0}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Plays: ${video.statistics.playCount || 0}`,
+              chalk.yellow
+            )
+          }
+
+          if (video.video) {
+            Logger.info(`---- VIDEO URLs ----`)
+            const videoUrl = `${_tiktokurl}/@${video.author?.uniqueId || "unknown"
+              }/video/${video.id}`
+            Logger.result(`Video URL: ${videoUrl}`, chalk.blue)
+          }
+
+          if (video.textExtra?.length > 0) {
+            Logger.info(`---- HASHTAGS ----`)
+            video.textExtra.forEach((tag) => {
+              if (tag.hashtagName) {
+                Logger.result(`#${tag.hashtagName}`, chalk.cyan)
+              }
+            })
+          }
+        }
+
+        if (hasMore) {
+          Logger.info("\nTo fetch more videos, use:")
+          Logger.info(`tiktokdl collection ${collectionIdOrUrl} -p ${parseInt(options.page) + 1}`)
+        }
+      } else {
+        Logger.error(`Error: ${results.message}`)
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
 program.parse()

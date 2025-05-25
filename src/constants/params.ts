@@ -353,4 +353,49 @@ const generateOdinId = () => {
   return `${prefix}${random}`
 }
 
+export const _getCollectionParams = (collectionId: string, page: number = 1, count: number = 5) => {
+  let cursor = 0
+  if (page > 0) {
+    cursor = (page - 1) * count
+  }
+
+  return qs.stringify({
+    WebIdLastTime: Date.now(),
+    aid: 1988,
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Win32",
+    browser_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    channel: "tiktok_web",
+    collectionId,
+    cookie_enabled: true,
+    count,
+    cursor: cursor.toString(),
+    data_collection_enabled: true,
+    device_id: "7002566096994190854",
+    device_platform: "web_pc",
+    focus_state: true,
+    from_page: "user",
+    history_len: 3,
+    is_fullscreen: false,
+    is_page_visible: true,
+    language: "en",
+    odinId: "7458943931621032978",
+    os: "windows",
+    priority_region: "NZ",
+    referer: "",
+    region: "NZ",
+    screen_height: 1440,
+    screen_width: 2560,
+    sourceType: 113,
+    tz_name: "Pacific/Auckland",
+    user_is_login: true,
+    verifyFp: "verify_lacphy8d_z2ux9idt_xdmu_4gKb_9nng_NNTTTvsFS8ao",
+    webcast_language: "en"
+  })
+}
+
 export { randomChar, generateSearchId, generateDeviceId, generateOdinId }

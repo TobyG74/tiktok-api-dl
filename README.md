@@ -56,6 +56,7 @@
   - [Tiktok Video Comments](#tiktok-video-comments-1)
   - [Tiktok User Posts](#tiktok-user-posts)
   - [Tiktok User Liked Videos](#tiktok-user-liked-videos)
+  - [Tiktok Collection](#tiktok-collection)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -259,6 +260,99 @@ Tiktok.GetUserLiked(username, {
 ```
 
 - [Tiktok User Liked Videos Response](#tiktok-user-liked-videos)
+
+## Tiktok Collection
+
+Get videos from a TikTok collection (supports collection ID or URL)
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+// Using collection ID
+const collectionId = "7507916135931218695"
+Tiktok.Collection(collectionId, {
+  page: 1, // optional, default is 1
+  count: 5, // optional, default is 5
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+
+// Using collection URL
+const collectionUrl = "https://www.tiktok.com/@username/collection/name-id"
+Tiktok.Collection(collectionUrl, {
+  page: 1,
+  count: 5,
+  proxy: "YOUR_PROXY"
+}).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Using collection ID
+tiktokdl collection 7507916135931218695 -n 5
+
+# Using collection URL
+tiktokdl collection "https://www.tiktok.com/@username/collection/name-id" -n 5
+
+# With page for pagination
+tiktokdl collection 7507916135931218695 -p 1 -n 5
+
+# With proxy
+tiktokdl collection 7507916135931218695 -n 5 -proxy "http://your-proxy-url"
+```
+
+### Response Type
+
+```typescript
+interface TiktokCollectionResponse {
+  status: "success" | "error"
+  message?: string
+  result?: {
+    itemList: Array<{
+      id: string
+      desc: string
+      createTime: number
+      author?: {
+        id: string
+        uniqueId: string
+        nickname: string
+        avatarThumb: string
+        avatarMedium: string
+        avatarLarger: string
+        signature: string
+        verified: boolean
+      }
+      statistics?: {
+        playCount: number
+        diggCount: number
+        shareCount: number
+        commentCount: number
+        collectCount: number
+      }
+      video?: {
+        id: string
+        height: number
+        width: number
+        duration: number
+        ratio: string
+        cover: string
+        originCover: string
+        dynamicCover: string
+        playAddr: string
+        downloadAddr: string
+        format: string
+        bitrate: number
+      }
+      textExtra?: Array<{
+        hashtagName: string
+        hashtagId: string
+        type: number
+      }>
+    }>
+    hasMore: boolean
+  }
+}
+```
 
 # API Response Types
 
@@ -709,6 +803,62 @@ interface TiktokUserFavoriteVideosResponse {
     }
   }>
   totalPosts?: number
+}
+```
+
+## Tiktok Collection
+
+### Collection Response
+
+```typescript
+interface TiktokCollectionResponse {
+  status: "success" | "error"
+  message?: string
+  result?: {
+    itemList: Array<{
+      id: string
+      desc: string
+      createTime: number
+      author?: {
+        id: string
+        uniqueId: string
+        nickname: string
+        avatarThumb: string
+        avatarMedium: string
+        avatarLarger: string
+        signature: string
+        verified: boolean
+      }
+      statistics?: {
+        playCount: number
+        diggCount: number
+        shareCount: number
+        commentCount: number
+        collectCount: number
+      }
+      video?: {
+        id: string
+        height: number
+        width: number
+        duration: number
+        ratio: string
+        cover: string
+        originCover: string
+        dynamicCover: string
+        playAddr: string
+        downloadAddr: string
+        format: string
+        bitrate: number
+      }
+      textExtra?: Array<{
+        hashtagName: string
+        hashtagId: string
+        type: number
+      }>
+    }>
+    hasMore: boolean
+    cursor: string
+  }
 }
 ```
 

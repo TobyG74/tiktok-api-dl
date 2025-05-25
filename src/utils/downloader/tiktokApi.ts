@@ -1,14 +1,15 @@
 import Axios from "axios"
 import asyncRetry from "async-retry"
-import { _tiktokvFeed, _tiktokurl } from "../../constants/api"
-import { _tiktokApiParams } from "../../constants/params"
+import { _tiktokvFeed, _tiktokurl, _tiktokGetCollection } from "../../constants/api"
+import { _tiktokApiParams, _getCollectionParams } from "../../constants/params"
 import {
   AuthorTiktokAPI,
   TiktokAPIResponse,
   StatisticsTiktokAPI,
   MusicTiktokAPI,
   ResponseParserTiktokAPI,
-  VideoTiktokAPI
+  VideoTiktokAPI,
+  TiktokCollectionResponse
 } from "../../types/downloader/tiktokApi"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
@@ -19,6 +20,7 @@ const TIKTOK_URL_REGEX =
   /https:\/\/(?:m|www|vm|vt|lite)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video|photo)\/|\?shareId=|\&item_id=)(\d+))|\w+)/
 const USER_AGENT =
   "com.zhiliaoapp.musically/300904 (2018111632; U; Android 10; en_US; Pixel 4; Build/QQ3A.200805.001; Cronet/58.0.2991.0)"
+const COLLECTION_URL_REGEX = /collection\/[^/]+-(\d+)/
 
 /** Types */
 interface ProxyConfig {
@@ -61,6 +63,7 @@ const parseStatistics = (content: any): StatisticsTiktokAPI => ({
 const parseAuthor = (content: any): AuthorTiktokAPI => ({
   uid: content.author.uid,
   username: content.author.unique_id,
+  uniqueId: content.author.unique_id,
   nickname: content.author.nickname,
   signature: content.author.signature,
   region: content.author.region,
@@ -194,6 +197,37 @@ const createVideoResponse = (
   }
 })
 
+const handleRedirect = async (url: string, proxy?: string): Promise<string> => {
+  try {
+    const response = await Axios(url, {
+      method: 'HEAD',
+      maxRedirects: 5,
+      validateStatus: (status) => status >= 200 && status < 400,
+      ...createProxyAgent(proxy)
+    })
+
+    // Get the final URL after all redirects
+    const finalUrl = response.request.res.responseUrl
+
+    // Remove query parameters
+    return finalUrl.split('?')[0]
+  } catch (error) {
+    console.error('Error handling redirect:', error)
+    return url
+  }
+}
+
+export const extractCollectionId = (input: string): string | null => {
+  // If it's already just a number, return it
+  if (/^\d+$/.test(input)) {
+    return input
+  }
+
+  // Try to extract from URL
+  const match = input.match(COLLECTION_URL_REGEX)
+  return match ? match[1] : null
+}
+
 /**
  * Tiktok API Downloader
  * @param {string} url - Tiktok URL
@@ -261,6 +295,70 @@ export const TiktokAPI = async (
       status: "error",
       message:
         error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
+    }
+  }
+}
+
+export const Collection = async (
+  collectionIdOrUrl: string,
+  options?: {
+    page?: number,
+    proxy?: string,
+    count?: number
+  }
+): Promise<TiktokCollectionResponse> => {
+  try {
+    // Only handle redirects if the input is a URL
+    const processedUrl = collectionIdOrUrl.startsWith('http') 
+      ? await handleRedirect(collectionIdOrUrl, options?.proxy)
+      : collectionIdOrUrl
+    
+    const collectionId = extractCollectionId(processedUrl)
+    if (!collectionId) {
+      return {
+        status: "error",
+        message: "Invalid collection ID or URL format"
+      }
+    }
+
+    const response = await Axios(
+      _tiktokGetCollection(
+        _getCollectionParams(collectionId, options.page, options.count)
+      ),
+      {
+        method: "GET",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+          Accept: "*/*",
+          "Accept-Language": "en-US,en;q=0.7",
+          Referer: "https://www.tiktok.com/",
+          Origin: "https://www.tiktok.com"
+        },
+        ...createProxyAgent(options?.proxy)
+      }
+    )
+
+    if (response.data && response.data.status_code === 0) {
+      const data = response.data
+
+      return {
+        status: "success",
+        result: {
+          itemList: data.itemList || [],
+          hasMore: data.hasMore
+        }
+      }
+    }
+
+    return {
+      status: "error",
+      message: ERROR_MESSAGES.NETWORK_ERROR
+    }
+  } catch (error) {
+    return {
+      status: "error",
+      message: error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
     }
   }
 }
