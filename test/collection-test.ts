@@ -3,11 +3,13 @@ import { Collection } from "../src/utils/downloader/tiktokApi"
 async function testCollection() {
   try {
     // You can use either a collection ID or URL
-    const collectionIdOrUrl = "https://www.tiktok.com/@getrex.co.nz/collection/big%20back-7507916135931218695"
+    const collectionId = "7507916135931218695"
+    const collectionUrl = "https://www.tiktok.com/@getrex.co.nz/collection/big%20back-7507916135931218695"
+    const collectionShareableLink = "https://vt.tiktok.com/ZShvmqNjQ/"
 
     console.log("Testing Collection method...")
-    const result = await Collection(collectionIdOrUrl, {
-      page: 2,
+    const result = await Collection(collectionId, {
+      page: 1,
       count: 5, // Optional: Number of items to fetch
       proxy: undefined // Optional: Add your proxy if needed
     })
@@ -17,7 +19,6 @@ async function testCollection() {
       console.log("========================")
       console.log("Collection Overview:")
       console.log("========================")
-      console.log(`Collection ID: ${collectionIdOrUrl}`)
       console.log(`Total items fetched: ${result.result.itemList.length}`)
       console.log(`Has more items: ${result.result.hasMore}`)
 
@@ -29,7 +30,7 @@ async function testCollection() {
         console.log(`Description: ${item.desc}`)
         console.log(`Author: ${item.author.nickname}`)
         console.log(`Created: ${new Date(item.createTime * 1000).toLocaleString()}`)
-        
+
         // Log video URL
         if (item.video?.playAddr?.[0]) {
           console.log(`Video URL: ${item.video.playAddr[0]}`)

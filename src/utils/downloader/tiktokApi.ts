@@ -197,6 +197,26 @@ const createVideoResponse = (
   }
 })
 
+const handleRedirect = async (url: string, proxy?: string): Promise<string> => {
+  try {
+    const response = await Axios(url, {
+      method: 'HEAD',
+      maxRedirects: 5,
+      validateStatus: (status) => status >= 200 && status < 400,
+      ...createProxyAgent(proxy)
+    })
+
+    // Get the final URL after all redirects
+    const finalUrl = response.request.res.responseUrl
+
+    // Remove query parameters
+    return finalUrl.split('?')[0]
+  } catch (error) {
+    console.error('Error handling redirect:', error)
+    return url
+  }
+}
+
 export const extractCollectionId = (input: string): string | null => {
   // If it's already just a number, return it
   if (/^\d+$/.test(input)) {
@@ -288,7 +308,12 @@ export const Collection = async (
   }
 ): Promise<TiktokCollectionResponse> => {
   try {
-    const collectionId = extractCollectionId(collectionIdOrUrl)
+    // Only handle redirects if the input is a URL
+    const processedUrl = collectionIdOrUrl.startsWith('http') 
+      ? await handleRedirect(collectionIdOrUrl, options?.proxy)
+      : collectionIdOrUrl
+    
+    const collectionId = extractCollectionId(processedUrl)
     if (!collectionId) {
       return {
         status: "error",
