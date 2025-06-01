@@ -48,7 +48,6 @@ async function handleMediaDownload(
 
   const { result } = data
   const author = result.author
-  console.log(result)
   const username = version === "v1" ? author.username : author?.nickname || ""
 
   Logger.success(
