@@ -1,16 +1,30 @@
 import {
-  StatisticsTiktokAPI,
+  AuthorTiktokAPI,
   MusicTiktokAPI,
   VideoTiktokAPI
 } from "../downloader/tiktokApi"
-import { PlaylistAuthor } from "./getPlaylist"
 
-export interface CollectionItem {
+export interface PlaylistAuthor
+  extends Omit<AuthorTiktokAPI, "username" | "uid"> {
+  avatarLarger: string
+  nickname: string
+  id: string
+}
+
+interface Statistics {
+  collectCount: number
+  commentCount: number
+  diggCount: number
+  playCount: number
+  shareCount: number
+}
+
+export interface PlaylistItem {
   id: string
   desc: string
   createTime: number
   author: PlaylistAuthor
-  statistics: StatisticsTiktokAPI
+  stats: Statistics
   video: VideoTiktokAPI
   music: MusicTiktokAPI
   challenges: Array<{
@@ -44,12 +58,12 @@ export interface CollectionItem {
   }>
 }
 
-export interface TiktokCollectionResponse {
+export interface TiktokPlaylistResponse {
   status: "success" | "error"
   message?: string
   result?: {
     hasMore: boolean
-    itemList: CollectionItem[]
+    itemList: PlaylistItem[]
     extra?: {
       fatal_item_ids: string[]
       logid: string
