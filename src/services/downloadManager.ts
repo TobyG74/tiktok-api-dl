@@ -61,7 +61,7 @@ async function handleMediaDownload(
     case "video": {
       const videoUrl =
         version === "v1"
-          ? result.video.downloadAddr[0]
+          ? result.video.playAddr[0]
           : version === "v2"
           ? result.video.playAddr[0]
           : result.videoHD

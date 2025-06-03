@@ -5,6 +5,7 @@ import { userAgent, webUserAgent } from "../constants/headers"
 import qs from "qs"
 import fs from "fs"
 import { createCipheriv } from "crypto"
+import path from "path"
 
 export class TiktokService {
   /**
@@ -82,6 +83,7 @@ export class TiktokService {
     const baseUrl = `${TiktokService.BASE_URL}api/search/user/full/?`
     const queryParams = _userSearchParams(username, page)
     const xbogusParams = xbogus(`${baseUrl}${queryParams}`, userAgent)
+    console.log(`${baseUrl}${_userSearchParams(username, page, xbogusParams)}`)
 
     return `${baseUrl}${_userSearchParams(username, page, xbogusParams)}`
   }
@@ -102,11 +104,18 @@ export class TiktokService {
     }
   }
 
+  private static readonly FILE_PATH = path.join(__dirname, "../../helper")
   private static readonly BASE_URL = "https://www.tiktok.com/"
   private static readonly AES_KEY = "webapp1.0+202106"
   private static readonly AES_IV = "webapp1.0+202106"
-  private signaturejs = fs.readFileSync("./helper/signature.js", "utf-8")
-  private webmssdk = fs.readFileSync("./helper/webmssdk.js", "utf-8")
+  private signaturejs = fs.readFileSync(
+    path.join(TiktokService.FILE_PATH, "signature.js"),
+    "utf-8"
+  )
+  private webmssdk = fs.readFileSync(
+    path.join(TiktokService.FILE_PATH, "webmssdk.js"),
+    "utf-8"
+  )
   private resourceLoader = new ResourceLoader({
     userAgent:
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35"
