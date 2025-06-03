@@ -3,7 +3,6 @@ import { _tiktokSearchVideoFull } from "../../constants/api"
 import { _liveSearchParams, _videoSearchParams } from "../../constants/params"
 import { SocksProxyAgent } from "socks-proxy-agent"
 import { HttpsProxyAgent } from "https-proxy-agent"
-import { TiktokService } from "../../services/tiktokService"
 import retry from "async-retry"
 import {
   TiktokVideoSearchResponse,
