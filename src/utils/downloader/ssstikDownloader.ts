@@ -7,7 +7,7 @@ import {
   StatisticsSSSTik,
   SSSTikFetchTT,
   SSSTikResponse
-} from "../../types/downloader/ssstik"
+} from "../../types/downloader/ssstikDownloader"
 import { _ssstikapi, _ssstikurl } from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"

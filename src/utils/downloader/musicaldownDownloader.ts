@@ -3,7 +3,7 @@ import { load } from "cheerio"
 import {
   MusicalDownResponse,
   GetMusicalDownReuqest
-} from "../../types/downloader/musicaldown"
+} from "../../types/downloader/musicaldownDownloader"
 import { _musicaldownapi, _musicaldownurl } from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"

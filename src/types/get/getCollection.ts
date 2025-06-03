@@ -2,7 +2,7 @@ import {
   StatisticsTiktokAPI,
   MusicTiktokAPI,
   VideoTiktokAPI
-} from "../downloader/tiktokApi"
+} from "../downloader/tiktokApiDownloader"
 import { PlaylistAuthor } from "./getPlaylist"
 
 export interface CollectionItem {

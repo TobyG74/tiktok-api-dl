@@ -2,7 +2,7 @@ import {
   AuthorTiktokAPI,
   MusicTiktokAPI,
   VideoTiktokAPI
-} from "../downloader/tiktokApi"
+} from "../downloader/tiktokApiDownloader"
 
 export interface PlaylistAuthor
   extends Omit<AuthorTiktokAPI, "username" | "uid"> {
