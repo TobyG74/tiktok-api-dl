@@ -371,3 +371,27 @@
 ### Changed
 
 - Update Documentation [4260ea6](https://github.com/TobyG74/tiktok-api-dl/commit/4260ea653ee50569f898cc0653cb35e4557992a9)
+
+### Version 1.3.2 - 03-06-2025
+
+### Added
+
+- Add Tiktok Collection [5bd743a](https://github.com/TobyG74/tiktok-api-dl/pull/42/commits/5bd743a888cfafe932f083a2f887dbdd98e99d0c)
+- Add Tiktok Collection Documentation [a37640e](https://github.com/TobyG74/tiktok-api-dl/pull/42/commits/a37640e332a43827bca8599881c931097d07256e)
+- Add Tiktok Collection Types [baa8fa2](https://github.com/TobyG74/tiktok-api-dl/pull/42/commits/baa8fa2cc8d1bcc7aabc7fdef5a93677fed10be5)
+- Add Tiktok Playlist [2fa9e6f](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/2fa9e6fef414c2825cf3072655998e1322210062)
+- Add Tiktok Playlist Documentation [d0b1f2c](https://github.com/TobyG74/tiktok-api-dl/commit/db1686fc9b0480402db7bd6bd0c41f899ff56668)
+- Add a New CLI Downloader for Tiktok Collection & Playlist [ae53775](https://github.com/TobyG74/tiktok-api-dl/commit/ae537757d8fa274e52060f445d4822c617f9ac93)
+- Add Some Test Files [4f7cd9f](https://github.com/TobyG74/tiktok-api-dl/commit/4f7cd9f083d1798c18a0cad823b2e9b224893f14)
+
+### Fixed
+
+- Repair Musicaldown Broken Logics [732c0d4](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/732c0d4c146d7ed743b5902fbd392717e2df5692)
+- Fix Downloader Types [1ad6d8b](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/1ad6d8baea7c2ac45ffc6cccd089ce193d17f491)
+- Fix Handle Downloader Function [a56bc8c](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/a56bc8c9d9bedd42305c92a7bb15edb3ecad390a)
+- Fix Duplicate Types [9d53637](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/9d53637ac267568fc0f2d3c4556dd2367b4cbf19)
+
+### Changed
+
+- Moving the Function to the Function Owner's File [c83e329](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/c83e329f27bd744dd2274604e15e10ec2264e083)
+- Removing Cookie Options on Tiktok Stalk User [c7af8d5](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/c7af8d53a99fbbf1bda453a9ee1293bfb7ac6cf4)
