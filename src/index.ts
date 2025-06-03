@@ -1,7 +1,7 @@
 /** Types */
-import { TiktokAPIResponse } from "./types/downloader/tiktokApi"
-import { SSSTikResponse } from "./types/downloader/ssstik"
-import { MusicalDownResponse } from "./types/downloader/musicaldown"
+import { TiktokAPIResponse } from "./types/downloader/tiktokApiDownloader"
+import { SSSTikResponse } from "./types/downloader/ssstikDownloader"
+import { MusicalDownResponse } from "./types/downloader/musicaldownDownloader"
 import { UserSearchResult } from "./types/search/userSearch"
 import { LiveSearchResult } from "./types/search/liveSearch"
 import { VideoSearchResult } from "./types/search/videoSearch"
@@ -12,9 +12,9 @@ import { TiktokUserFavoriteVideosResponse } from "./types/get/getUserLiked"
 import { TiktokCollectionResponse } from "./types/get/getCollection"
 
 /** Services */
-import { extractPlaylistId, TiktokAPI } from "./utils/downloader/tiktokApi"
-import { SSSTik } from "./utils/downloader/ssstik"
-import { MusicalDown } from "./utils/downloader/musicalDown"
+import { TiktokAPI } from "./utils/downloader/tiktokAPIDownloader"
+import { SSSTik } from "./utils/downloader/ssstikDownloader"
+import { MusicalDown } from "./utils/downloader/musicaldownDownloader"
 import { StalkUser } from "./utils/get/getProfile"
 import { SearchUser } from "./utils/search/userSearch"
 import { SearchLive } from "./utils/search/liveSearch"
@@ -23,7 +23,6 @@ import { getUserPosts } from "./utils/get/getUserPosts"
 import { getUserLiked } from "./utils/get/getUserLiked"
 import { SearchVideo } from "./utils/search/videoSearch"
 import { getCollection } from "./utils/get/getCollection"
-import { extractCollectionId } from "./utils/downloader/tiktokApi"
 
 /** Constants */
 import { DOWNLOADER_VERSIONS, SEARCH_TYPES } from "./constants"
@@ -31,6 +30,8 @@ import { ERROR_MESSAGES } from "./constants"
 import { validateCookie } from "./utils/validator"
 import { TiktokPlaylistResponse } from "./types/get/getPlaylist"
 import { getPlaylist } from "./utils/get/getPlaylist"
+import { extractPlaylistId } from "./utils/get/getPlaylist"
+import { extractCollectionId } from "./utils/get/getCollection"
 
 /** Types */
 type DownloaderVersion = "v1" | "v2" | "v3"
@@ -82,7 +83,7 @@ export = {
   Downloader: async <T extends DownloaderVersion>(
     url: string,
     options?: {
-      version: DownloaderVersion
+      version: T
       proxy?: string
       showOriginalResponse?: boolean
     }
@@ -119,38 +120,6 @@ export = {
   },
 
   /**
-   * Get TikTok Collection
-   * @param {string} collectionIdOrUrl - Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)
-   * @param {Object} options - The options for collection
-   * @param {string} [options.proxy] - Optional proxy URL
-   * @param {string} [options.page] - Optional page for pagination
-   * @param {number} [options.count] - Optional number of items to fetch
-   * @returns {Promise<TiktokCollectionResponse>}
-   */
-  Collection: async (
-    collectionIdOrUrl: string,
-    options?: {
-      proxy?: string
-      page?: number
-      count?: number
-    }
-  ): Promise<TiktokCollectionResponse> => {
-    const collectionId = extractCollectionId(collectionIdOrUrl)
-    if (!collectionId) {
-      return {
-        status: "error",
-        message: "Invalid collection ID or URL format"
-      }
-    }
-    return await getCollection(
-      collectionId,
-      options?.proxy,
-      options?.page,
-      options?.count
-    )
-  },
-
-  /**
    * Tiktok Search
    * @param {string} keyword - The query you want to search
    * @param {Object} options - The options for search
@@ -164,7 +133,7 @@ export = {
     keyword: string,
     options?: {
       type?: T
-      cookie?: string
+      cookie: string | any[]
       page?: number
       proxy?: string
     }
@@ -240,11 +209,10 @@ export = {
   StalkUser: async (
     username: string,
     options?: {
-      cookie?: string | any[]
       proxy?: string
     }
   ): Promise<TiktokStalkUserResponse> => {
-    return await StalkUser(username, options?.cookie, options?.proxy)
+    return await StalkUser(username, options?.proxy)
   },
 
   /**
@@ -315,8 +283,40 @@ export = {
   },
 
   /**
+   * Get TikTok Collection
+   * @param {string} collectionIdOrUrl - Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)
+   * @param {Object} options - The options for collection
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @param {string} [options.page] - Optional page for pagination
+   * @param {number} [options.count] - Optional number of items to fetch
+   * @returns {Promise<TiktokCollectionResponse>}
+   */
+  Collection: async (
+    collectionIdOrUrl: string,
+    options?: {
+      proxy?: string
+      page?: number
+      count?: number
+    }
+  ): Promise<TiktokCollectionResponse> => {
+    const collectionId = extractCollectionId(collectionIdOrUrl)
+    if (!collectionId) {
+      return {
+        status: "error",
+        message: "Invalid collection ID or URL format"
+      }
+    }
+    return await getCollection(
+      collectionId,
+      options?.proxy,
+      options?.page,
+      options?.count
+    )
+  },
+
+  /**
    * Get TikTok Playlist
-   * @param {string} url - URL (e.g. https://www.tiktok.com/@username/playlist/name-id)
+   * @param {string} playlistIdOrUrl - Playlist ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/playlist/name-id)
    * @param {Object} options - The options for playlist
    * @param {string} [options.proxy] - Optional proxy URL
    * @param {string} [options.page] - Optional page for pagination
@@ -324,14 +324,14 @@ export = {
    * @returns {Promise<TiktokPlaylistResponse>}
    */
   Playlist: async (
-    url: string,
+    playlistIdOrUrl: string,
     options?: {
       proxy?: string
       page?: number
       count?: number
     }
   ): Promise<TiktokPlaylistResponse> => {
-    const playlistId = extractPlaylistId(url)
+    const playlistId = extractPlaylistId(playlistIdOrUrl)
     if (!playlistId) {
       return {
         status: "error",
