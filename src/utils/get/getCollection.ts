@@ -6,6 +6,10 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 import { TiktokCollectionResponse } from "../../types/get/getCollection"
 import { ERROR_MESSAGES } from "../../constants"
 import retry from "async-retry"
+import { handleRedirect } from "../downloader/tiktokAPIDownloader"
+
+/** Constants */
+const COLLECTION_URL_REGEX = /collection\/[^/]+-(\d+)/
 
 /** Types */
 interface ProxyConfig {
@@ -44,9 +48,7 @@ export const getCollection = async (
     const response = await retry(
       async () => {
         const res = await Axios(
-          _tiktokGetCollection(
-            _getCollectionParams(collectionId, page, count)
-          ),
+          _tiktokGetCollection(_getCollectionParams(collectionId, page, count)),
           {
             method: "GET",
             headers: {
@@ -89,4 +91,80 @@ export const getCollection = async (
         error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
     }
   }
+}
+
+export const Collection = async (
+  collectionIdOrUrl: string,
+  options?: {
+    page?: number
+    proxy?: string
+    count?: number
+  }
+): Promise<TiktokCollectionResponse> => {
+  try {
+    // Only handle redirects if the input is a URL
+    const processedUrl = collectionIdOrUrl.startsWith("http")
+      ? await handleRedirect(collectionIdOrUrl, options?.proxy)
+      : collectionIdOrUrl
+
+    const collectionId = extractCollectionId(processedUrl)
+    if (!collectionId) {
+      return {
+        status: "error",
+        message: "Invalid collection ID or URL format"
+      }
+    }
+
+    const response = await Axios(
+      _tiktokGetCollection(
+        _getCollectionParams(collectionId, options.page, options.count)
+      ),
+      {
+        method: "GET",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+          Accept: "*/*",
+          "Accept-Language": "en-US,en;q=0.7",
+          Referer: "https://www.tiktok.com/",
+          Origin: "https://www.tiktok.com"
+        },
+        ...createProxyAgent(options?.proxy)
+      }
+    )
+
+    if (response.data && response.data.status_code === 0) {
+      const data = response.data
+
+      return {
+        status: "success",
+        result: {
+          itemList: data.itemList || [],
+          hasMore: data.hasMore
+        }
+      }
+    }
+
+    return {
+      status: "error",
+      message: ERROR_MESSAGES.NETWORK_ERROR
+    }
+  } catch (error) {
+    return {
+      status: "error",
+      message:
+        error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
+    }
+  }
+}
+
+export const extractCollectionId = (input: string): string | null => {
+  // If it's already just a number, return it
+  if (/^\d+$/.test(input)) {
+    return input
+  }
+
+  // Try to extract from URL
+  const match = input.match(COLLECTION_URL_REGEX)
+  return match ? match[1] : null
 }

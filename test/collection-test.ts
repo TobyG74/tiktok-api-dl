@@ -1,14 +1,15 @@
-import { Collection } from "../src/utils/downloader/tiktokApi"
+import Tiktok from "../src/index"
 
 async function testCollection() {
   try {
     // You can use either a collection ID or URL
     const collectionId = "7507916135931218695"
-    const collectionUrl = "https://www.tiktok.com/@getrex.co.nz/collection/big%20back-7507916135931218695"
+    const collectionUrl =
+      "https://www.tiktok.com/@getrex.co.nz/collection/big%20back-7507916135931218695"
     const collectionShareableLink = "https://vt.tiktok.com/ZShvmqNjQ/"
 
     console.log("Testing Collection method...")
-    const result = await Collection(collectionId, {
+    const result = await Tiktok.Collection(collectionId, {
       page: 1,
       count: 5, // Optional: Number of items to fetch
       proxy: undefined // Optional: Add your proxy if needed
@@ -29,7 +30,9 @@ async function testCollection() {
         console.log(`ID: ${item.id}`)
         console.log(`Description: ${item.desc}`)
         console.log(`Author: ${item.author.nickname}`)
-        console.log(`Created: ${new Date(item.createTime * 1000).toLocaleString()}`)
+        console.log(
+          `Created: ${new Date(item.createTime * 1000).toLocaleString()}`
+        )
 
         // Log video URL
         if (item.video?.playAddr?.[0]) {
@@ -50,7 +53,7 @@ async function testCollection() {
         // Log hashtags if available
         if (item.textExtra?.length > 0) {
           console.log("\nHashtags:")
-          item.textExtra.forEach(tag => {
+          item.textExtra.forEach((tag) => {
             if (tag.hashtagName) {
               console.log(`- #${tag.hashtagName}`)
             }
@@ -67,4 +70,4 @@ async function testCollection() {
 }
 
 // Run the test
-testCollection() 
+testCollection()

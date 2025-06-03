@@ -46,6 +46,8 @@
   - [Tiktok Video User Comments](#tiktok-video-comments)
   - [Tiktok Get User Posts](#tiktok-get-user-posts)
   - [Tiktok Get User Favorite Videos](#tiktok-get-user-favorite-videos)
+  - [Tiktok Collection](#tiktok-collection)
+  - [Tiktok Playlist](#tiktok-playlist)
 - [API Response Types](#api-response-types)
   - [Tiktok Downloader](#tiktok-downloader-1)
     - [Version 1 Response](#version-1-response)
@@ -182,6 +184,22 @@ Tiktok.Downloader(url, {
 }).then((result) => console.log(result))
 ```
 
+### CLI Usage
+
+```bash
+# Download Tiktok Video
+tiktokdl download "https://vt.tiktok.com/xxxxxxxx"
+
+# Download Tiktok Video with version
+tiktokdl download "https://vt.tiktok.com/xxxxxxxx" -v v1
+
+# Download Tiktok Video with Custom Output Directory Path
+tiktokdl download "https://vt.tiktok.com/xxxxxxxx" -v v1 -o "/path/to/save/video.mp4"
+
+# Download Tiktok Video with Proxy
+tiktokdl download "https://vt.tiktok.com/xxxxxxxx" -v v1 -proxy "http://your-proxy-url"
+```
+
 - [Version 1 Response](#version-1-response)
 - [Version 2 Response](#version-2-response)
 - [Version 3 Response](#version-3-response)
@@ -192,15 +210,47 @@ Tiktok.Downloader(url, {
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 Tiktok.Search("username", {
-  type: "user", // "user" | "live"
+  type: "user", // "user" | "live" | "video"
   page: 1,
   cookie: "YOUR_COOKIE", // needed
   proxy: "YOUR_PROXY" // optional
 }).then((result) => console.log(result))
 ```
 
+### CLI Usage
+
+```bash
+# Search Tiktok Users
+tiktokdl search user <username>
+
+# Search Tiktok Users with pagination
+tiktokdl search user <username> -p 1
+
+# Search Tiktok Users with proxy
+tiktokdl search user <username> -p 1 -proxy "http://your-proxy-url"
+
+# Search Tiktok Live Streams
+tiktokdl search live <username>
+
+# Search Tiktok Live Streams with pagination
+tiktokdl search live <username> -p 1
+
+# Search Tiktok Live Streams with proxy
+tiktokdl search live <username> -p 1 -proxy "http://your-proxy-url"
+
+# Search Tiktok Videos
+tiktokdl search video <query>
+
+# Search Tiktok Videos with pagination
+tiktokdl search video <query> -p 1
+
+# Search Tiktok Videos with proxy
+tiktokdl search video <query> -p 1 -proxy "http://your-proxy-url"
+```
+
 - [User Search Response](#user-search-response)
 - [Live Search Response](live-search-response)
+- [Video Search Response](#video-search-response)
 
 ## Tiktok Stalk User Profile
 
@@ -208,10 +258,19 @@ Tiktok.Search("username", {
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const username = "Tobz2k19"
-Tiktok.Stalker(username, {
-  cookie: "YOUR_COOKIE", // optional, if response null
+Tiktok.StalkUser(username, {
   proxy: "YOUR_PROXY" // optional
 }).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Stalk User Profile
+tiktokdl stalk <username>
+
+# Stalk User Profile with proxy
+tiktokdl stalk <username> -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok Stalk User Response](#tiktok-stalk-user-profile-1)
@@ -228,6 +287,19 @@ Tiktok.GetVideoComments(url, {
 }).then((result) => console.log(result))
 ```
 
+### CLI Usage
+
+```bash
+# Get Video Comments
+tiktokdl getvideocomments "https://vt.tiktok.com/xxxxxxxx"
+
+# Get Video Comments with limit of comments
+tiktokdl getvideocomments "https://vt.tiktok.com/xxxxxxxx" -l 10
+
+# Get Video Comments with proxy
+tiktokdl getvideocomments "https://vt.tiktok.com/xxxxxxxx" -l 10 -proxy "http://your-proxy-url"
+```
+
 - [Tiktok Video Comments Response](#tiktok-video-comments-1)
 
 ## Tiktok Get User Posts
@@ -240,6 +312,19 @@ Tiktok.GetUserPosts(username, {
   postLimit: 10, // optional, default is 30
   proxy: "YOUR_PROXY" // optional
 }).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Get User Posts
+tiktokdl getuserposts <username>
+
+# Get User Posts with limit of posts
+tiktokdl getuserposts <username> -l 10
+
+# Get User Posts with proxy
+tiktokdl getuserposts <username> -l 10 -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok User Posts Response](#tiktok-user-posts)
@@ -257,6 +342,19 @@ Tiktok.GetUserLiked(username, {
   cookie: "YOUR_COOKIE", // needed
   proxy: "YOUR_PROXY" // optional
 })
+```
+
+### CLI Usage
+
+```bash
+# Get User Liked Videos
+tiktokdl getuserliked <username>
+
+# Get User Liked Videos with limit of posts
+tiktokdl getuserliked <username> -l 10
+
+# Get User Liked Videos with proxy
+tiktokdl getuserliked <username> -l 10 -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok User Liked Videos Response](#tiktok-user-liked-videos)
@@ -301,58 +399,40 @@ tiktokdl collection 7507916135931218695 -p 1 -n 5
 tiktokdl collection 7507916135931218695 -n 5 -proxy "http://your-proxy-url"
 ```
 
-### Response Type
+- [Tiktok Collection Response](#tiktok-collection-1)
 
-```typescript
-interface TiktokCollectionResponse {
-  status: "success" | "error"
-  message?: string
-  result?: {
-    itemList: Array<{
-      id: string
-      desc: string
-      createTime: number
-      author?: {
-        id: string
-        uniqueId: string
-        nickname: string
-        avatarThumb: string
-        avatarMedium: string
-        avatarLarger: string
-        signature: string
-        verified: boolean
-      }
-      statistics?: {
-        playCount: number
-        diggCount: number
-        shareCount: number
-        commentCount: number
-        collectCount: number
-      }
-      video?: {
-        id: string
-        height: number
-        width: number
-        duration: number
-        ratio: string
-        cover: string
-        originCover: string
-        dynamicCover: string
-        playAddr: string
-        downloadAddr: string
-        format: string
-        bitrate: number
-      }
-      textExtra?: Array<{
-        hashtagName: string
-        hashtagId: string
-        type: number
-      }>
-    }>
-    hasMore: boolean
-  }
-}
+## Tiktok Playlist
+
+Get videos from a TikTok playlist (supports playlist ID or URL)
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const playlistIdOrUrl = "https://www.tiktok.com/@username/playlist/name-id"
+Tiktok.Playlist(playlistIdOrUrl, {
+  page: 1,
+  count: 5,
+  proxy: "YOUR_PROXY"
+}).then((result) => console.log(result))
 ```
+
+### CLI Usage
+
+```bash
+# Using playlist ID
+tiktokdl playlist 7507916135931218695 -n 5
+
+# Using playlist URL
+tiktokdl playlist "https://www.tiktok.com/@username/playlist/name-id" -n 5
+
+# With page for pagination
+tiktokdl playlist 7507916135931218695 -p 1 -n 5
+
+# With proxy
+tiktokdl playlist 7507916135931218695 -n 5 -proxy "http://your-proxy-url"
+```
+
+- [Tiktok Playlist Response](#tiktok-playlist-1)
 
 # API Response Types
 
@@ -446,8 +526,12 @@ interface SSSTikResponse {
       shareCount: string
     }
     images?: string[]
-    video?: string
-    music?: string
+    video?: {
+      playAddr: string
+    }
+    music?: {
+      playUrl: string
+    }
     direct?: string
   }
 }
@@ -858,6 +942,61 @@ interface TiktokCollectionResponse {
     }>
     hasMore: boolean
     cursor: string
+  }
+}
+```
+
+## Tiktok Playlist
+
+### Playlist Response
+
+```typescript
+status: "success" | "error"
+message?: string
+result?: {
+  hasMore: boolean
+  itemList: Array<{
+    id: string
+    desc: string
+    createTime: number
+    author: PlaylistAuthor
+    stats: Statistics
+    video: VideoTiktokAPI
+    music: MusicTiktokAPI
+    challenges: Array<{
+      id: string
+      title: string
+      desc: string
+      coverLarger: string
+      coverMedium: string
+      coverThumb: string
+      profileLarger: string
+      profileMedium: string
+      profileThumb: string
+    }>
+    collected: boolean
+    digged: boolean
+    duetDisplay: number
+    forFriend: boolean
+    officalItem: boolean
+    originalItem: boolean
+    privateItem: boolean
+    shareEnabled: boolean
+    stitchDisplay: number
+    textExtra: Array<{
+      awemeId: string
+      end: number
+      hashtagName: string
+      isCommerce: boolean
+      start: number
+      subType: number
+      type: number
+    }>
+  }>
+  extra?: {
+    fatal_item_ids: string[]
+    logid: string
+    now: number
   }
 }
 ```
