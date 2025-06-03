@@ -23,7 +23,6 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 
 export const StalkUser = (
   username: string,
-  cookie?: string | any[],
   proxy?: string
 ): Promise<TiktokStalkUserResponse> =>
   new Promise(async (resolve) => {
@@ -31,10 +30,6 @@ export const StalkUser = (
     Axios(`${_tiktokurl}/@${username}`, {
       method: "GET",
       headers: {
-        cookie:
-          typeof cookie === "object"
-            ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ")
-            : cookie,
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
       },

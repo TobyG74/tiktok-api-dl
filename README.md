@@ -258,7 +258,7 @@ tiktokdl search video <query> -p 1 -proxy "http://your-proxy-url"
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
 const username = "Tobz2k19"
-Tiktok.Stalker(username, {
+Tiktok.StalkUser(username, {
   proxy: "YOUR_PROXY" // optional
 }).then((result) => console.log(result))
 ```
