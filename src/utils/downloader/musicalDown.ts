@@ -1,19 +1,14 @@
 import Axios from "axios"
 import { load } from "cheerio"
-type CheerioAPI = ReturnType<typeof load>
 import {
   MusicalDownResponse,
-  GetMusicalDownMusic,
   GetMusicalDownReuqest
 } from "../../types/downloader/musicaldown"
-import {
-  _musicaldownapi,
-  _musicaldownmusicapi,
-  _musicaldownurl
-} from "../../constants/api"
+import { _musicaldownapi, _musicaldownurl } from "../../constants/api"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
 import { ERROR_MESSAGES } from "../../constants"
+type CheerioAPI = ReturnType<typeof load>
 
 /** Constants */
 const TIKTOK_URL_REGEX =
@@ -59,10 +54,10 @@ const isValidUrl = (url: string): boolean => {
   }
 }
 
-const extractRequestForm = ($: CheerioAPI): RequestForm => {
+const extractRequestForm = ($: CheerioAPI, url: string): RequestForm => {
   const input = $("div > input").map((_, el) => $(el))
   return {
-    [input.get(0).attr("name") || ""]: input.get(0).attr("value") || "",
+    [input.get(0).attr("name") || ""]: input.get(0).attr("value") || url,
     [input.get(1).attr("name") || ""]: input.get(1).attr("value") || "",
     [input.get(2).attr("name") || ""]: input.get(2).attr("value") || ""
   }
@@ -170,7 +165,7 @@ const getRequest = async (
     }
 
     const $ = load(data)
-    const request = extractRequestForm($)
+    const request = extractRequestForm($, url)
 
     return {
       status: "success",

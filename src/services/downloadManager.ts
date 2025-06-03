@@ -48,7 +48,7 @@ async function handleMediaDownload(
 
   const { result } = data
   const author = result.author
-  const username = version === "v1" ? author.username : author.nickname
+  const username = version === "v1" ? author.username : author?.nickname || ""
 
   Logger.success(
     `${
@@ -63,7 +63,7 @@ async function handleMediaDownload(
         version === "v1"
           ? result.video.downloadAddr[0]
           : version === "v2"
-          ? result.video
+          ? result.video.playAddr[0]
           : result.videoHD
       const videoName = `ttdl_${username}_${Date.now()}.mp4`
 

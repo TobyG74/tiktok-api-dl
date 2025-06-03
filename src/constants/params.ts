@@ -353,7 +353,11 @@ const generateOdinId = () => {
   return `${prefix}${random}`
 }
 
-export const _getCollectionParams = (collectionId: string, page: number = 1, count: number = 5) => {
+export const _getCollectionParams = (
+  collectionId: string,
+  page: number = 1,
+  count: number = 5
+) => {
   let cursor = 0
   if (page > 0) {
     cursor = (page - 1) * count
@@ -368,7 +372,8 @@ export const _getCollectionParams = (collectionId: string, page: number = 1, cou
     browser_name: "Mozilla",
     browser_online: true,
     browser_platform: "Win32",
-    browser_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    browser_version:
+      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
     channel: "tiktok_web",
     collectionId,
     cookie_enabled: true,
@@ -391,6 +396,60 @@ export const _getCollectionParams = (collectionId: string, page: number = 1, cou
     screen_height: 1440,
     screen_width: 2560,
     sourceType: 113,
+    tz_name: "Pacific/Auckland",
+    user_is_login: true,
+    verifyFp: "verify_lacphy8d_z2ux9idt_xdmu_4gKb_9nng_NNTTTvsFS8ao",
+    webcast_language: "en"
+  })
+}
+
+export const _getPlaylistParams = (
+  playlistId: string,
+  page: number = 1,
+  /**
+   * @max 20
+   * @default 5
+   */
+  count: number = 5
+) => {
+  count = Math.min(Math.max(1, count), 20)
+
+  let cursor = 0
+  if (page > 0) {
+    cursor = (page - 1) * count
+  }
+
+  return qs.stringify({
+    WebIdLastTime: Date.now(),
+    aid: 1988,
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Linux x86_64",
+    browser_version: "5.0 (X11)",
+    channel: "tiktok_web",
+    cookie_enabled: true,
+    count,
+    cursor: cursor.toString(),
+    data_collection_enabled: true,
+    device_id: generateDeviceId(),
+    device_platform: "web_pc",
+    focus_state: true,
+    from_page: "user",
+    history_len: 1,
+    is_fullscreen: false,
+    is_page_visible: true,
+    language: "en",
+    mixId: playlistId,
+    odinId: generateOdinId(),
+    os: "linux",
+    priority_region: "NZ",
+    referer: "",
+    region: "NZ",
+    screen_height: 1440,
+    screen_width: 2560,
     tz_name: "Pacific/Auckland",
     user_is_login: true,
     verifyFp: "verify_lacphy8d_z2ux9idt_xdmu_4gKb_9nng_NNTTTvsFS8ao",

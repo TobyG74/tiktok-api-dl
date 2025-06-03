@@ -2,18 +2,9 @@
 import { TiktokAPIResponse } from "./types/downloader/tiktokApi"
 import { SSSTikResponse } from "./types/downloader/ssstik"
 import { MusicalDownResponse } from "./types/downloader/musicaldown"
-import {
-  TiktokUserSearchResponse,
-  UserSearchResult
-} from "./types/search/userSearch"
-import {
-  TiktokLiveSearchResponse,
-  LiveSearchResult
-} from "./types/search/liveSearch"
-import {
-  TiktokVideoSearchResponse,
-  VideoSearchResult
-} from "./types/search/videoSearch"
+import { UserSearchResult } from "./types/search/userSearch"
+import { LiveSearchResult } from "./types/search/liveSearch"
+import { VideoSearchResult } from "./types/search/videoSearch"
 import { TiktokStalkUserResponse } from "./types/get/getProfile"
 import { TiktokVideoCommentsResponse } from "./types/get/getComments"
 import { TiktokUserPostsResponse } from "./types/get/getUserPosts"
@@ -21,7 +12,7 @@ import { TiktokUserFavoriteVideosResponse } from "./types/get/getUserLiked"
 import { TiktokCollectionResponse } from "./types/get/getCollection"
 
 /** Services */
-import { TiktokAPI } from "./utils/downloader/tiktokApi"
+import { extractPlaylistId, TiktokAPI } from "./utils/downloader/tiktokApi"
 import { SSSTik } from "./utils/downloader/ssstik"
 import { MusicalDown } from "./utils/downloader/musicalDown"
 import { StalkUser } from "./utils/get/getProfile"
@@ -38,6 +29,8 @@ import { extractCollectionId } from "./utils/downloader/tiktokApi"
 import { DOWNLOADER_VERSIONS, SEARCH_TYPES } from "./constants"
 import { ERROR_MESSAGES } from "./constants"
 import { validateCookie } from "./utils/validator"
+import { TiktokPlaylistResponse } from "./types/get/getPlaylist"
+import { getPlaylist } from "./utils/get/getPlaylist"
 
 /** Types */
 type DownloaderVersion = "v1" | "v2" | "v3"
@@ -149,7 +142,12 @@ export = {
         message: "Invalid collection ID or URL format"
       }
     }
-    return await getCollection(collectionId, options?.proxy, options?.page, options?.count)
+    return await getCollection(
+      collectionId,
+      options?.proxy,
+      options?.page,
+      options?.count
+    )
   },
 
   /**
@@ -313,6 +311,38 @@ export = {
       options.cookie,
       options?.proxy,
       options?.postLimit
+    )
+  },
+
+  /**
+   * Get TikTok Playlist
+   * @param {string} url - URL (e.g. https://www.tiktok.com/@username/playlist/name-id)
+   * @param {Object} options - The options for playlist
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @param {string} [options.page] - Optional page for pagination
+   * @param {number} [options.count] - Optional number of items to fetch(max: 20)
+   * @returns {Promise<TiktokPlaylistResponse>}
+   */
+  Playlist: async (
+    url: string,
+    options?: {
+      proxy?: string
+      page?: number
+      count?: number
+    }
+  ): Promise<TiktokPlaylistResponse> => {
+    const playlistId = extractPlaylistId(url)
+    if (!playlistId) {
+      return {
+        status: "error",
+        message: "Invalid playlist ID or URL format"
+      }
+    }
+    return await getPlaylist(
+      playlistId,
+      options?.proxy,
+      options?.page,
+      options?.count
     )
   }
 }
