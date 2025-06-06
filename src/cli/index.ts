@@ -11,6 +11,17 @@ import {
 } from "../services/downloadManager"
 import { _tiktokurl } from "../constants/api"
 
+const TIKTOK_URL_REGEX = {
+  playlist:
+    /https:\/\/(?:www|m)\.tiktok\.com\/@[\w.-]+\/playlist\/[\w-]+-(\d+)/,
+  collection:
+    /https:\/\/(?:www|m)\.tiktok\.com\/@[\w.-]+\/collection\/[\w-]+-(\d+)/,
+  video: /https:\/\/(?:www|m)\.tiktok\.com\/@[\w.-]+\/video\/(\d+)/,
+  photo: /https:\/\/(?:www|m)\.tiktok\.com\/@[\w.-]+\/photo\/(\d+)/,
+  shortLink: /https:\/\/(vm|vt|lite)\.tiktok\.com\/[\w\d]+\/?/,
+  music: /https:\/\/(?:www|m)\.tiktok\.com\/music\/[\w%-]+-(\d+)/
+}
+
 const cookieManager = new CookieManager()
 
 program
@@ -20,30 +31,117 @@ program
 
 program
   .command("download")
-  .description("Download TikTok Video / Slide / Music")
-  .argument("<url>", "TikTok Video / Slide / Music URL")
+  .description("Download TikTok Video / Slide / Music / Playlist / Collection")
+  .argument(
+    "<urls...>",
+    "TikTok URLs (Video / Slide / Music / Playlist / Collection)"
+  )
   .option("-o, --output <path>", "Output directory path")
   .option("-v, --version <version>", "Downloader version (v1/v2/v3)", "v1")
   .option("-p, --proxy <proxy>", "Proxy URL (http/https/socks)")
-  .action(async (url, options) => {
-    try {
-      const outputPath = options.output || getDefaultDownloadPath()
-      const version = options.version.toLowerCase()
-
-      if (!["v1", "v2", "v3"].includes(version)) {
-        throw new Error("Invalid version. Use v1, v2 or v3")
+  .option(
+    "-c, --count <number>",
+    "Number of items to fetch for playlist/collection (default: 20)",
+    (val) => parseInt(val),
+    20
+  )
+  .action(async (urls, options) => {
+    const outputPath = options.output || getDefaultDownloadPath()
+    const version = options.version.toLowerCase()
+    const count = options.count || 20
+    if (!Array.isArray(urls)) urls = [urls]
+    for (const url of urls) {
+      try {
+        if (!["v1", "v2", "v3"].includes(version)) {
+          throw new Error("Invalid version. Use v1, v2 or v3")
+        }
+        if (TIKTOK_URL_REGEX.playlist.test(url)) {
+          Logger.info(`Fetching playlist items from: ${url}`)
+          const match = url.match(TIKTOK_URL_REGEX.playlist)
+          const results = await Tiktok.Playlist(match[1], {
+            page: 1,
+            proxy: options.proxy,
+            count: count
+          })
+          if (results.status === "success" && results.result) {
+            const { itemList } = results.result
+            Logger.info(
+              `Found ${itemList.length} items in playlist. Starting download...`
+            )
+            for (const [index, item] of itemList.entries()) {
+              Logger.info(
+                `Downloading [${index + 1}/${itemList.length}]: ${item.id}`
+              )
+              const videoUrl = `https://www.tiktok.com/@${
+                item.author?.uniqueId || "unknown"
+              }/video/${item.id}`
+              try {
+                const data = await Tiktok.Downloader(videoUrl, {
+                  version: version,
+                  proxy: options.proxy
+                })
+                await handleMediaDownload(data, outputPath, version)
+                Logger.success(`Downloaded: ${videoUrl}`)
+              } catch (err) {
+                Logger.error(`Failed to download ${videoUrl}: ${err.message}`)
+              }
+            }
+            Logger.info("All downloads finished.")
+          } else {
+            Logger.error(`Error: ${results.message}`)
+          }
+        } else if (TIKTOK_URL_REGEX.collection.test(url)) {
+          Logger.info(`Fetching collection items from: ${url}`)
+          const match = url.match(TIKTOK_URL_REGEX.collection)
+          const results = await Tiktok.Collection(match[1], {
+            page: 1,
+            proxy: options.proxy,
+            count: count
+          })
+          if (results.status === "success" && results.result) {
+            const { itemList } = results.result
+            Logger.info(
+              `Found ${itemList.length} items in collection. Starting download...`
+            )
+            for (const [index, item] of itemList.entries()) {
+              Logger.info(
+                `Downloading [${index + 1}/${itemList.length}]: ${item.id}`
+              )
+              const videoUrl = `https://www.tiktok.com/@${
+                item.author?.uniqueId || "unknown"
+              }/video/${item.id}`
+              try {
+                const data = await Tiktok.Downloader(videoUrl, {
+                  version: version,
+                  proxy: options.proxy
+                })
+                await handleMediaDownload(data, outputPath, version)
+                Logger.success(`Downloaded: ${videoUrl}`)
+              } catch (err) {
+                Logger.error(`Failed to download ${videoUrl}: ${err.message}`)
+              }
+            }
+            Logger.info("All downloads finished.")
+          } else {
+            Logger.error(`Error: ${results.message}`)
+          }
+        } else if (
+          TIKTOK_URL_REGEX.video.test(url) ||
+          TIKTOK_URL_REGEX.shortLink.test(url) ||
+          TIKTOK_URL_REGEX.photo.test(url)
+        ) {
+          Logger.info("Fetching media information...")
+          const data = await Tiktok.Downloader(url, {
+            version: version,
+            proxy: options.proxy
+          })
+          await handleMediaDownload(data, outputPath, version)
+        } else {
+          Logger.error("URL tidak valid atau tidak dikenali: " + url)
+        }
+      } catch (error) {
+        Logger.error(`Error: ${error.message}`)
       }
-
-      Logger.info("Fetching media information...")
-
-      const data = await Tiktok.Downloader(url, {
-        version: version as "v1" | "v2" | "v3",
-        proxy: options.proxy
-      })
-
-      await handleMediaDownload(data, outputPath, version)
-    } catch (error) {
-      Logger.error(`Error: ${error.message}`)
     }
   })
 
@@ -579,124 +677,6 @@ program
             `tiktokdl playlist ${url} -p ${parseInt(options.page) + 1}`
           )
         }
-      } else {
-        Logger.error(`Error: ${results.message}`)
-      }
-    } catch (error) {
-      Logger.error(`Error: ${error.message}`)
-    }
-  })
-
-// Download all items in a TikTok playlist
-program
-  .command("download-playlist")
-  .description("Download all videos from a TikTok playlist")
-  .argument(
-    "<PlaylistIdOrUrl>",
-    "Playlist URL (e.g. https://www.tiktok.com/@username/playlist/name-id)"
-  )
-  .option("-o, --output <path>", "Output directory path")
-  .option("-v, --version <version>", "Downloader version (v1/v2/v3)", "v1")
-  .option("-p, --proxy <proxy>", "Proxy URL (http/https/socks)")
-  .option(
-    "-c, --count <number>",
-    "Number of items to fetch (max: 20)",
-    (val) => parseInt(val),
-    20
-  )
-  .action(async (url, options) => {
-    try {
-      const outputPath = options.output || getDefaultDownloadPath()
-      const version = options.version.toLowerCase()
-      Logger.info(`Fetching playlist items...`)
-      const results = await Tiktok.Playlist(url, {
-        page: 1,
-        proxy: options.proxy,
-        count: options.count
-      })
-      if (results.status === "success" && results.result) {
-        const { itemList } = results.result
-        Logger.info(
-          `Found ${itemList.length} items in playlist. Starting download...`
-        )
-        for (const [index, item] of itemList.entries()) {
-          Logger.info(
-            `Downloading [${index + 1}/${itemList.length}]: ${item.id}`
-          )
-          const videoUrl = `https://www.tiktok.com/@${
-            item.author?.uniqueId || "unknown"
-          }/video/${item.id}`
-          try {
-            const data = await Tiktok.Downloader(videoUrl, {
-              version: version,
-              proxy: options.proxy
-            })
-            await handleMediaDownload(data, outputPath, version)
-            Logger.success(`Downloaded: ${videoUrl}`)
-          } catch (err) {
-            Logger.error(`Failed to download ${videoUrl}: ${err.message}`)
-          }
-        }
-        Logger.info("All downloads finished.")
-      } else {
-        Logger.error(`Error: ${results.message}`)
-      }
-    } catch (error) {
-      Logger.error(`Error: ${error.message}`)
-    }
-  })
-
-// Download all items in a TikTok collection
-program
-  .command("download-collection")
-  .description("Download all videos from a TikTok collection")
-  .argument(
-    "<collectionIdOrUrl>",
-    "Collection ID or URL (e.g. 7507916135931218695 or https://www.tiktok.com/@username/collection/name-id)"
-  )
-  .option("-o, --output <path>", "Output directory path")
-  .option("-v, --version <version>", "Downloader version (v1/v2/v3)", "v1")
-  .option("-p, --proxy <proxy>", "Proxy URL (http/https/socks)")
-  .option(
-    "-n, --count <number>",
-    "Number of items to fetch",
-    (val) => parseInt(val),
-    20
-  )
-  .action(async (collectionIdOrUrl, options) => {
-    try {
-      const outputPath = options.output || getDefaultDownloadPath()
-      const version = options.version.toLowerCase()
-      Logger.info(`Fetching collection items...`)
-      const results = await Tiktok.Collection(collectionIdOrUrl, {
-        page: 1,
-        proxy: options.proxy,
-        count: options.count
-      })
-      if (results.status === "success" && results.result) {
-        const { itemList } = results.result
-        Logger.info(
-          `Found ${itemList.length} items in collection. Starting download...`
-        )
-        for (const [index, item] of itemList.entries()) {
-          Logger.info(
-            `Downloading [${index + 1}/${itemList.length}]: ${item.id}`
-          )
-          const videoUrl = `https://www.tiktok.com/@${
-            item.author?.uniqueId || "unknown"
-          }/video/${item.id}`
-          try {
-            const data = await Tiktok.Downloader(videoUrl, {
-              version: version,
-              proxy: options.proxy
-            })
-            await handleMediaDownload(data, outputPath, version)
-            Logger.success(`Downloaded: ${videoUrl}`)
-          } catch (err) {
-            Logger.error(`Failed to download ${videoUrl}: ${err.message}`)
-          }
-        }
-        Logger.info("All downloads finished.")
       } else {
         Logger.error(`Error: ${results.message}`)
       }

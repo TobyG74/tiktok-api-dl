@@ -35,7 +35,7 @@
 - [Quick Installation](#quick-installation)
 - [Installation Methods](#installation-methods)
   - [Using Installation Script](#using-installation-script)
-  - [Using NPM](#using-cpm)
+  - [Using NPM](#using-npm)
   - [Using Yarn](#using-yarn)
   - [Using Github](#using-github)
 - [Usage Guide](#usage-guide)
@@ -138,7 +138,7 @@ tiktokdl [command] [options]
 git clone https://github.com/TobyG74/tiktok-api-dl.git
 cd tiktok-api-dl
 npm install
-npx ts-code src/cli/index.ts [command] [options]
+npx ts-node src/cli/index.ts [command] [options]
 ```
 
 ### NPM Script
