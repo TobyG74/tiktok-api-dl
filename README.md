@@ -15,13 +15,16 @@
   <a href="https://github.com/TobyG74/tiktok-api-dl/stargazers" title="stargazer">
     <img src="https://img.shields.io/github/stars/TobyG74/tiktok-api-dl.svg?style=for-the-badge">
   </a>
-
 </div>
 <br>
 <div align="center">
   <a href="https://nodei.co/npm/@tobyg74/tiktok-api-dl" title="npm">
     <img src="https://nodei.co/npm/@tobyg74/tiktok-api-dl.png?downloads=true&downloadRank=true&stars=true">
   </a>
+</div>
+<br>
+<div align="center">
+  <a href="https://whatsapp.com/channel/0029VaGQpAOKAwEfkKNh6Z0X" target="_blank"><img src="https://img.shields.io/badge/join our community-%2317ad1e.svg?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Join Our Community"/></a>
 </div>
 
 <br>
@@ -32,13 +35,15 @@
 - [Quick Installation](#quick-installation)
 - [Installation Methods](#installation-methods)
   - [Using Installation Script](#using-installation-script)
-  - [Using NPM](#using-npm)
+  - [Using NPM](#using-cpm)
   - [Using Yarn](#using-yarn)
   - [Using Github](#using-github)
 - [Usage Guide](#usage-guide)
   - [Getting Tiktok Cookie](#getting-tiktok-cookie)
   - [Using CLI](#using-cli)
   - [Building from Source](#building-from-source)
+  - [CLI Usage](#cli-usage)
+  - [Example Cookie Usage](#example-cookie-usage)
 - [Features](#features)
   - [Tiktok Downloader](#tiktok-downloader)
   - [Tiktok Search](#tiktok-search)
@@ -64,11 +69,14 @@
 
 # Description
 
-Note : `This project uses the API from Tiktok. This project is made for educational purposes only. This project is not affiliated with Tiktok. This project is not intended to harm or damage the Tiktok platform.`
+Note : `This project uses the API from Tiktok & Unofficial Tiktok API from Another Website. This project is not affiliated with Tiktok. `
 
 - This project is made to help users to download videos, images / slides and music from Tiktok.
 - This project is also made to help users to view someone's profile from Tiktok.
 - This project is also made to help users to view comments from a video on Tiktok.
+- This project is also made to help users to search for users, live streams and videos on Tiktok.
+- This project is also made to help users to get user's posts and liked videos from Tiktok.
+- This project is made to help users to get videos, images / slides from a Tiktok collection or playlist.
 
 # Quick Installation
 
@@ -130,16 +138,16 @@ tiktokdl [command] [options]
 git clone https://github.com/TobyG74/tiktok-api-dl.git
 cd tiktok-api-dl
 npm install
-npx ts-node src/cli/index.ts [command] [options]
+npx ts-code src/cli/index.ts [command] [options]
 ```
 
 ### NPM Script
 
 ```bash
-npm run cli -- [command] [options]
+npm run cli  [command] [options]
 ```
 
-### Examples
+### CLI Usage
 
 ```bash
 $ tiktokdl -h
@@ -158,6 +166,19 @@ Commands:
   getcomments [options] <url>  Get comments from a Tiktok video
   stalk [options] <username>   Stalk a Tiktok user
   help [command]               display help for command
+```
+
+### Example Cookie Usage
+
+```bash
+# Set Tiktok Cookie to use in commands
+tiktokdl cookie set "YOUR_COOKIE"
+
+# Get Tiktok Cookie
+tiktokdl cookie get
+
+# Delete Tiktok Cookie
+tiktokdl cookie delete
 ```
 
 ## Building from Source
@@ -198,6 +219,18 @@ tiktokdl download "https://vt.tiktok.com/xxxxxxxx" -v v1 -o "/path/to/save/video
 
 # Download Tiktok Video with Proxy
 tiktokdl download "https://vt.tiktok.com/xxxxxxxx" -v v1 -proxy "http://your-proxy-url"
+
+# Download Collection or Playlist
+tiktokdl download "https://www.tiktok.com/@username/collection/name-id"
+tiktokdl download "https://www.tiktok.com/@username/playlist/name-id"
+
+# Download Collection or Playlist with Count
+tiktokdl download "https://www.tiktok.com/@username/collection/name-id" -c 5
+tiktokdl download "https://www.tiktok.com/@username/playlist/name-id" -c 5
+
+# Download Collection or Playlist with Proxy
+tiktokdl download "https://www.tiktok.com/@username/collection/name-id" -c 5 -proxy "http://your-proxy-url"
+tiktokdl download "https://www.tiktok.com/@username/playlist/name-id" -c 5 -proxy "http://your-proxy-url"
 ```
 
 - [Version 1 Response](#version-1-response)
@@ -386,17 +419,26 @@ Tiktok.Collection(collectionUrl, {
 ### CLI Usage
 
 ```bash
+# Using download command with collection URL
+tiktokdl download "https://www.tiktok.com/@username/collection/name-id"
+
+# Using download command with count
+tiktokdl download "https://www.tiktok.com/@username/collection/name-id" -c 5
+
 # Using collection ID
-tiktokdl collection 7507916135931218695 -n 5
+tiktokdl collection 7507916135931218695 -c 5
 
 # Using collection URL
-tiktokdl collection "https://www.tiktok.com/@username/collection/name-id" -n 5
+tiktokdl collection "https://www.tiktok.com/@username/collection/name-id"
+
+# Using collection URL with count
+tiktokdl collection "https://www.tiktok.com/@username/collection/name-id" -c 5
 
 # With page for pagination
-tiktokdl collection 7507916135931218695 -p 1 -n 5
+tiktokdl collection 7507916135931218695 -p 1 -c 5
 
 # With proxy
-tiktokdl collection 7507916135931218695 -n 5 -proxy "http://your-proxy-url"
+tiktokdl collection 7507916135931218695 -c 5 -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok Collection Response](#tiktok-collection-1)
@@ -419,17 +461,23 @@ Tiktok.Playlist(playlistIdOrUrl, {
 ### CLI Usage
 
 ```bash
+# Using download command with playlist URL
+tiktokdl download "https://www.tiktok.com/@username/playlist/name-id"
+
+# Using download command with count
+tiktokdl download "https://www.tiktok.com/@username/playlist/name-id" -c 5
+
 # Using playlist ID
-tiktokdl playlist 7507916135931218695 -n 5
+tiktokdl download 7507916135931218695 -c 5
 
 # Using playlist URL
-tiktokdl playlist "https://www.tiktok.com/@username/playlist/name-id" -n 5
+tiktokdl playlist "https://www.tiktok.com/@username/playlist/name-id" -c 5
 
 # With page for pagination
-tiktokdl playlist 7507916135931218695 -p 1 -n 5
+tiktokdl playlist 7507916135931218695 -p 1 -c 5
 
 # With proxy
-tiktokdl playlist 7507916135931218695 -n 5 -proxy "http://your-proxy-url"
+tiktokdl playlist 7507916135931218695 -c 5 -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok Playlist Response](#tiktok-playlist-1)
