@@ -400,42 +400,49 @@ program
     }
   })
 
-// Get User Favorites Command
+// Get User Reposts Command
 
 program
-  .command("getuserliked")
-  .description("Get user liked videos from a TikTok user")
+  .command("getuserreposts")
+  .description("Get reposts from a TikTok user")
   .argument("<username>", "TikTok username")
-  .option("-l, --limit <number>", "Limit of posts", "5")
+  .option("-l, --limit <number>", "Limit of reposts", "5")
   .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
   .action(async (username, options) => {
     try {
       const postLimit = parseInt(options.limit)
-      const results = await Tiktok.GetUserLiked(username, {
-        cookie: cookieManager.getCookie(),
+      const results = await Tiktok.GetUserReposts(username, {
         postLimit: postLimit,
         proxy: options.proxy
       })
       if (results.status === "success") {
         const data = results.result
-        for (const [index, liked] of data.entries()) {
-          Logger.info(`---- FAVORITE ${index + 1} ----`)
-          Logger.result(`Video ID: ${liked.id}`, chalk.green)
-          Logger.result(`Description: ${liked.desc}`, chalk.yellow)
-          Logger.result(`Author: ${liked.author.nickname}`, chalk.yellow)
-          Logger.result(
-            `Video URL: ${_tiktokurl}/@${liked.author.username}/video/${liked.video.id}`,
-            chalk.yellow
-          )
+        for (const [index, repost] of data.entries()) {
+          Logger.info(`---- REPOST ${index + 1} ----`)
+          Logger.result(`Video ID: ${repost.id}`, chalk.green)
+          Logger.result(`Description: ${repost.desc}`, chalk.yellow)
           Logger.info(`---- STATISTICS ----`)
-          Logger.result(`Likes: ${liked.stats.diggCount}`, chalk.yellow)
-          Logger.result(`Favorites: ${liked.stats.collectCount}`, chalk.yellow)
-          Logger.result(`Views: ${liked.stats.playCount}`, chalk.yellow)
-          Logger.result(`Shares: ${liked.stats.shareCount}`, chalk.yellow)
-          Logger.result(`Comments: ${liked.stats.commentCount}`, chalk.yellow)
-          Logger.result(`Reposts: ${liked.stats.repostCount}`, chalk.yellow)
+          Logger.result(`Shares: ${repost.stats.shareCount}`, chalk.yellow)
+          if (repost.stats.likeCount) {
+            Logger.result(`Likes: ${repost.stats.likeCount}`, chalk.yellow)
+          }
+          if (repost.stats.collectCount) {
+            Logger.result(
+              `Favorites: ${repost.stats.collectCount}`,
+              chalk.yellow
+            )
+          }
+          if (repost.stats.playCount) {
+            Logger.result(`Views: ${repost.stats.playCount}`, chalk.yellow)
+          }
+          if (repost.stats.commentCount) {
+            Logger.result(
+              `Comments: ${repost.stats.commentCount}`,
+              chalk.yellow
+            )
+          }
         }
-        Logger.info(`Total Liked Videos: ${data.length}`)
+        Logger.info(`Total reposts: ${data.length}`)
       } else {
         Logger.error(`Error: ${results.message}`)
       }

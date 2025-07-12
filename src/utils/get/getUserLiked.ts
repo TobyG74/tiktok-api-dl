@@ -66,7 +66,6 @@ const parseUserLiked = async (
 ): Promise<LikedResponse[]> => {
   // Liked Result
   let hasMore = true
-  let cursor = 0
   const favorites: LikedResponse[] = []
   let counter = 0
   while (hasMore) {
@@ -186,7 +185,6 @@ const parseUserLiked = async (
 
     // Update hasMore and cursor for next iteration
     hasMore = result.hasMore
-    cursor = hasMore ? result.cursor : null
     counter++
 
     // Check post limit if specified

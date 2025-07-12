@@ -8,6 +8,7 @@ import { VideoSearchResult } from "./types/search/videoSearch"
 import { TiktokStalkUserResponse } from "./types/get/getProfile"
 import { TiktokVideoCommentsResponse } from "./types/get/getComments"
 import { TiktokUserPostsResponse } from "./types/get/getUserPosts"
+import { TiktokUserRepostsResponse } from "./types/get/getUserReposts"
 import { TiktokUserFavoriteVideosResponse } from "./types/get/getUserLiked"
 import { TiktokCollectionResponse } from "./types/get/getCollection"
 
@@ -20,6 +21,7 @@ import { SearchUser } from "./utils/search/userSearch"
 import { SearchLive } from "./utils/search/liveSearch"
 import { getComments } from "./utils/get/getComments"
 import { getUserPosts } from "./utils/get/getUserPosts"
+import { getUserReposts } from "./utils/get/getUserRepost"
 import { getUserLiked } from "./utils/get/getUserLiked"
 import { SearchVideo } from "./utils/search/videoSearch"
 import { getCollection } from "./utils/get/getCollection"
@@ -236,7 +238,7 @@ export = {
   /**
    * Tiktok Get User Posts
    * @param {string} username - The username you want to get posts from
-   * @param {Object} options - The options for getting posts
+   * @param {Object} [options] - The options for getting posts
    * @param {number} [options.postLimit] - Limit number of posts to fetch
    * @param {string} [options.proxy] - Optional proxy URL
    * @returns {Promise<TiktokUserPostsResponse>}
@@ -279,6 +281,31 @@ export = {
       options.cookie,
       options?.proxy,
       options?.postLimit
+    )
+  },
+
+  /**
+   * Tiktok Get User Reposts
+   * @param {string} username - The username you want to get reposts from
+   * @param {Object} [options] - The options for getting reposts
+   * @param {number} [options.postLimit] - Limit number of reposts to fetch
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @param {boolean} [options.filterDeletedPost] - Whether to filter deleted posts ()
+   * @returns {Promise<TiktokUserRepostsResponse>}
+   */
+  GetUserReposts: async (
+    username: string,
+    options?: {
+      postLimit?: number
+      proxy?: string
+      filterDeletedPost?: boolean
+    }
+  ): Promise<TiktokUserRepostsResponse> => {
+    return await getUserReposts(
+      username,
+      options?.proxy,
+      options?.postLimit,
+      options?.filterDeletedPost
     )
   },
 
