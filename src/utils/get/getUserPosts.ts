@@ -61,18 +61,41 @@ const parseUserPosts = async (
   proxy?: string
 ): Promise<Posts[]> => {
   // Posts Result
+  let page = 1
   let hasMore = true
-  let cursor = 0
+  let responseCursor = 0
   const posts: Posts[] = []
   let counter = 0
 
   const Tiktok = new TiktokService()
-  const xttparams = Tiktok.generateXTTParams(
-    _xttParams(secUid, cursor, postLimit)
-  )
 
   while (hasMore) {
     let result: any | null = null
+    let xttparams = ""
+    let urlCursor = 0
+    let urlCount = 0
+
+    if (page === 1) {
+      urlCount = 0
+      urlCursor = 0
+      xttparams = Tiktok.generateXTTParams(_xttParams(secUid, 0, 35))
+    } else if (page === 2) {
+      urlCount = 35
+      urlCursor = 0
+      xttparams = Tiktok.generateXTTParams(_xttParams(secUid, 0, 30))
+    } else if (page === 3) {
+      urlCount = 30
+      urlCursor = 0
+      xttparams = Tiktok.generateXTTParams(
+        _xttParams(secUid, responseCursor, 16)
+      )
+    } else {
+      urlCount = 16
+      urlCursor = responseCursor
+      xttparams = Tiktok.generateXTTParams(
+        _xttParams(secUid, responseCursor, 16)
+      )
+    }
 
     // Prevent missing response posts
     result = await requestUserPosts(proxy, xttparams)
@@ -149,9 +172,9 @@ const parseUserPosts = async (
       }
     })
 
-    // Update hasMore and cursor for next iteration
     hasMore = result.hasMore
-    cursor = hasMore ? result.cursor : null
+    responseCursor = hasMore ? result.cursor : 0
+    page++
     counter++
 
     // Check post limit if specified
@@ -171,24 +194,23 @@ const requestUserPosts = async (
   return retry(
     async (bail, attempt) => {
       try {
-        const { data } = await Axios.get(
-          `${_tiktokGetPosts(_getUserPostsParams())}`,
-          {
-            headers: {
-              "user-agent":
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
-              "x-tt-params": xttparams
-            },
-            httpsAgent:
-              (proxy &&
-                (proxy.startsWith("http") || proxy.startsWith("https")
-                  ? new HttpsProxyAgent(proxy)
-                  : proxy.startsWith("socks")
-                  ? new SocksProxyAgent(proxy)
-                  : undefined)) ||
-              undefined
-          }
-        )
+        let urlParams = _getUserPostsParams()
+
+        const { data } = await Axios.get(`${_tiktokGetPosts(urlParams)}`, {
+          headers: {
+            "user-agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
+            "x-tt-params": xttparams
+          },
+          httpsAgent:
+            (proxy &&
+              (proxy.startsWith("http") || proxy.startsWith("https")
+                ? new HttpsProxyAgent(proxy)
+                : proxy.startsWith("socks")
+                ? new SocksProxyAgent(proxy)
+                : undefined)) ||
+            undefined
+        })
 
         if (data === "") {
           throw new Error("Empty response")

@@ -1,3 +1,4 @@
+import { count } from "console"
 import qs from "qs"
 
 /** Get Params */
@@ -36,6 +37,48 @@ export const _getUserPostsParams = () => {
     }) +
     "&msToken=7UfjxOYL5mVC8QFOKQRhmLR3pCjoxewuwxtfFIcPweqC05Q6C_qjW-5Ba6_fE5-fkZc0wkLSWaaesA4CZ0LAqRrXSL8b88jGvEjbZPwLIPnHeyQq6VifzyKf5oGCQNw_W4Xq12Q-8KCuyiKGLOw=&X-Bogus=DFSzswVL-XGANHVWS0OnS2XyYJUm"
   )
+}
+
+export const _getUserRepostsParams = (
+  secUid: string,
+  cursor: number,
+  count: number
+) => {
+  return qs.stringify({
+    WebIdLastTime: 1743386313,
+    aid: 1988,
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Win32",
+    browser_version:
+      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    channel: "tiktok_web",
+    clientABVersions: "",
+    ...(count ? { count } : { count: 16 }),
+    coverFormat: 2,
+    ...(cursor ? { cursor } : { cursor: 0 }),
+    data_collection_enabled: true,
+    device_id: "7002566096994190854",
+    device_platform: "web_pc",
+    focus_state: true,
+    from_page: "user",
+    history_len: 12,
+    is_fullscreen: false,
+    is_page_visible: true,
+    language: "en",
+    os: "windows",
+    post_item_list_request_type: 0,
+    priority_region: "ID",
+    region: "ID",
+    screen_height: 1080,
+    screen_width: 1920,
+    secUid,
+    tz_name: "Asia/Jakarta",
+    webcast_language: "en"
+  })
 }
 
 export const _getUserLikedParams = (

@@ -5,7 +5,7 @@ async function testUserPosts() {
   try {
     const username = "Tobz2k19" // Change to a valid TikTok username
     const result = await Tiktok.GetUserPosts(username, {
-      postLimit: 5,
+      postLimit: 30,
       proxy: undefined
     })
     if (result.status === "success" && result.result) {
@@ -14,6 +14,7 @@ async function testUserPosts() {
       console.log("Posts Overview:")
       console.log("========================")
       console.log(`Total posts fetched: ${result.result.length}`)
+
       result.result.forEach((post, index) => {
         console.log(`\nPost ${index + 1}:`)
         console.log("-------------------")
