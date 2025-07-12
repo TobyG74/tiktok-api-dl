@@ -40,6 +40,7 @@
   - [Using Github](#using-github)
 - [Usage Guide](#usage-guide)
   - [Getting Tiktok Cookie](#getting-tiktok-cookie)
+  - [Using the Search Feature](#using-the-search-feature)
   - [Using CLI](#using-cli)
   - [Building from Source](#building-from-source)
   - [CLI Usage](#cli-usage)
@@ -50,6 +51,7 @@
   - [Tiktok Stalk User Profile](#tiktok-stalk-user-profile)
   - [Tiktok Video User Comments](#tiktok-video-comments)
   - [Tiktok Get User Posts](#tiktok-get-user-posts)
+  - [Tiktok Get User Reposts](#tiktok-get-user-reposts)
   - [Tiktok Get User Favorite Videos](#tiktok-get-user-favorite-videos)
   - [Tiktok Collection](#tiktok-collection)
   - [Tiktok Playlist](#tiktok-playlist)
@@ -62,8 +64,10 @@
   - [Tiktok Stalk User Profile](#tiktok-stalk-user-profile-1)
   - [Tiktok Video Comments](#tiktok-video-comments-1)
   - [Tiktok User Posts](#tiktok-user-posts)
-  - [Tiktok User Liked Videos](#tiktok-user-liked-videos)
-  - [Tiktok Collection](#tiktok-collection)
+  - [Tiktok User Reposts](#tiktok-user-reposts)
+  - [Tiktok User Favorite Videos](#tiktok-user-favorite-videos)
+  - [Tiktok Collection](#tiktok-collection-1)
+  - [Tiktok Playlist](#tiktok-playlist-1)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -75,7 +79,7 @@ Note : `This project uses the API from Tiktok & Unofficial Tiktok API from Anoth
 - This project is also made to help users to view someone's profile from Tiktok.
 - This project is also made to help users to view comments from a video on Tiktok.
 - This project is also made to help users to search for users, live streams and videos on Tiktok.
-- This project is also made to help users to get user's posts and liked videos from Tiktok.
+- This project is also made to help users to get user's posts, reposts and liked videos from Tiktok.
 - This project is made to help users to get videos, images / slides from a Tiktok collection or playlist.
 
 # Quick Installation
@@ -123,6 +127,14 @@ npm install github:TobyG74/tiktok-api-dl
 3. Open Cookie-Editor
 4. Copy the cookie and use it in your code: `COOKIE: "YOUR_COOKIE"`
 
+## Using the Search Feature
+
+- To use the search feature, you need to install the `Canvas` library.
+
+```bash
+npm install canvas
+```
+
 ## Using CLI
 
 ### Global Installation
@@ -163,7 +175,9 @@ Commands:
   download [options] <url>     Download Tiktok Video / Slide / Music
   cookie                       Cookie Manager
   search                       Search Tiktok users or live streams
-  getcomments [options] <url>  Get comments from a Tiktok video
+  getvideocomments [options] <url>  Get comments from a Tiktok video
+  getuserposts [options] <username>  Get posts from a Tiktok user
+  getuserreposts [options] <username>  Get reposts from a Tiktok user
   stalk [options] <username>   Stalk a Tiktok user
   help [command]               display help for command
 ```
@@ -362,7 +376,34 @@ tiktokdl getuserposts <username> -l 10 -proxy "http://your-proxy-url"
 
 - [Tiktok User Posts Response](#tiktok-user-posts)
 
-## Tiktok Get User Liked Videos
+## Tiktok Get User Reposts
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const username = "Tobz2k19"
+Tiktok.GetUserReposts(username, {
+  postLimit: 10, // optional, default is 30
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Get User Reposts
+tiktokdl getuserreposts <username>
+
+# Get User Reposts with limit of reposts
+tiktokdl getuserreposts <username> -l 10
+
+# Get User Reposts with proxy
+tiktokdl getuserreposts <username> -l 10 -proxy "http://your-proxy-url"
+```
+
+- [Tiktok User Reposts Response](#tiktok-user-reposts)
+
+## Tiktok Get User Favorite Videos
 
 - Note: To use this feature, you must be logged in with valid TikTok cookies to access user's liked videos
 
@@ -856,9 +897,112 @@ interface TiktokUserPostsResponse {
 }
 ```
 
-## Tiktok User Liked Videos
+## Tiktok User Reposts
 
-### User Liked Videos Response
+### User Reposts Response
+
+```typescript
+interface TiktokUserRepostsResponse {
+  status: "success" | "error"
+  message?: string
+  result?: Array<{
+    id: string
+    desc: string
+    createTime: number
+    digged: boolean
+    duetEnabled?: boolean
+    forFriend: boolean
+    officalItem: boolean
+    originalItem: boolean
+    privateItem: boolean
+    secret: boolean
+    shareEnabled: boolean
+    stitchEnabled?: boolean
+    stats: {
+      shareCount: number
+      collectCount?: number
+      commentCount?: number
+      likeCount?: number
+      playCount?: number
+      repostCount?: number
+    }
+    author: {
+      id: string
+      username: string
+      nickname: string
+      avatarLarger: string
+      avatarThumb: string
+      avatarMedium: string
+      signature: string
+      verified: boolean
+      openFavorite?: boolean
+      privateAccount?: boolean
+      isADVirtual?: boolean
+      isEmbedBanned?: boolean
+    }
+    video?: {
+      id: string
+      duration: number
+      ratio: string
+      cover: string
+      originCover: string
+      dynamicCover: string
+      playAddr: string
+      downloadAddr: string
+      format: string
+      bitrate: number
+    }
+    music: {
+      authorName?: string
+      coverLarge?: string
+      coverMedium?: string
+      coverThumb?: string
+      duration?: number
+      id?: string
+      title?: string
+      playUrl?: string
+      original?: boolean
+      tt2dsp?: any
+    }
+    imagePost?: {
+      title: string
+      images?: Array<{
+        imageURL: {
+          urlList: string[]
+        }
+      }>
+    }
+    AIGCDescription?: string
+    CategoryType?: number
+    collected?: boolean
+    contents?: any[]
+    challenges?: any[]
+    textExtra?: any[]
+    textLanguage?: string
+    textTranslatable?: boolean
+    titleLanguage?: string
+    titleTranslatable?: boolean
+    isAd?: boolean
+    isReviewing?: boolean
+    itemCommentStatus?: number
+    item_control?: {
+      can_repost?: boolean
+      can_share?: boolean
+    }
+    duetDisplay?: number
+    stitchDisplay?: number
+    diversificationId?: number
+    backendSourceEventTracking?: string
+    stickersOnItem?: any[]
+    videoSuggestWordsList?: any
+  }>
+  totalReposts?: number
+}
+```
+
+## Tiktok User Favorite Videos
+
+### User Favorite Videos Response
 
 ```typescript
 interface TiktokUserFavoriteVideosResponse {
