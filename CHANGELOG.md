@@ -1,5 +1,45 @@
 # Changelog
 
+History of changes to the project.
+
+- [Version 1.0.0 - 16-03-2023](#version-100---16-03-2023)
+- [Version 1.0.0a - 25-03-2023](#version-100a---25-03-2023)
+- [Version 1.0.0b - 03-04-2023](#version-100b---03-04-2023)
+- [Version 1.0.0c - 07-04-2023](#version-100c---07-04-2023)
+- [Version 1.0.2 - 08-04-2023](#version-1002---08-04-2023)
+- [Version 1.0.3 - 23-06-2023](#version-1003---23-06-2023)
+- [Version 1.0.5 - 10-09-2023](#version-1005---10-09-2023)
+- [Version 1.0.5a - 21-09-2023](#version-1005a---21-09-2023)
+- [Version 1.0.6 - 07-10-2023](#version-1006---07-10-2023)
+- [Version 1.0.7 - 08-10-2023](#version-1007---08-10-2023)
+- [Version 1.0.9 - 12-10-2023](#version-1009---12-10-2023)
+- [Version 1.0.10 - 14-10-2023](#version-10010---14-10-2023)
+- [Version 1.0.11 - 06-11-2023](#version-10011---06-11-2023)
+- [Version 1.0.13 - 11-11-2023](#version-10013---11-11-2023)
+- [Version 1.0.14 - 28-02-2024](#version-10014---28-02-2024)
+- [Version 1.0.14a - 22-03-2024](#version-10014a---22-03-2024)
+- [Version 1.0.16 - 24-03-2024](#version-10016---24-03-2024)
+- [Version 1.1.0 - 29-03-2024](#version-110---29-03-2024)
+- [Version 1.1.1 - 30-03-2024](#version-111---30-03-2024)
+- [Version 1.1.1a - 06-04-2024](#version-111a---06-04-2024)
+- [Version 1.1.4 - 20-04-2024](#version-114---20-04-2024)
+- [Version 1.1.4a - 30-04-2024](#version-114a---30-04-2024)
+- [Version 1.1.4b - 19-05-2024](#version-114b---19-05-2024)
+- [Version 1.1.6 - 07-07-2024](#version-116---07-07-2024)
+- [Version 1.1.7 - 08-07-2024](#version-117---08-07-2024)
+- [Version 1.1.8 - 09-07-2024](#version-118---09-07-2024)
+- [Version 1.1.9 - 10-07-2024](#version-119---10-07-2024)
+- [Version 1.1.9a - 05-09-2024](#version-119a---05-09-2024)
+- [Version 1.2.0 - 11-10-2024](#version-120---11-10-2024)
+- [Version 1.2.1 - 06-11-2024](#version-121---06-11-2024)
+- [Version 1.2.2 - 07-11-2024](#version-122---07-11-2024)
+- [Version 1.2.3 - 07-02-2025](#version-123---07-02-2025)
+- [Version 1.2.7 - 03-03-2025](#version-127---03-03-2025)
+- [Version 1.3.0 - 05-03-2025](#version-130---05-03-2025)
+- [Version 1.3.1 - 13-05-2025](#version-131---13-05-2025)
+- [Version 1.3.2 - 03-06-2025](#version-132---03-06-2025)
+- [Version 1.3.3 - 12-07-2025](#version-133---12-07-2025)
+
 ## Version 1.0.0 - 16-03-2023
 
 ### Added
@@ -372,7 +412,7 @@
 
 - Update Documentation [4260ea6](https://github.com/TobyG74/tiktok-api-dl/commit/4260ea653ee50569f898cc0653cb35e4557992a9)
 
-### Version 1.3.2 - 03-06-2025
+## Version 1.3.2 - 03-06-2025
 
 ### Added
 
@@ -395,3 +435,14 @@
 
 - Moving the Function to the Function Owner's File [c83e329](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/c83e329f27bd744dd2274604e15e10ec2264e083)
 - Removing Cookie Options on Tiktok Stalk User [c7af8d5](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/c7af8d53a99fbbf1bda453a9ee1293bfb7ac6cf4)
+
+## Version 1.3.3 - 12-07-2025
+
+### Added
+
+- Add Tiktok Get User Reposts [9bab4ad](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/9bab4ad652058cf3cd9c7cc79a94d12a3606c200)
+- Add Tiktok Get User Reposts Documentation [d71a970](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/d71a970977ab7413450092b65841eb897a25e232)
+
+### Fixed
+
+- Fix the getUserPost error when the data exceeds 35 [259c9a1](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/259c9a178996aee9bcd3d10a5f84dabbaf6f3dfb)
