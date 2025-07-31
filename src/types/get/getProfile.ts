@@ -4,6 +4,7 @@ export type TiktokStalkUserResponse = {
   result?: {
     user: UserProfile
     stats: StatsUserProfile
+    statsV2: StatsV2UserProfile
   }
 }
 
@@ -31,6 +32,16 @@ export type StatsUserProfile = {
   videoCount: number
   likeCount: number
   friendCount: number
+}
+
+
+export type StatsV2UserProfile = {
+  followerCount: string
+  followingCount: string
+  heartCount: string
+  videoCount: string
+  likeCount: string
+  friendCount: string
 }
 
 export type StatisticsUserProfile = {
