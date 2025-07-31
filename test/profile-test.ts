@@ -3,13 +3,12 @@ import Tiktok from "../src/index"
 
 async function testProfile() {
   try {
-    const username = "tobz2k19" // Change to a valid TikTok username
+    const username = "charlidamelio" // Change to a valid TikTok username
     const result = await Tiktok.StalkUser(username, {
       proxy: undefined
     })
     if (result.status === "success" && result.result) {
-      const user = result.result.user
-      const stats = result.result.stats
+      const { user, stats, statsV2 } = result.result
       console.log("\nProfile fetched successfully!")
       console.log("========================")
       console.log("User Profile:")
@@ -29,6 +28,14 @@ async function testProfile() {
       console.log(`- Videos: ${stats.videoCount}`)
       console.log(`- Likes: ${stats.likeCount}`)
       console.log(`- Friends: ${stats.friendCount}`)
+      console.log("========================")
+      console.log("\nStats V2:")
+      console.log(`- Followers: ${statsV2.followerCount}`)
+      console.log(`- Following: ${statsV2.followingCount}`)
+      console.log(`- Hearts: ${statsV2.heartCount}`)
+      console.log(`- Videos: ${statsV2.videoCount}`)
+      console.log(`- Likes: ${statsV2.likeCount}`)
+      console.log(`- Friends: ${statsV2.friendCount}`)
       console.log("========================")
     } else {
       console.error("Error:", result.message)
