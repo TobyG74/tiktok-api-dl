@@ -8,7 +8,7 @@ import {
 import {
   TiktokStalkUserResponse,
   StatsUserProfile,
-  UserProfile
+  UserProfile, StatsV2UserProfile
 } from "../../types/get/getProfile"
 import { _getUserPostsParams, _xttParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -66,13 +66,14 @@ export const StalkUser = (
           })
         }
 
-        const { user, stats } = parseDataUser(dataUser)
+        const { user, stats, statsV2 } = parseDataUser(dataUser)
 
         let response: TiktokStalkUserResponse = {
           status: "success",
           result: {
             user,
-            stats
+            stats,
+            statsV2
           }
         }
 
@@ -110,5 +111,15 @@ const parseDataUser = (dataUser: any) => {
     friendCount: dataUser.stats.friendCount
   }
 
-  return { user, stats }
+  // Statistics V2 Result
+  const statsV2: StatsV2UserProfile = {
+    followerCount: dataUser.statsV2.followerCount,
+    followingCount: dataUser.statsV2.followingCount,
+    heartCount: dataUser.statsV2.heartCount,
+    videoCount: dataUser.statsV2.videoCount,
+    likeCount: dataUser.statsV2.diggCount,
+    friendCount: dataUser.statsV2.friendCount
+  }
+
+  return { user, stats, statsV2 }
 }
