@@ -134,6 +134,7 @@ const parseUserPosts = async (
           shareEnabled: v.shareEnabled,
           stitchEnabled: v.stitchEnabled,
           stats: v.stats,
+          statsV2: v.statsV2,
           music: v.music,
           author,
           imagePost
@@ -165,6 +166,7 @@ const parseUserPosts = async (
           shareEnabled: v.shareEnabled,
           stitchEnabled: v.stitchEnabled,
           stats: v.stats,
+          statsV2: v.statsV2,
           music: v.music,
           author,
           video

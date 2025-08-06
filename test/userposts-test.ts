@@ -3,7 +3,7 @@ import Tiktok from "../src/index"
 
 async function testUserPosts() {
   try {
-    const username = "Tobz2k19" // Change to a valid TikTok username
+    const username = "charlidamelio" // Change to a valid TikTok username
     const result = await Tiktok.GetUserPosts(username, {
       postLimit: 30,
       proxy: undefined
@@ -36,6 +36,15 @@ async function testUserPosts() {
           console.log(`- Comments: ${post.stats.commentCount}`)
           console.log(`- Shares: ${post.stats.shareCount}`)
           console.log(`- Plays: ${post.stats.playCount}`)
+        }
+        if (post.statsV2) {
+          console.log("Statistics V2:")
+          console.log(`- Collects: ${post.statsV2.collectCount}`)
+          console.log(`- Comments: ${post.statsV2.commentCount}`)
+          console.log(`- Likes: ${post.statsV2.diggCount}`)
+          console.log(`- Plays: ${post.statsV2.playCount}`)
+          console.log(`- Reposts: ${post.statsV2.repostCount}`)
+          console.log(`- Shares: ${post.statsV2.shareCount}`)
         }
         if (post.video?.playAddr) {
           console.log(`Video URL: ${post.video.playAddr}`)

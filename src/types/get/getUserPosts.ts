@@ -18,6 +18,7 @@ export type Posts = {
   shareEnabled: number
   stitchEnabled: number
   stats: StatsPost
+  statsV2: StatsV2Post
   author: AuthorPost
   video?: VideoPost
   music: MusicPost
@@ -30,6 +31,15 @@ export type StatsPost = {
   likeCount: number
   playCount: number
   shareCount: number
+}
+
+export type StatsV2Post = {
+  collectCount: string
+  commentCount: string
+  diggCount: string
+  playCount: string
+  repostCount: string
+  shareCount: string
 }
 
 export type AuthorPost = {
