@@ -40,7 +40,6 @@
   - [Using Github](#using-github)
 - [Usage Guide](#usage-guide)
   - [Getting Tiktok Cookie](#getting-tiktok-cookie)
-  - [Using the Search Feature](#using-the-search-feature)
   - [Using CLI](#using-cli)
   - [Building from Source](#building-from-source)
   - [CLI Usage](#cli-usage)
@@ -126,14 +125,6 @@ npm install github:TobyG74/tiktok-api-dl
 2. Login to [Tiktok](https://tiktok.com)
 3. Open Cookie-Editor
 4. Copy the cookie and use it in your code: `COOKIE: "YOUR_COOKIE"`
-
-## Using the Search Feature
-
-- To use the search feature, you need to install the `Canvas` library.
-
-```bash
-npm install canvas
-```
 
 ## Using CLI
 
