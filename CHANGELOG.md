@@ -446,3 +446,14 @@ History of changes to the project.
 ### Fixed
 
 - Fix the getUserPost error when the data exceeds 35 [259c9a1](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/259c9a178996aee9bcd3d10a5f84dabbaf6f3dfb)
+
+## Version 1.3.4 - 08-08-2025
+
+### Added
+
+- Add StatsV2 For Tiktok Profile [3479514](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/3479514054482f87454805cc2cf5a52ba422d61a)
+- Add StatsV2 Documentation [3b640e2](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/3b640e23e183cb7d48b4fa35b61d20307d7a5555)
+
+### Fixed
+
+- Fixing errors in the search feature [3d341c7](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/3d341c7fa15dabf8f49400e634e164ebf73ba3dd)
