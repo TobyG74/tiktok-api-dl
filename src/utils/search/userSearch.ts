@@ -8,7 +8,7 @@ import { _userSearchParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
 import { TiktokService } from "../../services/tiktokService"
-import { userAgent } from "../../constants/headers"
+import { userAgent, webUserAgent } from "../../constants/headers"
 
 /**
  * Tiktok Search User
@@ -38,7 +38,7 @@ export const SearchUser = (
     Axios(Tiktok.generateURLXbogus(username, page), {
       method: "GET",
       headers: {
-        "User-Agent": userAgent,
+        "User-Agent": webUserAgent,
         cookie:
           typeof cookie === "object"
             ? cookie.map((v: any) => `${v.name}=${v.value}`).join("; ")

@@ -83,7 +83,6 @@ export class TiktokService {
     const baseUrl = `${TiktokService.BASE_URL}api/search/user/full/?`
     const queryParams = _userSearchParams(username, page)
     const xbogusParams = xbogus(`${baseUrl}${queryParams}`, userAgent)
-    console.log(`${baseUrl}${_userSearchParams(username, page, xbogusParams)}`)
 
     return `${baseUrl}${_userSearchParams(username, page, xbogusParams)}`
   }

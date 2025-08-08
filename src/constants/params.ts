@@ -170,7 +170,7 @@ export const _getCommentsParams = (id: string, count: number) => {
 export const _userSearchParams = (
   keyword: string,
   page: number,
-  xbogus?: any
+  xbogus?: string
 ) => {
   let cursor = 0
   if (page > 1) {
@@ -179,7 +179,7 @@ export const _userSearchParams = (
     }
   }
 
-  const params = {
+  const params: any = {
     WebIdLastTime: Date.now(),
     aid: "1988",
     app_language: "en",
@@ -189,26 +189,28 @@ export const _userSearchParams = (
     browser_online: true,
     browser_platform: "Win32",
     browser_version:
-      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
+      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
     channel: "tiktok_web",
     cookie_enabled: true,
     cursor: cursor,
-    device_id: generateDeviceId(),
+    data_collection_enabled: true,
+    device_id: "7487787165935371783",
     device_platform: "web_pc",
-    focus_state: false,
+    focus_state: true,
     from_page: "search",
-    history_len: 5,
+    history_len: 4,
     is_fullscreen: false,
     is_page_visible: true,
     keyword: keyword,
+    odinId: generateOdinId(),
     os: "windows",
     priority_region: "ID",
     referer: "",
     region: "ID",
-    screen_height: 768,
-    screen_width: 1366,
-    search_id: generateSearchId(),
+    screen_height: 1080,
+    screen_width: 1920,
     tz_name: "Asia/Jakarta",
+    user_is_login: true,
     web_search_code: {
       tiktok: {
         client_params_x: {
@@ -251,7 +253,7 @@ export const _liveSearchParams = (keyword: string, page: number) => {
     channel: "tiktok_web",
     cookie_enabled: "true",
     count: "20",
-    device_id: generateDeviceId(),
+    device_id: "7487787165935371783",
     device_platform: "web_pc",
     device_type: "web_h264",
     focus_state: "true",
@@ -298,7 +300,7 @@ export const _videoSearchParams = (keyword: string, page: number) => {
     channel: "tiktok_web",
     cookie_enabled: "true",
     count: "20",
-    device_id: generateDeviceId(),
+    device_id: "7487787165935371783",
     device_platform: "web_pc",
     device_type: "web_h264",
     focus_state: "true",
