@@ -18,6 +18,12 @@ export const _tiktokGetCollection = (params: any): string =>
   `${_tiktokurl}/api/collection/item_list/?${params}`
 export const _tiktokGetPlaylist = (params: any): string =>
   `${_tiktokurl}/api/mix/item_list/?${params}`
+export const _tiktokGetHashtag = (params: any): string =>
+  `${_tiktokurl}/api/challenge/item_list/?${params}`
+export const _tiktokGetMusic = (params: any): string =>
+  `${_tiktokurl}/api/music/item_list/?${params}`
+export const _tiktokTrendings = (params: any): string =>
+  `${_tiktokurl}/node/share/discover?${params}`
 
 /** Tiktokv */
 export const _tiktokvApi: string = `https://api16-normal-useast5.tiktokv.us`
@@ -29,6 +35,6 @@ export const _ssstikurl: string = "https://ssstik.io"
 export const _ssstikapi: string = `${_ssstikurl}/abc?url=dl`
 
 /** Musicaldown */
-export const _musicaldownurl: string = "https://musicaldown.com"
+export const _musicaldownurl: string = "https://musidown.com"
 export const _musicaldownapi: string = `${_musicaldownurl}/download`
 export const _musicaldownmusicapi: string = `${_musicaldownurl}/mp3/download`

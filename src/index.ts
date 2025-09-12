@@ -11,6 +11,10 @@ import { TiktokUserPostsResponse } from "./types/get/getUserPosts"
 import { TiktokUserRepostsResponse } from "./types/get/getUserReposts"
 import { TiktokUserFavoriteVideosResponse } from "./types/get/getUserLiked"
 import { TiktokCollectionResponse } from "./types/get/getCollection"
+import {
+  TiktokTrendingResponse,
+  TrendingCreator
+} from "./types/get/getTrendings"
 
 /** Services */
 import { TiktokAPI } from "./utils/downloader/tiktokAPIDownloader"
@@ -25,6 +29,7 @@ import { getUserReposts } from "./utils/get/getUserRepost"
 import { getUserLiked } from "./utils/get/getUserLiked"
 import { SearchVideo } from "./utils/search/videoSearch"
 import { getCollection } from "./utils/get/getCollection"
+import { getTrendings, getTrendingCreators } from "./utils/get/getTrendings"
 
 /** Constants */
 import { DOWNLOADER_VERSIONS, SEARCH_TYPES } from "./constants"
@@ -371,5 +376,27 @@ export = {
       options?.page,
       options?.count
     )
+  },
+
+  /**
+   * Get TikTok Trending Content
+   * @param {Object} options - The options for trending
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @returns {Promise<TiktokTrendingResponse>}
+   */
+  Trending: async (options?: {
+    proxy?: string
+  }): Promise<TiktokTrendingResponse> => {
+    return await getTrendings(options?.proxy)
+  },
+
+  /**
+   * Get TikTok Trending Creators
+   * @param {Object} options - The options for trending creators
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @returns {Promise<{ status: "success" | "error", message?: string, result?: TrendingCreator[] }>}
+   */
+  TrendingCreators: async (options?: { proxy?: string }) => {
+    return await getTrendingCreators(options?.proxy)
   }
 }

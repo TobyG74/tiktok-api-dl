@@ -692,4 +692,184 @@ program
     }
   })
 
+// =============================================
+// Trending Command
+// =============================================
+program
+  .command("trending")
+  .description("Get TikTok trending content and creators")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .option("-c, --creators", "Show only trending creators", false)
+  .option("-r, --raw", "Show raw response", false)
+  .action(async (options) => {
+    try {
+      if (options.creators) {
+        Logger.info("Fetching trending creators...")
+        const results = await Tiktok.TrendingCreators({
+          proxy: options.proxy
+        })
+
+        if (results.status === "success" && results.result) {
+          if (options.raw) {
+            console.log(JSON.stringify(results.result, null, 2))
+            return
+          }
+
+          Logger.info(`Found ${results.result.length} trending creators`)
+
+          results.result.slice(0, 20).forEach((creator, index) => {
+            Logger.info(`---- CREATOR ${index + 1} ----`)
+            Logger.result(`Username: @${creator.username}`, chalk.green)
+            Logger.result(`Nickname: ${creator.nickname}`, chalk.green)
+            Logger.result(
+              `Verified: ${creator.verified ? "Yes" : "No"}`,
+              chalk.green
+            )
+            Logger.result(
+              `Followers: ${creator.followerCount.toLocaleString()}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Total Likes: ${creator.likeCount.toLocaleString()}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Videos: ${creator.videoCount.toLocaleString()}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Following: ${creator.followingCount.toLocaleString()}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Description: ${creator.description.substring(0, 100)}${
+                creator.description.length > 100 ? "..." : ""
+              }`,
+              chalk.blue
+            )
+            Logger.result(
+              `Profile: https://www.tiktok.com${creator.link}`,
+              chalk.blue
+            )
+          })
+
+          if (results.result.length > 20) {
+            Logger.info(
+              `\nShowing first 20 of ${results.result.length} trending creators`
+            )
+          }
+
+          // Show statistics
+          const verifiedCount = results.result.filter((c) => c.verified).length
+          const totalFollowers = results.result.reduce(
+            (sum, c) => sum + c.followerCount,
+            0
+          )
+          const avgFollowers = Math.round(
+            totalFollowers / results.result.length
+          )
+
+          Logger.info(`\n---- STATISTICS ----`)
+          Logger.result(
+            `Verified creators: ${verifiedCount}/${results.result.length}`,
+            chalk.cyan
+          )
+          Logger.result(
+            `Average followers: ${avgFollowers.toLocaleString()}`,
+            chalk.cyan
+          )
+          Logger.result(
+            `Total combined followers: ${totalFollowers.toLocaleString()}`,
+            chalk.cyan
+          )
+        } else {
+          Logger.error(`Error: ${results.message}`)
+        }
+      } else {
+        Logger.info("Fetching trending content...")
+        const results = await Tiktok.Trending({
+          proxy: options.proxy
+        })
+
+        if (results.status === "success" && results.result) {
+          if (options.raw) {
+            console.log(JSON.stringify(results.result, null, 2))
+            return
+          }
+
+          Logger.info(`Found ${results.result.length} trending sections`)
+
+          results.result.forEach((section, sectionIndex) => {
+            Logger.info(`\n---- SECTION ${sectionIndex + 1} ----`)
+            Logger.result(
+              `Items in section: ${section.exploreList.length}`,
+              chalk.green
+            )
+
+            if (section.pageState) {
+              Logger.result(`Region: ${section.pageState.region}`, chalk.yellow)
+              Logger.result(`OS: ${section.pageState.os}`, chalk.yellow)
+            }
+
+            section.exploreList.slice(0, 5).forEach((item, index) => {
+              const cardItem = item.cardItem
+              Logger.info(`\n  Item ${index + 1}:`)
+              Logger.result(`  Title: ${cardItem.title}`, chalk.green)
+              Logger.result(`  Subtitle: ${cardItem.subTitle}`, chalk.green)
+              Logger.result(`  Type: ${cardItem.type}`, chalk.yellow)
+              Logger.result(
+                `  Description: ${cardItem.description.substring(0, 80)}${
+                  cardItem.description.length > 80 ? "..." : ""
+                }`,
+                chalk.blue
+              )
+
+              if (cardItem.extraInfo) {
+                Logger.result(
+                  `  Verified: ${cardItem.extraInfo.verified ? "Yes" : "No"}`,
+                  chalk.cyan
+                )
+                Logger.result(
+                  `  Fans: ${
+                    cardItem.extraInfo.fans?.toLocaleString() || "N/A"
+                  }`,
+                  chalk.cyan
+                )
+                Logger.result(
+                  `  Likes: ${
+                    cardItem.extraInfo.likes?.toLocaleString() || "N/A"
+                  }`,
+                  chalk.cyan
+                )
+                Logger.result(
+                  `  Videos: ${cardItem.extraInfo.video || "N/A"}`,
+                  chalk.cyan
+                )
+              }
+              Logger.result(
+                `  Profile: https://www.tiktok.com${cardItem.link}`,
+                chalk.blue
+              )
+            })
+
+            if (section.exploreList.length > 5) {
+              Logger.info(
+                `  ... and ${section.exploreList.length - 5} more items`
+              )
+            }
+          })
+
+          Logger.info(
+            "\nTip: Use --creators flag to see only trending creators"
+          )
+          Logger.info("Tip: Use --raw flag to see the complete JSON response")
+        } else {
+          Logger.error(`Error: ${results.message}`)
+        }
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
 program.parse()

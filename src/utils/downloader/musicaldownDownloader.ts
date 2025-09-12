@@ -205,8 +205,8 @@ export const MusicalDown = async (
       headers: {
         cookie: request.cookie,
         "Content-Type": "application/x-www-form-urlencoded",
-        Origin: "https://musicaldown.com",
-        Referer: "https://musicaldown.com/en",
+        Origin: "https://musidown.com/download",
+        Referer: "https://musidown.com/download/en",
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": USER_AGENT
       },

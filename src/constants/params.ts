@@ -2,6 +2,15 @@ import { count } from "console"
 import qs from "qs"
 
 /** Get Params */
+export const _getTrendingsParams = () => {
+  return qs.stringify({
+    aid: 1988,
+    app_language: "en",
+    app_name: "tiktok_web",
+    battery_info: 1
+  })
+}
+
 export const _getUserPostsParams = () => {
   return (
     qs.stringify({
