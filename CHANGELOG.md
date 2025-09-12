@@ -457,3 +457,14 @@ History of changes to the project.
 ### Fixed
 
 - Fixing errors in the search feature [3d341c7](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/3d341c7fa15dabf8f49400e634e164ebf73ba3dd)
+
+## Version 1.3.5 - 13-09-2025
+
+### Added
+
+- Add Tiktok Trending [5e7b3b4](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/5e7b3b4181275b856d8de8a002d8c622fa4412e8)
+- Add Tiktok Trending Documentation [16a8e5b](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/16a8e5b85709f63a99ad38747e0b1e487aa05cd9)
+
+### Fixed
+
+- Fix Error Tiktok Downloader V3 When Getting Videos [5e7b3b4](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/5e7b3b4181275b856d8de8a002d8c622fa4412e8)
