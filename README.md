@@ -54,6 +54,7 @@
   - [Tiktok Get User Favorite Videos](#tiktok-get-user-favorite-videos)
   - [Tiktok Collection](#tiktok-collection)
   - [Tiktok Playlist](#tiktok-playlist)
+  - [Tiktok Trending](#tiktok-trending)
 - [API Response Types](#api-response-types)
   - [Tiktok Downloader](#tiktok-downloader-1)
     - [Version 1 Response](#version-1-response)
@@ -67,6 +68,7 @@
   - [Tiktok User Favorite Videos](#tiktok-user-favorite-videos)
   - [Tiktok Collection](#tiktok-collection-1)
   - [Tiktok Playlist](#tiktok-playlist-1)
+  - [Tiktok Trending](#tiktok-trending-1)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -80,6 +82,7 @@ Note : `This project uses the API from Tiktok & Unofficial Tiktok API from Anoth
 - This project is also made to help users to search for users, live streams and videos on Tiktok.
 - This project is also made to help users to get user's posts, reposts and liked videos from Tiktok.
 - This project is made to help users to get videos, images / slides from a Tiktok collection or playlist.
+- This project is also made to help users to get trending content and creators from Tiktok.
 
 # Quick Installation
 
@@ -513,6 +516,40 @@ tiktokdl playlist 7507916135931218695 -c 5 -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok Playlist Response](#tiktok-playlist-1)
+
+## Tiktok Trending
+
+Get trending content and creators from TikTok's discovery/explore page
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+// Get all trending content (full data structure)
+Tiktok.Trending({
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+
+// Get trending creators only (simplified data)
+Tiktok.TrendingCreators({
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Get trending content
+tiktokdl trending
+
+# Get trending creators only
+tiktokdl trending-creators
+
+# With proxy
+tiktokdl trending -proxy "http://your-proxy-url"
+tiktokdl trending-creators -proxy "http://your-proxy-url"
+```
+
+- [Tiktok Trending Response](#tiktok-trending-1)
 
 # API Response Types
 
@@ -1181,6 +1218,78 @@ result?: {
     logid: string
     now: number
   }
+}
+```
+
+## Tiktok Trending
+
+### Trending Response
+
+```typescript
+interface TiktokTrendingResponse {
+  status: "success" | "error"
+  message?: string
+  result?: Array<{
+    exploreList: Array<{
+      cardItem: {
+        id: string
+        type: number
+        cover: string
+        title: string
+        subTitle: string
+        description: string
+        link: string
+        round: boolean
+        playToken: string
+        keyToken: string
+        extraInfo: {
+          verified: boolean
+          fans: number
+          likes: number
+          userId: string
+          secUid: string
+          relation: number
+          video: number
+          following: number
+          heart: number
+          digg: number
+        }
+      }
+    }>
+    pageState: {
+      regionAppId: number
+      os: string
+      region: string
+      baseURL: string
+      appType: string
+      fullUrl: string
+    }
+  }>
+}
+```
+
+### Trending Creators Response
+
+```typescript
+interface TrendingCreatorsResponse {
+  status: "success" | "error"
+  message?: string
+  result?: Array<{
+    id: string
+    username: string
+    nickname: string
+    avatarThumb: string
+    description: string
+    verified: boolean
+    followerCount: number
+    likeCount: number
+    videoCount: number
+    followingCount: number
+    heartCount: number
+    diggCount: number
+    secUid: string
+    link: string
+  }>
 }
 ```
 
