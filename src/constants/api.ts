@@ -35,6 +35,6 @@ export const _ssstikurl: string = "https://ssstik.io"
 export const _ssstikapi: string = `${_ssstikurl}/abc?url=dl`
 
 /** Musicaldown */
-export const _musicaldownurl: string = "https://musidown.com"
+export const _musicaldownurl: string = "https://musicaldown.com"
 export const _musicaldownapi: string = `${_musicaldownurl}/download`
 export const _musicaldownmusicapi: string = `${_musicaldownurl}/mp3/download`
