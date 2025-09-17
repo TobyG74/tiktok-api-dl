@@ -55,6 +55,7 @@
   - [Tiktok Collection](#tiktok-collection)
   - [Tiktok Playlist](#tiktok-playlist)
   - [Tiktok Trending](#tiktok-trending)
+  - [Tiktok Get Videos by Music ID](#tiktok-get-videos-by-music-id)
 - [API Response Types](#api-response-types)
   - [Tiktok Downloader](#tiktok-downloader-1)
     - [Version 1 Response](#version-1-response)
@@ -69,6 +70,7 @@
   - [Tiktok Collection](#tiktok-collection-1)
   - [Tiktok Playlist](#tiktok-playlist-1)
   - [Tiktok Trending](#tiktok-trending-1)
+  - [Tiktok Get Videos by Music ID](#tiktok-get-videos-by-music-id-1)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -83,6 +85,7 @@ Note : `This project uses the API from Tiktok & Unofficial Tiktok API from Anoth
 - This project is also made to help users to get user's posts, reposts and liked videos from Tiktok.
 - This project is made to help users to get videos, images / slides from a Tiktok collection or playlist.
 - This project is also made to help users to get trending content and creators from Tiktok.
+- This project is also made to help users to get videos that use a specific music/audio track by music ID from Tiktok.
 
 # Quick Installation
 
@@ -550,6 +553,36 @@ tiktokdl trending-creators -proxy "http://your-proxy-url"
 ```
 
 - [Tiktok Trending Response](#tiktok-trending-1)
+
+## Tiktok Get Videos by Music ID
+
+Get videos that use a specific music/audio track by providing the music ID
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const musicId = "7034143722082192134"
+Tiktok.GetVideosByMusicId(musicId, {
+  page: 1, // optional, default is 1
+  count: 30, // optional, default is 30
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Get videos by music ID
+tiktokdl getmusicvideos 7034143722082192134
+
+# Get videos by music ID with page and count
+tiktokdl getmusicvideos 7034143722082192134 -p 1 -c 20
+
+# Get videos by music ID with proxy
+tiktokdl getmusicvideos 7034143722082192134 -p 1 -c 20 -proxy "http://your-proxy-url"
+```
+
+- [Tiktok Music Videos Response](#tiktok-music-videos-response)
 
 # API Response Types
 
@@ -1290,6 +1323,95 @@ interface TrendingCreatorsResponse {
     secUid: string
     link: string
   }>
+}
+```
+
+## Tiktok Music Videos Response
+
+### Music Videos Response
+
+```typescript
+interface TiktokMusicVideosResponse {
+  status: "success" | "error"
+  message?: string
+  result?: {
+    music?: {
+      id: string
+      title: string
+      authorName: string
+      author?: string
+      duration?: number
+      original?: boolean
+      playUrl?: string[]
+      coverThumb?: string
+      coverLarge?: string
+      coverMedium?: string
+    }
+    videos?: Array<{
+      id: string
+      desc?: string
+      createTime: number
+      digged?: boolean
+      duetEnabled?: boolean
+      forFriend?: boolean
+      officalItem?: boolean
+      originalItem?: boolean
+      privateItem?: boolean
+      shareEnabled?: boolean
+      stitchEnabled?: boolean
+      stats: {
+        collectCount?: number
+        commentCount: number
+        diggCount: number
+        playCount: number
+        shareCount: number
+      }
+      author: {
+        id: string
+        uniqueId: string
+        nickname: string
+        avatarLarger?: string
+        avatarThumb?: string
+        avatarMedium?: string
+        signature?: string
+        verified?: boolean
+        openFavorite?: boolean
+        privateAccount?: boolean
+        isADVirtual?: boolean
+        isEmbedBanned?: boolean
+      }
+      video?: {
+        id: string
+        duration: number
+        ratio?: string
+        cover?: string
+        originCover?: string
+        dynamicCover?: string
+        playAddr?: string
+        downloadAddr?: string
+        format?: string
+        bitrate?: number
+      }
+      music: {
+        id: string
+        title: string
+        authorName: string
+        duration: number
+        playUrl?: string[]
+        coverLarge?: string
+        coverMedium?: string
+        coverThumb?: string
+        original?: boolean
+      }
+      imagePost?: string[]
+      effectStickers?: Array<{
+        id: string
+        name: string
+        type?: number
+      }>
+    }>
+    totalVideos?: number
+  }
 }
 ```
 
