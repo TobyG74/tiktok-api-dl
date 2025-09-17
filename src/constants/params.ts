@@ -511,4 +511,45 @@ export const _getPlaylistParams = (
   })
 }
 
+export const _getMusicVideosParams = (
+  musicId: string,
+  cursor: number = 0,
+  count: number = 30
+) => {
+  return qs.stringify({
+    aid: 1988,
+    app_language: "en",
+    app_name: "tiktok_web",
+    battery_info: 1,
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Win32",
+    browser_version:
+      "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53",
+    channel: "tiktok_web",
+    cookie_enabled: true,
+    count,
+    cursor,
+    device_id: generateDeviceId(),
+    device_platform: "web_pc",
+    focus_state: false,
+    from_page: "music",
+    history_len: 1,
+    is_fullscreen: false,
+    is_page_visible: true,
+    musicID: musicId,
+    os: "windows",
+    priority_region: "US",
+    referer: "",
+    region: "US",
+    screen_height: 1080,
+    screen_width: 1920,
+    tz_name: "America/New_York",
+    timezone_name: "America/New_York",
+    verifyFp: "verify_dca8729afe5c502257ed30b0b070dbdb",
+    webcast_language: "en"
+  })
+}
+
 export { randomChar, generateSearchId, generateDeviceId, generateOdinId }

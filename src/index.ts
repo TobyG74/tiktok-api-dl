@@ -15,6 +15,7 @@ import {
   TiktokTrendingResponse,
   TrendingCreator
 } from "./types/get/getTrendings"
+import { TiktokMusicVideosResponse } from "./types/get/getMusicVideos"
 
 /** Services */
 import { TiktokAPI } from "./utils/downloader/tiktokAPIDownloader"
@@ -30,6 +31,7 @@ import { getUserLiked } from "./utils/get/getUserLiked"
 import { SearchVideo } from "./utils/search/videoSearch"
 import { getCollection } from "./utils/get/getCollection"
 import { getTrendings, getTrendingCreators } from "./utils/get/getTrendings"
+import { getMusicVideos } from "./utils/get/getMusicVideos"
 
 /** Constants */
 import { DOWNLOADER_VERSIONS, SEARCH_TYPES } from "./constants"
@@ -388,6 +390,31 @@ export = {
     proxy?: string
   }): Promise<TiktokTrendingResponse> => {
     return await getTrendings(options?.proxy)
+  },
+
+  /**
+   * Get Videos by Music ID
+   * @param {string} musicId - The music ID to fetch videos for
+   * @param {Object} options - The options for music videos
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @param {number} [options.page] - Page number for pagination (default: 1)
+   * @param {number} [options.count] - Number of videos per page (default: 30)
+   * @returns {Promise<TiktokMusicVideosResponse>}
+   */
+  GetVideosByMusicId: async (
+    musicId: string,
+    options?: {
+      proxy?: string
+      page?: number
+      count?: number
+    }
+  ): Promise<TiktokMusicVideosResponse> => {
+    return await getMusicVideos(
+      musicId,
+      options?.proxy,
+      options?.page,
+      options?.count
+    )
   },
 
   /**
