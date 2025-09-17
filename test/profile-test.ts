@@ -21,6 +21,7 @@ async function testProfile() {
       console.log(`Private Account: ${user.privateAccount ? "Yes" : "No"}`)
       console.log(`Commerce User: ${user.commerceUser ? "Yes" : "No"}`)
       console.log(`Avatar: ${user.avatarLarger}`)
+      console.log(`Secured ID: ${user.secUid}`)
       console.log("\nStats:")
       console.log(`- Followers: ${stats.followerCount}`)
       console.log(`- Following: ${stats.followingCount}`)
