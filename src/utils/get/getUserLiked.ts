@@ -1,5 +1,5 @@
 import Axios from "axios"
-import { _tiktokGetUserLiked, _tiktokurl } from "../../constants/api"
+import { _tiktokGetUserLiked, _tiktokDesktopUrl } from "../../constants/api"
 import { StalkUser } from "./getProfile"
 import { _getUserLikedParams, _xttParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -221,7 +221,7 @@ const requestUserLiked = async (
           headers: {
             "user-agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.35",
-            cookie,
+            cookie: Array.isArray(cookie) ? cookie.join("; ") : cookie,
             "x-tt-params": xttparams
           },
           httpsAgent:

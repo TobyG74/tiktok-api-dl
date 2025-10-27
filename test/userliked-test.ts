@@ -4,7 +4,7 @@ import Tiktok from "../src/index"
 async function testUserLiked() {
   try {
     const username = "Tobz2k19" // Change to a valid TikTok username
-    const cookie = "" // Optional: provide a valid TikTok cookie if needed
+    const cookie = "YOUR_TIKTOK_COOKIE_HERE" // Get this from your browser's dev tools
     const result = await Tiktok.GetUserLiked(username, {
       cookie,
       postLimit: 5,

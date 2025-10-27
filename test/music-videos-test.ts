@@ -3,18 +3,19 @@ import Tiktok from "../src/index"
 
 /**
  * Test getMusicVideos function
- * This test will fetch videos for a specific music ID
+ * This test will fetch videos for a specific music ID or URL
  */
 async function testGetMusicVideos() {
   console.log("Testing getMusicVideos function...")
 
-  // Using a sample music ID from the reference GitHub code
-  const musicId = "7034143722082192134"
+  // You can use either music ID or URL
+  const musicIdOrUrl = "https://www.tiktok.com/music/QKThr-6771810675950880769"
+  // const musicIdOrUrl = "7034143722082192134" // Alternative: use direct ID
 
   try {
-    console.log(`Fetching videos for music ID: ${musicId}`)
+    console.log(`Fetching videos for: ${musicIdOrUrl}`)
 
-    const result = await Tiktok.GetVideosByMusicId(musicId, {
+    const result = await Tiktok.GetVideosByMusicId(musicIdOrUrl, {
       page: 1,
       count: 30
     })

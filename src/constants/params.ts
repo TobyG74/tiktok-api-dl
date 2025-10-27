@@ -552,4 +552,38 @@ export const _getMusicVideosParams = (
   })
 }
 
+export const _getMusicDetailParams = (musicId: string) => {
+  return qs.stringify({
+    aid: 1988,
+    app_language: "en",
+    app_name: "tiktok_web",
+    browser_language: "en-US",
+    browser_name: "Mozilla",
+    browser_online: true,
+    browser_platform: "Linux x86_64",
+    browser_version: "5.0 (X11)",
+    channel: "tiktok_web",
+    cookie_enabled: true,
+    data_collection_enabled: true,
+    device_id: "7551034554073482753",
+    device_platform: "web_pc",
+    focus_state: true,
+    from_page: "music",
+    history_len: 5,
+    is_fullscreen: false,
+    is_page_visible: true,
+    language: "en",
+    musicId,
+    os: "linux",
+    priority_region: "ID",
+    referer: "https://www.tiktok.com/id-ID/",
+    region: "ID",
+    root_referer: "https://www.google.com/",
+    screen_height: 1080,
+    screen_width: 1920,
+    tz_name: "Asia/Jakarta",
+    is_encryption: 1
+  })
+}
+
 export { randomChar, generateSearchId, generateDeviceId, generateOdinId }

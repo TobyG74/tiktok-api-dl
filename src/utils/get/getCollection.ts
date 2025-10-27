@@ -7,9 +7,7 @@ import { TiktokCollectionResponse } from "../../types/get/getCollection"
 import { ERROR_MESSAGES } from "../../constants"
 import retry from "async-retry"
 import { handleRedirect } from "../downloader/tiktokAPIDownloader"
-
-/** Constants */
-const COLLECTION_URL_REGEX = /collection\/[^/]+-(\d+)/
+import { extractCollectionId } from "../urlExtractors"
 
 /** Types */
 interface ProxyConfig {
@@ -156,15 +154,4 @@ export const Collection = async (
         error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
     }
   }
-}
-
-export const extractCollectionId = (input: string): string | null => {
-  // If it's already just a number, return it
-  if (/^\d+$/.test(input)) {
-    return input
-  }
-
-  // Try to extract from URL
-  const match = input.match(COLLECTION_URL_REGEX)
-  return match ? match[1] : null
 }

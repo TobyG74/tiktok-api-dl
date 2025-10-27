@@ -7,9 +7,11 @@ import { Logger } from "../lib/logger"
 import chalk from "chalk"
 import {
   getDefaultDownloadPath,
-  handleMediaDownload
+  handleMediaDownload,
+  downloadMusicFromDetail
 } from "../services/downloadManager"
-import { _tiktokurl } from "../constants/api"
+import { _tiktokDesktopUrl } from "../constants/api"
+import { extractMusicId } from "../utils/urlExtractors"
 
 const TIKTOK_URL_REGEX = {
   playlist:
@@ -311,7 +313,7 @@ searchCommand
             Logger.result(`Description: ${item.desc}`, chalk.yellow)
             Logger.result(`Author: ${item.author.nickname}`, chalk.yellow)
             Logger.result(
-              `Video URL: ${_tiktokurl}/@${item.author.uniqueId}/video/${item.id}`,
+              `Video URL: ${_tiktokDesktopUrl}/@${item.author.uniqueId}/video/${item.id}`,
               chalk.yellow
             )
             Logger.info(`---- STATISTICS ----`)
@@ -566,7 +568,7 @@ program
 
           if (video.video) {
             Logger.info(`---- VIDEO URLs ----`)
-            const videoUrl = `${_tiktokurl}/@${
+            const videoUrl = `${_tiktokDesktopUrl}/@${
               video.author?.uniqueId || "unknown"
             }/video/${video.id}`
             Logger.result(`Video URL: ${videoUrl}`, chalk.blue)
@@ -671,7 +673,7 @@ program
 
           if (item.video) {
             Logger.info(`---- VIDEO URLs ----`)
-            const videoUrl = `${_tiktokurl}/@${
+            const videoUrl = `${_tiktokDesktopUrl}/@${
               item.author?.uniqueId || "unknown"
             }/${contentType(item)}/${item.id}`
             Logger.result(`Video URL: ${videoUrl}`, chalk.blue)
@@ -869,6 +871,294 @@ program
       }
     } catch (error) {
       Logger.error(`Error: ${error.message}`)
+    }
+  })
+
+// =============================================
+// Get Music Videos Command
+// =============================================
+program
+  .command("getmusicvideos")
+  .description("Get videos by music ID or URL")
+  .argument(
+    "<musicIdOrUrl>",
+    "Music ID or URL (e.g., 6771810675950880769 or https://www.tiktok.com/music/QKThr-6771810675950880769)"
+  )
+  .option("-p, --page <number>", "Page number", "1")
+  .option("-c, --count <number>", "Number of videos per page", "30")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .option("-r, --raw", "Show raw response", false)
+  .action(async (musicIdOrUrl, options) => {
+    try {
+      const page = parseInt(options.page)
+      const count = parseInt(options.count)
+
+      Logger.info(
+        `Fetching videos for music: ${musicIdOrUrl} (page ${page}, ${count} per page)...`
+      )
+
+      const results = await Tiktok.GetVideosByMusicId(musicIdOrUrl, {
+        page,
+        count,
+        proxy: options.proxy
+      })
+
+      if (results.status === "success" && results.result) {
+        if (options.raw) {
+          console.log(JSON.stringify(results.result, null, 2))
+          return
+        }
+
+        const { music, videos, totalVideos } = results.result
+
+        if (music) {
+          Logger.info("\n---- MUSIC INFO ----")
+          Logger.result(`Music ID: ${music.id}`, chalk.green)
+          Logger.result(`Title: ${music.title}`, chalk.green)
+          Logger.result(`Author: ${music.authorName}`, chalk.green)
+          Logger.result(
+            `Duration: ${music.duration || "N/A"} seconds`,
+            chalk.yellow
+          )
+          Logger.result(
+            `Original: ${music.original ? "Yes" : "No"}`,
+            chalk.yellow
+          )
+        }
+
+        if (videos && videos.length > 0) {
+          Logger.info(`\nFound ${videos.length} videos`)
+          if (totalVideos) {
+            Logger.info(`Total videos using this music: ${totalVideos}`)
+          }
+
+          videos.slice(0, 10).forEach((video, index) => {
+            Logger.info(`\n---- VIDEO ${index + 1} ----`)
+            Logger.result(`Video ID: ${video.id}`, chalk.green)
+            Logger.result(`Description: ${video.desc || "N/A"}`, chalk.yellow)
+            Logger.result(
+              `Author: ${video.author?.nickname || "Unknown"}`,
+              chalk.yellow
+            )
+            Logger.result(
+              `Username: @${video.author?.uniqueId || "unknown"}`,
+              chalk.yellow
+            )
+
+            if (video.stats) {
+              Logger.info("---- STATISTICS ----")
+              Logger.result(
+                `Likes: ${video.stats.diggCount?.toLocaleString() || 0}`,
+                chalk.yellow
+              )
+              Logger.result(
+                `Comments: ${video.stats.commentCount?.toLocaleString() || 0}`,
+                chalk.yellow
+              )
+              Logger.result(
+                `Shares: ${video.stats.shareCount?.toLocaleString() || 0}`,
+                chalk.yellow
+              )
+              Logger.result(
+                `Plays: ${video.stats.playCount?.toLocaleString() || 0}`,
+                chalk.yellow
+              )
+            }
+
+            const videoUrl = `${_tiktokDesktopUrl}/@${
+              video.author?.uniqueId || "unknown"
+            }/video/${video.id}`
+            Logger.result(`Video URL: ${videoUrl}`, chalk.blue)
+          })
+
+          if (videos.length > 10) {
+            Logger.info(`\n... and ${videos.length - 10} more videos`)
+          }
+        } else {
+          Logger.warning("No videos found for this music")
+        }
+      } else {
+        Logger.error(`Error: ${results.message}`)
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
+// =============================================
+// Get Music Detail Command
+// =============================================
+program
+  .command("getmusicdetail")
+  .description(
+    "Get detailed information about a music/audio track by music ID or URL"
+  )
+  .argument(
+    "<musicIdOrUrl>",
+    "Music ID or URL (e.g., 6771810675950880769 or https://www.tiktok.com/music/QKThr-6771810675950880769)"
+  )
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .option("-r, --raw", "Show raw response", false)
+  .action(async (musicIdOrUrl, options) => {
+    try {
+      const cookie = cookieManager.getCookie()
+      if (!cookie) {
+        Logger.error(
+          "Cookie is required for this command. Set cookie using: tiktokdl cookie set <value>"
+        )
+        return
+      }
+
+      Logger.info(`Fetching music detail for: ${musicIdOrUrl}...`)
+
+      const results = await Tiktok.GetMusicDetail(musicIdOrUrl, {
+        cookie,
+        proxy: options.proxy
+      })
+
+      if (results.status === "success" && results.result) {
+        if (options.raw) {
+          console.log(JSON.stringify(results.result, null, 2))
+          return
+        }
+
+        const { musicInfo, shareMeta } = results.result
+
+        Logger.info("\n==== MUSIC INFORMATION ====")
+        Logger.result(`Music ID: ${musicInfo.music.id}`, chalk.green)
+        Logger.result(`Title: ${musicInfo.music.title}`, chalk.green)
+        Logger.result(`Author: ${musicInfo.music.authorName}`, chalk.green)
+        Logger.result(
+          `Duration: ${musicInfo.music.duration} seconds`,
+          chalk.yellow
+        )
+        Logger.result(
+          `Original: ${musicInfo.music.original ? "Yes" : "No"}`,
+          chalk.yellow
+        )
+        Logger.result(
+          `Copyrighted: ${musicInfo.music.isCopyrighted ? "Yes" : "No"}`,
+          chalk.yellow
+        )
+        Logger.result(
+          `Private: ${musicInfo.music.private ? "Yes" : "No"}`,
+          chalk.yellow
+        )
+
+        Logger.info("\n==== AUTHOR INFORMATION ====")
+        Logger.result(`Author ID: ${musicInfo.author.id}`, chalk.green)
+        Logger.result(`Nickname: ${musicInfo.author.nickname}`, chalk.green)
+        Logger.result(`Username: @${musicInfo.author.uniqueId}`, chalk.green)
+        Logger.result(
+          `Signature: ${musicInfo.author.signature || "N/A"}`,
+          chalk.yellow
+        )
+        Logger.result(
+          `Verified: ${musicInfo.author.ftc ? "Yes" : "No"}`,
+          chalk.yellow
+        )
+        Logger.result(
+          `Private Account: ${musicInfo.author.privateAccount ? "Yes" : "No"}`,
+          chalk.yellow
+        )
+
+        Logger.info("\n==== STATISTICS ====")
+        Logger.result(
+          `Videos using this music: ${musicInfo.stats.videoCount.toLocaleString()}`,
+          chalk.cyan
+        )
+
+        Logger.info("\n==== URLs ====")
+        Logger.result(`Play URL: ${musicInfo.music.playUrl}`, chalk.blue)
+        Logger.result(
+          `Cover Thumbnail: ${musicInfo.music.coverThumb}`,
+          chalk.blue
+        )
+        Logger.result(
+          `Cover Medium: ${musicInfo.music.coverMedium}`,
+          chalk.blue
+        )
+        Logger.result(`Cover Large: ${musicInfo.music.coverLarge}`, chalk.blue)
+
+        if (shareMeta) {
+          Logger.info("\n==== SHARE META ====")
+          Logger.result(`Title: ${shareMeta.title}`, chalk.magenta)
+          Logger.result(`Description: ${shareMeta.desc}`, chalk.magenta)
+        }
+
+        Logger.info(
+          "\n✨ Tip: Use the music ID with 'getmusicvideos' command to see videos using this music"
+        )
+      } else {
+        Logger.error(`Error: ${results.message}`)
+      }
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+    }
+  })
+
+// =============================================
+// Download Music Command
+// =============================================
+program
+  .command("downloadmusic")
+  .description(
+    "Download music/audio from TikTok by music ID or URL (requires cookie)"
+  )
+  .argument(
+    "<musicIdOrUrl>",
+    "Music ID or TikTok music URL (e.g. 7562597337407785760 or https://www.tiktok.com/music/QKThr-6771810675950880769)"
+  )
+  .option("-o, --output <path>", "Output directory path")
+  .option("--proxy <proxy>", "Proxy URL (http/https/socks)")
+  .action(async (musicIdOrUrl, options) => {
+    try {
+      const cookie = cookieManager.getCookie()
+      if (!cookie) {
+        Logger.error(
+          "Cookie is required for downloading music. Set cookie using: tiktokdl cookie set <value>"
+        )
+        Logger.info(
+          "\n💡 How to get cookie: Open TikTok in your browser, login, open DevTools (F12), go to Application/Storage > Cookies, and copy the cookie value"
+        )
+        return
+      }
+
+      const outputPath = options.output || getDefaultDownloadPath()
+
+      // Extract music ID from URL if URL is provided
+      const musicId = extractMusicId(musicIdOrUrl)
+
+      if (!musicId) {
+        Logger.error(
+          "Invalid input. Please provide either a music ID (numbers only) or a valid TikTok music URL"
+        )
+        Logger.info(
+          "Example URL: https://www.tiktok.com/music/QKThr-6771810675950880769"
+        )
+        Logger.info("Example ID: 7562597337407785760")
+        return
+      }
+
+      Logger.info(`Starting music download for music ID: ${musicId}`)
+      Logger.info(`Output directory: ${outputPath}`)
+
+      await downloadMusicFromDetail(
+        musicIdOrUrl,
+        cookie,
+        outputPath,
+        options.proxy
+      )
+
+      Logger.success("\n✅ Music download completed!")
+      Logger.info(
+        "\n💡 Tip: Use 'tiktokdl getmusicdetail' to view detailed information about this music"
+      )
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`)
+      Logger.info(
+        "\nPossible issues:\n- Invalid or expired cookie\n- Invalid music ID\n- Network/connection problem\n- Music might be region-restricted"
+      )
     }
   })
 

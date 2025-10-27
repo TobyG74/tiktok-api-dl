@@ -2,7 +2,7 @@ import Axios from "axios"
 import asyncRetry from "async-retry"
 import {
   _tiktokvFeed,
-  _tiktokurl,
+  _tiktokDesktopUrl,
   _tiktokGetCollection,
   _tiktokGetPlaylist
 } from "../../constants/api"
@@ -76,7 +76,7 @@ const parseAuthor = (content: any): AuthorTiktokAPI => ({
   region: content.author.region,
   avatarThumb: content.author?.avatar_thumb?.url_list || [],
   avatarMedium: content.author?.avatar_medium?.url_list || [],
-  url: `${_tiktokurl}/@${content.author.unique_id}`
+  url: `${_tiktokDesktopUrl}/@${content.author.unique_id}`
 })
 
 const parseMusic = (content: any): MusicTiktokAPI => ({

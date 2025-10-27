@@ -16,6 +16,7 @@ import {
   TrendingCreator
 } from "./types/get/getTrendings"
 import { TiktokMusicVideosResponse } from "./types/get/getMusicVideos"
+import { TiktokMusicDetailResponse } from "./types/get/getMusicDetail"
 
 /** Services */
 import { TiktokAPI } from "./utils/downloader/tiktokAPIDownloader"
@@ -32,6 +33,7 @@ import { SearchVideo } from "./utils/search/videoSearch"
 import { getCollection } from "./utils/get/getCollection"
 import { getTrendings, getTrendingCreators } from "./utils/get/getTrendings"
 import { getMusicVideos } from "./utils/get/getMusicVideos"
+import { getMusicDetail } from "./utils/get/getMusicDetail"
 
 /** Constants */
 import { DOWNLOADER_VERSIONS, SEARCH_TYPES } from "./constants"
@@ -39,8 +41,11 @@ import { ERROR_MESSAGES } from "./constants"
 import { validateCookie } from "./utils/validator"
 import { TiktokPlaylistResponse } from "./types/get/getPlaylist"
 import { getPlaylist } from "./utils/get/getPlaylist"
-import { extractPlaylistId } from "./utils/get/getPlaylist"
-import { extractCollectionId } from "./utils/get/getCollection"
+import {
+  extractMusicId,
+  extractCollectionId,
+  extractPlaylistId
+} from "./utils/urlExtractors"
 
 /** Types */
 type DownloaderVersion = "v1" | "v2" | "v3"
@@ -133,7 +138,7 @@ export = {
    * @param {string} keyword - The query you want to search
    * @param {Object} options - The options for search
    * @param {SearchType} [options.type] - The type of search (user/live/video)
-   * @param {string} [options.cookie] - Cookie for authentication
+   * @param {string} [options.cookie] - Required cookie for authentication
    * @param {number} [options.page] - Page number for pagination
    * @param {string} [options.proxy] - Optional proxy URL
    * @returns {Promise<TiktokSearchResponse>}
@@ -211,7 +216,6 @@ export = {
    * Tiktok Stalk User
    * @param {string} username - The username you want to stalk
    * @param {Object} options - The options for stalk
-   * @param {string|Array} [options.cookie] - Optional cookie for authentication
    * @param {string} [options.proxy] - Optional proxy URL
    * @returns {Promise<TiktokStalkUserResponse>}
    */
@@ -394,7 +398,7 @@ export = {
 
   /**
    * Get Videos by Music ID
-   * @param {string} musicId - The music ID to fetch videos for
+   * @param {string} musicIdOrUrl - The music ID or URL to fetch videos for (e.g., "6771810675950880769" or "https://www.tiktok.com/music/QKThr-6771810675950880769")
    * @param {Object} options - The options for music videos
    * @param {string} [options.proxy] - Optional proxy URL
    * @param {number} [options.page] - Page number for pagination (default: 1)
@@ -402,7 +406,7 @@ export = {
    * @returns {Promise<TiktokMusicVideosResponse>}
    */
   GetVideosByMusicId: async (
-    musicId: string,
+    musicIdOrUrl: string,
     options?: {
       proxy?: string
       page?: number
@@ -410,11 +414,29 @@ export = {
     }
   ): Promise<TiktokMusicVideosResponse> => {
     return await getMusicVideos(
-      musicId,
+      musicIdOrUrl,
       options?.proxy,
       options?.page,
       options?.count
     )
+  },
+
+  /**
+   * Get Music Detail
+   * @param {string} musicIdOrUrl - The music ID or URL to fetch detail for (e.g., "6771810675950880769" or "https://www.tiktok.com/music/QKThr-6771810675950880769")
+   * @param {Object} options - The options for music detail
+   * @param {string|Array} [options.cookie] - Required use of cookies for this endpoint
+   * @param {string} [options.proxy] - Optional proxy URL
+   * @returns {Promise<TiktokMusicDetailResponse>}
+   */
+  GetMusicDetail: async (
+    musicIdOrUrl: string,
+    options: {
+      cookie: string | any[]
+      proxy?: string
+    }
+  ): Promise<TiktokMusicDetailResponse> => {
+    return await getMusicDetail(musicIdOrUrl, options.cookie, options?.proxy)
   },
 
   /**

@@ -1,5 +1,5 @@
 import Axios from "axios"
-import { _tiktokSearchUserFull, _tiktokurl } from "../../constants/api"
+import { _tiktokSearchUserFull, _tiktokDesktopUrl } from "../../constants/api"
 import {
   UserSearchResult,
   TiktokUserSearchResponse
@@ -80,7 +80,7 @@ export const SearchUser = (
             avatarThumb: user.user_info.avatar_thumb,
             isVerified: user.custom_verify !== "",
             secUid: user.user_info.sec_uid,
-            url: `${_tiktokurl}/@${user.user_info.unique_id}`
+            url: `${_tiktokDesktopUrl}/@${user.user_info.unique_id}`
           })
         }
 

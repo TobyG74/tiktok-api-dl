@@ -3,12 +3,13 @@ import { load } from "cheerio"
 import {
   _tiktokGetUserLiked,
   _tiktokGetPosts,
-  _tiktokurl
+  _tiktokDesktopUrl
 } from "../../constants/api"
 import {
   TiktokStalkUserResponse,
   StatsUserProfile,
-  UserProfile, StatsV2UserProfile
+  UserProfile,
+  StatsV2UserProfile
 } from "../../types/get/getProfile"
 import { _getUserPostsParams, _xttParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -27,7 +28,7 @@ export const StalkUser = (
 ): Promise<TiktokStalkUserResponse> =>
   new Promise(async (resolve) => {
     username = username.replace("@", "")
-    Axios(`${_tiktokurl}/@${username}`, {
+    Axios(`${_tiktokDesktopUrl}/@${username}`, {
       method: "GET",
       headers: {
         "User-Agent":

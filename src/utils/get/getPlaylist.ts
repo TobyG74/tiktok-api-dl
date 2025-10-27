@@ -1,5 +1,5 @@
 import Axios from "axios"
-import { _tiktokGetPlaylist, _tiktokurl } from "../../constants/api"
+import { _tiktokGetPlaylist, _tiktokDesktopUrl } from "../../constants/api"
 import { _getPlaylistParams } from "../../constants/params"
 import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
@@ -7,9 +7,7 @@ import { ERROR_MESSAGES } from "../../constants"
 import retry from "async-retry"
 import { TiktokPlaylistResponse } from "../../types/get/getPlaylist"
 import { handleRedirect } from "../downloader/tiktokAPIDownloader"
-
-/** Constants */
-const PLAYLIST_URL_REGEX = /playlist\/[^/]+-(\d+)/
+import { extractPlaylistId } from "../urlExtractors"
 
 /** Types */
 interface ProxyConfig {
@@ -157,15 +155,4 @@ export const Playlist = async (
         error instanceof Error ? error.message : ERROR_MESSAGES.NETWORK_ERROR
     }
   }
-}
-
-export const extractPlaylistId = (input: string): string | null => {
-  // If it's already just a number, return it
-  if (/^\d+$/.test(input)) {
-    return input
-  }
-
-  // Try to extract from URL
-  const match = input.match(PLAYLIST_URL_REGEX)
-  return match ? match[1] : null
 }

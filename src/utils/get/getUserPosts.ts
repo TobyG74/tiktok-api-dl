@@ -1,5 +1,5 @@
 import Axios from "axios"
-import { _tiktokGetPosts, _tiktokurl } from "../../constants/api"
+import { _tiktokGetPosts, _tiktokDesktopUrl } from "../../constants/api"
 import {
   AuthorPost,
   Posts,

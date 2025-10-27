@@ -15,15 +15,26 @@ import { HttpsProxyAgent } from "https-proxy-agent"
 import { SocksProxyAgent } from "socks-proxy-agent"
 import { TiktokService } from "../../services/tiktokService"
 import retry from "async-retry"
+import { extractMusicId } from "../urlExtractors"
 
 export const getMusicVideos = (
-  musicId: string,
+  musicIdOrUrl: string,
   proxy?: string,
   page?: number,
   count?: number
 ): Promise<TiktokMusicVideosResponse> =>
   new Promise(async (resolve) => {
     try {
+      // Extract music ID from URL or use as is
+      const musicId = extractMusicId(musicIdOrUrl)
+
+      if (!musicId) {
+        return resolve({
+          status: "error",
+          message: "Invalid music ID or URL format"
+        })
+      }
+
       const data = await parseMusicVideos(
         musicId,
         page || 1,
