@@ -72,6 +72,7 @@
   - [Tiktok Playlist](#tiktok-playlist-1)
   - [Tiktok Trending](#tiktok-trending-1)
   - [Tiktok Get Videos by Music ID](#tiktok-get-videos-by-music-id-1)
+  - [Tiktok Get Music Detail](#tiktok-get-music-detail-response)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -87,6 +88,7 @@ Note : `This project uses the API from Tiktok & Unofficial Tiktok API from Anoth
 - This project is made to help users to get videos, images / slides from a Tiktok collection or playlist.
 - This project is also made to help users to get trending content and creators from Tiktok.
 - This project is also made to help users to get videos that use a specific music/audio track by music ID from Tiktok.
+- This project is also made to help users to get detailed information about a music/audio track from Tiktok.
 
 # Quick Installation
 
@@ -557,16 +559,24 @@ tiktokdl trending-creators -proxy "http://your-proxy-url"
 
 ## Tiktok Get Videos by Music ID
 
-Get videos that use a specific music/audio track by providing the music ID
+Get videos that use a specific music/audio track by providing the music ID or URL
 
 ```javascript
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
+// Using music ID
 const musicId = "7034143722082192134"
 Tiktok.GetVideosByMusicId(musicId, {
   page: 1, // optional, default is 1
   count: 30, // optional, default is 30
   proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+
+// Or using music URL
+const musicUrl = "https://www.tiktok.com/music/QKThr-6771810675950880769"
+Tiktok.GetVideosByMusicId(musicUrl, {
+  page: 1,
+  count: 30
 }).then((result) => console.log(result))
 ```
 
@@ -576,37 +586,91 @@ Tiktok.GetVideosByMusicId(musicId, {
 # Get videos by music ID
 tiktokdl getmusicvideos 7034143722082192134
 
+# Get videos by music URL
+tiktokdl getmusicvideos "https://www.tiktok.com/music/QKThr-6771810675950880769"
+
 # Get videos by music ID with page and count
 tiktokdl getmusicvideos 7034143722082192134 -p 1 -c 20
 
 # Get videos by music ID with proxy
-tiktokdl getmusicvideos 7034143722082192134 -p 1 -c 20 -proxy "http://your-proxy-url"
+tiktokdl getmusicvideos 7034143722082192134 -p 1 -c 20 --proxy "http://your-proxy-url"
+
+# Get raw JSON response
+tiktokdl getmusicvideos 7034143722082192134 -r
 ```
 
 - [Tiktok Music Videos Response](#tiktok-music-videos-response)
 
 ## Tiktok Get Music Detail
 
-Get detailed information about a music/audio track by providing the music ID. This feature uses xttparams encryption for enhanced security.
+Get detailed information about a music/audio track by providing the music ID or URL. This feature uses xttparams encryption for enhanced security.
 
 ```javascript
 const Tiktok = require("@tobyg74/tiktok-api-dl")
 
+// Using music ID
 const musicId = "7562597337407785760"
 Tiktok.GetMusicDetail(musicId, {
+  cookie: "YOUR_COOKIE", // required
   proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+
+// Or using music URL
+const musicUrl = "https://www.tiktok.com/music/QKThr-6771810675950880769"
+Tiktok.GetMusicDetail(musicUrl, {
+  cookie: "YOUR_COOKIE"
 }).then((result) => console.log(result))
 ```
 
 ### CLI Usage
 
+**Note:** This command requires a cookie. Set your cookie first using `tiktokdl cookie set <value>`
+
 ```bash
-# Get music detail
+# Set cookie first (required)
+tiktokdl cookie set "YOUR_COOKIE_VALUE"
+
+# Get music detail by ID
 tiktokdl getmusicdetail 7562597337407785760
 
+# Get music detail by URL
+tiktokdl getmusicdetail "https://www.tiktok.com/music/QKThr-6771810675950880769"
+
 # Get music detail with proxy
-tiktokdl getmusicdetail 7562597337407785760 -proxy "http://your-proxy-url"
+tiktokdl getmusicdetail 7562597337407785760 --proxy "http://your-proxy-url"
+
+# Get raw JSON response
+tiktokdl getmusicdetail 7562597337407785760 -r
 ```
+
+Download music/audio files from TikTok. Requires cookie authentication.
+
+### CLI Usage for Downloading Music
+
+```bash
+# Set cookie first (required for downloading)
+tiktokdl cookie set "YOUR_TIKTOK_COOKIE"
+
+# Download by music ID
+tiktokdl downloadmusic 7562597337407785760
+
+# Download by music URL
+tiktokdl downloadmusic "https://www.tiktok.com/music/QKThr-6771810675950880769"
+
+# Custom output directory
+tiktokdl downloadmusic 7562597337407785760 -o "./my-music"
+
+# With proxy
+tiktokdl downloadmusic 7562597337407785760 --proxy "http://your-proxy-url"
+```
+
+**How to get TikTok cookie:**
+
+1. Open TikTok in your browser and login
+2. Open DevTools (F12)
+3. Go to Application/Storage > Cookies
+4. Copy the entire cookie value
+5. Set it using: `tiktokdl cookie set "YOUR_COOKIE"`
 
 - [Tiktok Music Detail Response](#tiktok-music-detail-response)
 
@@ -1352,9 +1416,9 @@ interface TrendingCreatorsResponse {
 }
 ```
 
-## Tiktok Music Videos Response
+## Tiktok Get Videos by Music ID
 
-### Music Videos Response
+### Get Music Videos Response
 
 ```typescript
 interface TiktokMusicVideosResponse {
@@ -1441,9 +1505,9 @@ interface TiktokMusicVideosResponse {
 }
 ```
 
-## Tiktok Music Detail Response
+## Tiktok Get Music Detail Response
 
-### Music Detail Response
+### Get Music Detail Response
 
 ```typescript
 interface TiktokMusicDetailResponse {
@@ -1505,3 +1569,7 @@ interface TiktokMusicDetailResponse {
 # License
 
 - This project is licensed under the Apache License - see the [LICENSE](https://github.com/TobyG74/tiktok-api-dl/blob/master/LICENSE) file for details.
+
+```
+
+```
