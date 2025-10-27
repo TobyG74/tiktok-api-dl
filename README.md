@@ -680,6 +680,9 @@ tiktokdl downloadmusic 7562597337407785760 --proxy "http://your-proxy-url"
 
 ### Version 1 Response
 
+<details>
+<summary>Click to expand</summary>
+
 ```typescript
 interface TiktokAPIResponse {
   status: "success" | "error"
@@ -747,7 +750,12 @@ interface TiktokAPIResponse {
 }
 ```
 
+</details>
+
 ### Version 2 Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface SSSTikResponse {
@@ -777,7 +785,12 @@ interface SSSTikResponse {
 }
 ```
 
+</details>
+
 ### Version 3 Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface MusicalDownResponse {
@@ -798,9 +811,14 @@ interface MusicalDownResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Search
 
 ### User Search Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokUserSearchResponse {
@@ -822,7 +840,11 @@ interface TiktokUserSearchResponse {
 }
 ```
 
+</details>
+
 ### Live Search Response
+
+<details>
 
 ```typescript
 interface TiktokLiveSearchResponse {
@@ -863,7 +885,12 @@ interface TiktokLiveSearchResponse {
 }
 ```
 
+</details>
+
 ### Video Search Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokVideoSearchResponse {
@@ -925,9 +952,14 @@ interface TiktokVideoSearchResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Stalk User Profile
 
 ### Profile Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokStalkUserResponse {
@@ -953,9 +985,14 @@ interface TiktokStalkUserResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Video Comments
 
 ### Comments Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokVideoCommentsResponse {
@@ -978,9 +1015,14 @@ interface TiktokVideoCommentsResponse {
 }
 ```
 
+</details>
+
 ## Tiktok User Posts
 
 ### User Posts Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokUserPostsResponse {
@@ -1048,9 +1090,14 @@ interface TiktokUserPostsResponse {
 }
 ```
 
+</details>
+
 ## Tiktok User Reposts
 
 ### User Reposts Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokUserRepostsResponse {
@@ -1151,9 +1198,14 @@ interface TiktokUserRepostsResponse {
 }
 ```
 
+</details>
+
 ## Tiktok User Favorite Videos
 
 ### User Favorite Videos Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokUserFavoriteVideosResponse {
@@ -1233,9 +1285,14 @@ interface TiktokUserFavoriteVideosResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Collection
 
 ### Collection Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokCollectionResponse {
@@ -1289,9 +1346,14 @@ interface TiktokCollectionResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Playlist
 
 ### Playlist Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 status: "success" | "error"
@@ -1344,9 +1406,13 @@ result?: {
 }
 ```
 
+</details>
+
 ## Tiktok Trending
 
 ### Trending Response
+
+<details>
 
 ```typescript
 interface TiktokTrendingResponse {
@@ -1391,7 +1457,12 @@ interface TiktokTrendingResponse {
 }
 ```
 
+</details>
+
 ### Trending Creators Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TrendingCreatorsResponse {
@@ -1416,9 +1487,14 @@ interface TrendingCreatorsResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Get Videos by Music ID
 
 ### Get Music Videos Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokMusicVideosResponse {
@@ -1505,9 +1581,14 @@ interface TiktokMusicVideosResponse {
 }
 ```
 
+</details>
+
 ## Tiktok Get Music Detail Response
 
 ### Get Music Detail Response
+
+<details>
+<summary>Click to expand</summary>
 
 ```typescript
 interface TiktokMusicDetailResponse {
@@ -1557,6 +1638,9 @@ interface TiktokMusicDetailResponse {
 }
 ```
 
+</details>
+<br>
+
 # Changelog
 
 - All changes will be documented in the [CHANGELOG.md](https://github.com/TobyG74/tiktok-api-dl/blob/master/CHANGELOG.md) file.
@@ -1569,7 +1653,3 @@ interface TiktokMusicDetailResponse {
 # License
 
 - This project is licensed under the Apache License - see the [LICENSE](https://github.com/TobyG74/tiktok-api-dl/blob/master/LICENSE) file for details.
-
-```
-
-```
