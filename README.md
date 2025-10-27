@@ -56,6 +56,7 @@
   - [Tiktok Playlist](#tiktok-playlist)
   - [Tiktok Trending](#tiktok-trending)
   - [Tiktok Get Videos by Music ID](#tiktok-get-videos-by-music-id)
+  - [Tiktok Get Music Detail](#tiktok-get-music-detail)
 - [API Response Types](#api-response-types)
   - [Tiktok Downloader](#tiktok-downloader-1)
     - [Version 1 Response](#version-1-response)
@@ -583,6 +584,31 @@ tiktokdl getmusicvideos 7034143722082192134 -p 1 -c 20 -proxy "http://your-proxy
 ```
 
 - [Tiktok Music Videos Response](#tiktok-music-videos-response)
+
+## Tiktok Get Music Detail
+
+Get detailed information about a music/audio track by providing the music ID. This feature uses xttparams encryption for enhanced security.
+
+```javascript
+const Tiktok = require("@tobyg74/tiktok-api-dl")
+
+const musicId = "7562597337407785760"
+Tiktok.GetMusicDetail(musicId, {
+  proxy: "YOUR_PROXY" // optional
+}).then((result) => console.log(result))
+```
+
+### CLI Usage
+
+```bash
+# Get music detail
+tiktokdl getmusicdetail 7562597337407785760
+
+# Get music detail with proxy
+tiktokdl getmusicdetail 7562597337407785760 -proxy "http://your-proxy-url"
+```
+
+- [Tiktok Music Detail Response](#tiktok-music-detail-response)
 
 # API Response Types
 
@@ -1411,6 +1437,58 @@ interface TiktokMusicVideosResponse {
       }>
     }>
     totalVideos?: number
+  }
+}
+```
+
+## Tiktok Music Detail Response
+
+### Music Detail Response
+
+```typescript
+interface TiktokMusicDetailResponse {
+  status: "success" | "error"
+  message?: string
+  result?: {
+    musicInfo: {
+      author: {
+        id: string
+        nickname: string
+        uniqueId: string
+        signature: string
+        avatarThumb: string
+        avatarMedium: string
+        avatarLarger: string
+        secUid: string
+        privateAccount: boolean
+        ftc: boolean
+        relation: number
+        openFavorite: boolean
+        secret: boolean
+      }
+      music: {
+        id: string
+        title: string
+        authorName: string
+        original: boolean
+        playUrl: string
+        coverLarge: string
+        coverMedium: string
+        coverThumb: string
+        duration: number
+        private: boolean
+        isCopyrighted: boolean
+      }
+      stats: {
+        videoCount: number
+      }
+    }
+    shareMeta: {
+      title: string
+      desc: string
+    }
+    statusCode: number
+    status_msg: string
   }
 }
 ```
