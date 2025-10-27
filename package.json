@@ -1,6 +1,6 @@
 {
   "name": "@tobyg74/tiktok-api-dl",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "Scraper for downloading media in the form of videos, images and audio from Tiktok. Also for stalking Tiktok Users, getting user posts, likes, comments, followers and following.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
