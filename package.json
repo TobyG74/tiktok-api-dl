@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "cli": "ts-node src/cli/index.ts"
+    "cli": "[ -d ./lib ] || npm run build && ts-node lib/cli/index.js"
   },
   "bin": {
     "tiktokdl": "./lib/cli/index.js"
