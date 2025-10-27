@@ -42,6 +42,7 @@ History of changes to the project.
 - [Version 1.3.4 - 08-08-2025](#version-134---08-08-2025)
 - [Version 1.3.5 - 13-09-2025](#version-135---13-09-2025)
 - [Version 1.3.6 - 17-09-2025](#version-136---17-09-2025)
+- [Version 1.3.7 - 27-10-2025](#version-137---27-10-2025)
 
 ## Version 1.0.0 - 16-03-2023
 
@@ -476,9 +477,16 @@ History of changes to the project.
 
 ### Added
 
-- Add Tiktok Get Video by ID [1d09e1b](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/1d09e1b4b89ddda8f0a2667183cca0f31b91d7e1)
-- Add Tiktok Get Video by ID Documentation [f4c59d5](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/f4c59d5467a46a62fa57a0a6e56149caf2d05ec0)
+- Add Tiktok Get Video by Music ID [1d09e1b](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/1d09e1b4b89ddda8f0a2667183cca0f31b91d7e1)
+- Add Tiktok Get Video by Music ID Documentation [f4c59d5](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/f4c59d5467a46a62fa57a0a6e56149caf2d05ec0)
 
 ### Changed
 
 - Change the Tiktok Downloader V3 URL [806fcda](https://github.com/TobyG74/tiktok-api-dl/commit/806fcda2d3604202ca353ab96b18af5fa85a1350)
+
+## Version 1.3.7 - 27-10-2025
+
+### Added
+
+- Add Tiktok Get Video Detail [a2b9bd6](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/a2b9bd6b3149963c53db824a646cc209b7060c14)
+- Add Tiktok Get Video Detail Documentation [9ddf021](https://github.com/TobyG74/tiktok-api-dl/pull/45/commits/9ddf021fe7b7d4ef8baf3c64561af5034a2d673c)
