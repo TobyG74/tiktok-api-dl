@@ -251,12 +251,25 @@ export const TiktokAPI = async (
     url = url.replace("https://vm", "https://vt")
 
     // Get video ID
-    const { request } = await Axios(url, {
-      method: "HEAD",
-      ...createProxyAgent(proxy)
+    const request = await Axios(url, {
+      method: "GET",            
+      maxRedirects: 0,          
+      headers: {
+        "User-Agent": USER_AGENT,
+        "Accept":
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      },
+      ...createProxyAgent(proxy),
+      validateStatus: (status) => status >= 200 && status < 400,
     })
 
-    const videoId = extractVideoId(request.res.responseUrl)
+    const redirectUrl =
+      request.headers.location ??
+      request.request?.res?.responseUrl ??
+      url
+
+    const videoId = extractVideoId(redirectUrl)
     if (!videoId) {
       return {
         status: "error",
